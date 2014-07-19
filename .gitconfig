@@ -1,0 +1,10 @@
+[user]
+  name = %%GITNAME%%
+  email = %%GITEMAIL%%
+[diff]
+  external = git_diff_wrapper
+[color]
+  ui = auto
+[alias]
+  c = commit -m="commit"
+  a = add -A 
