@@ -1,0 +1,7 @@
+alias p="cd ~/p"
+alias ls="ls -an"
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+alias g="open /Applications/Google\ Chrome.app/"
+alias gca="git add -A && git commit -m 'commit it' && git push"

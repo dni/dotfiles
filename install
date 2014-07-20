@@ -1,0 +1,34 @@
+#!/bin/bash
+echo "old .dotfiles moved to .file.old"
+
+INSTALLDIR=${1:-$HOME}
+
+for i in .bash .bash_profile .vim .vimrc
+do
+	mv $INSTALLDIR/$i $INSTALLDIR/$i.old 2> /dev/null
+	ln -s $PWD/$i $INSTALLDIR/$i;
+done;
+
+echo "Git config settings"
+echo -n "Name: "
+read git_name
+echo -ne "\nEmail: "
+read git_email
+
+cp $PWD/.gitconfig $INSTALLDIR/.gitconfig
+sed -i "s/%%GITNAME%%/$git_name/" $INSTALLDIR/.gitconfig
+sed -i "s/%%GITEMAIL%%/$git_email/" $INSTALLDIR/.gitconfig
+
+echo "project directory, symlink from ~/p will be created"
+echo -n "Dir: "
+read projectdir
+
+ln -s ~/p $projectdir
+
+echo "brew install" 
+
+ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"
+brew doctor
+brew bundle .brew 
+
+
