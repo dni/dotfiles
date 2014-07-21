@@ -22,13 +22,10 @@ sed -i "s/%%GITEMAIL%%/$git_email/" $INSTALLDIR/.gitconfig
 echo "project directory, symlink from ~/p will be created"
 echo -n "Dir: "
 read projectdir
-
 ln -s ~/p $projectdir
 
-echo "brew install" 
+echo "brew install"
 
 ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"
 brew doctor
-brew bundle .brew 
-
-
+brew bundle .brew
