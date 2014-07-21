@@ -1,5 +1,5 @@
 alias p="cd ~/p"
-h="history"
+alias h="history"
 alias ls="ls -an"
 alias v="vim ."
 alias ..="cd .."
