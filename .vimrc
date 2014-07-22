@@ -1,8 +1,13 @@
 execute pathogen#infect()
-
+let mapleader = ","
 " save bind control-z
+nmap <C-x> :q<CR>
+nmap <C-x><C-x> :q!<CR>
 nmap <C-z> :w<CR>
-imap <C-z> <esc>:w<CR>a
+nmap <leader>h :nohl<CR>
+nmap <leader>c gcc
+nmap <C-h> :set hlsearch!<CR>
+nmap <leader>l <C-w><C-w> 
 
 filetype plugin indent on
 set noswapfile

@@ -1,0 +1,6 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =4
+let g:netrw_dirhist_1='/Users/dni/Documents/code/dotfiles'
+let g:netrw_dirhist_2='/Users/dni/Documents/code/publish-'
+let g:netrw_dirhist_3='/Users/dni/Documents/code/publish-/components/backend/modules/publish'
+let g:netrw_dirhist_4='/Users/dni/Documents/code/dotfiles'
