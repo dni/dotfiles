@@ -1,4 +1,7 @@
 dotfiles
 ========
+yeah yeah yeah
 
-.dotfiles
+http://vüz.org/
+
+dni's .dotfiles

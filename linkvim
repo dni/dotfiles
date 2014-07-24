@@ -1,0 +1,11 @@
+#!/bin/bash
+echo "old .dotfiles moved to .file.old"
+
+INSTALLDIR=${1:-$HOME}
+
+for i in .vim .vimrc
+do
+	mv $INSTALLDIR/$i $INSTALLDIR/$i.old 2> /dev/null
+	ln -s $PWD/$i $INSTALLDIR/$i;
+done;
+
