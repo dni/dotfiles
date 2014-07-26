@@ -1,0 +1,24 @@
+#!/bin/bash
+
+ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"
+brew doctor
+brew bundle
+brew update
+brew upgrade
+
+brew install vim --override-system-vi
+brew install wget
+brew install node
+brew install mongodb
+brew install git
+brew install phantomjs
+
+brew install caskroom/cask/brew-cask
+brew tap caskrook/versions
+
+brew cask install google-chrome 2> /dev/n
+brew cask install iterm2 2> /dev/null
+brew cask install the-unarchiver 2> /dev/
+brew cask install filezilla 2> /dev/null
+
+brew cleanup

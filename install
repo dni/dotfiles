@@ -1,12 +1,26 @@
 #!/bin/bash
 
-echo -n "brew install? if not you need git installed [n/Y]"
+echo -n "brew install? (OSX) [n/Y]"
 read -n 1 use_brew
 
 if [ "$use_brew" == "Y" ]; then
-  ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"
-  brew doctor
-  brew bundle
+  bash $PWD/.brew
+fi
+
+echo -n "apt-get install? (debian) [n/Y]"
+read -n 1 use_aptget
+
+if [ "$use_aptget" == "Y" ]; then
+  apt-get upgrade
+  apt-get install npm zip git phantomjs vim mongodb
+fi
+
+echo -n "npm install? [n/Y]"
+read -n 1 use_npm
+
+if [ "$use_npm" == "Y" ]; then
+  npm upgrade
+  npm i -g bower grunt-cli
 fi
 
 echo "Initializing submodules..."
@@ -34,7 +48,7 @@ if [ "$use_bash_configs" == "Y" ]; then
   ln -s $PWD/.bash_profile $INSTALLDIR/.bash_profile
 fi
 
-echo "Git config settings"
+echo -n "Git config settings"
 echo -n "Name: "
 read git_name
 echo -ne "\nEmail: "
@@ -49,5 +63,5 @@ if [ ! -d $HOME/p ]; then
   echo -n "Dir: "
   read projectdir
   ln -s $HOME/p $projectdir
-fi ]
+fi
 
