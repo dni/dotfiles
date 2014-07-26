@@ -1,5 +1,7 @@
-
 execute pathogen#infect()
+filetype plugin indent on
+syntax enable
+
 let mapleader = ","
 
 " own config binds
@@ -12,12 +14,10 @@ nmap <C-h> :set hlsearch!<CR>
 nmap <leader>l <C-w><C-w>
 nmap <leader>f gg=G
 nmap <space> /
-
-filetype plugin indent on
 set noswapfile
 set number
 set hlsearch
-
+set cursorline
 " airline
 " let g:airline_theme=dark
 let g:airline_powerline_fonts = 1
@@ -36,7 +36,6 @@ autocmd BufWritePre * :%s/\s\+$//e
 
 " colors
 let g:solarized_termcolors=256
-syntax enable
 set background=dark
 colorscheme solarized
 
