@@ -1,13 +1,13 @@
 execute pathogen#infect()
 filetype plugin indent on
 syntax enable
-
 let mapleader = ","
 
 " own config binds
 nmap <C-x> :q<CR>
 nmap <C-x><C-x> :q!<CR>
-nmap <C-z> :w<CR>
+nmap <C-y> :w<CR>
+nnoremap <C-z> <NOP>
 nmap <leader>h :nohl<CR>
 nmap <leader>c gcc
 nmap <C-h> :set hlsearch!<CR>
