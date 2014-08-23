@@ -59,6 +59,9 @@ let g:solarized_termcolors=256
 set background=dark
 colorscheme solarized
 
+" markown
+let g:vim_markdown_folding_disabled=1
+
 " nerdtree
 let g:nerdtree_plugin_open_cmd = 'open'
 map <C-n> :NERDTreeToggle<CR>
