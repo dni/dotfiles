@@ -38,7 +38,7 @@ set number
 set hlsearch
 set cursorline
 " airline
-let g:airline_theme="badwolf"
+" let g:airline_theme="badwolf"
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 set ttimeoutlen=50
@@ -57,7 +57,7 @@ autocmd BufWritePre * :%s/\s\+$//e
 " colors
 let g:solarized_termcolors=256
 set background=dark
-colorscheme solarized
+colorscheme badwolf
 
 " markown
 let g:vim_markdown_folding_disabled=1
