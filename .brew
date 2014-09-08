@@ -21,4 +21,8 @@ brew cask install iterm2 2> /dev/null
 brew cask install the-unarchiver 2> /dev/
 brew cask install filezilla 2> /dev/null
 
+brew tap Tox/tox
+brew install --HEAD libtoxcore
+brew install --HEAD toxic
+
 brew cleanup
