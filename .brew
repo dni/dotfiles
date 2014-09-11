@@ -16,13 +16,23 @@ brew install phantomjs
 brew install caskroom/cask/brew-cask
 brew tap caskrook/versions
 
-brew cask install google-chrome 2> /dev/n
-brew cask install iterm2 2> /dev/null
-brew cask install the-unarchiver 2> /dev/
-brew cask install filezilla 2> /dev/null
+brew cask install google-chrome
+brew cask install firefox
+brew cask install iterm2
+brew cask install the-unarchiver
+brew cask install filezilla
+brew cask install skype
+brew cask install limechat
+brew cask install openoffice
+brew cask install adobe-creative-cloud
 
-brew tap Tox/tox
-brew install --HEAD libtoxcore
-brew install --HEAD toxic
+# brew cask install ioquake3
+# wget http://playmorepromode.org/CPMA148.zip
+# unzip CPMA148.zip ~/Applications/ioquake3/cpma
+# rm CPMA148.zip
+
+# # brew tap Tox/tox
+# # brew install --HEAD libtoxcore
+# # brew install --HEAD toxic
 
 brew cleanup

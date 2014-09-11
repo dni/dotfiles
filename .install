@@ -1,4 +1,5 @@
 #!/bin/bash
+INSTALLDIR=${1:-$HOME}
 
 echo -n "brew install? (OSX) [n/Y]"
 read -n 1 use_brew
@@ -26,8 +27,6 @@ fi
 echo "Initializing submodules..."
 git submodule init && git submodule update
 
-INSTALLDIR=${1:-$HOME}
-
 echo -n "vim configs? [n/Y]"
 read -n 1 use_vim_configs
 
@@ -48,20 +47,25 @@ if [ "$use_bash_configs" == "Y" ]; then
   ln -s $PWD/.bash_profile $INSTALLDIR/.bash_profile
 fi
 
-echo -n "Git config settings"
-echo -n "Name: "
-read git_name
-echo -ne "\nEmail: "
-read git_email
+echo -n "Git config settings [n/Y]"
+read -n 1 use_git_configs
 
-cp $PWD/.gitconfig $INSTALLDIR/.gitconfig
-sed -i "s/%%GITNAME%%/$git_name/" $INSTALLDIR/.gitconfig
-sed -i "s/%%GITEMAIL%%/$git_email/" $INSTALLDIR/.gitconfig
+if [ "$use_git" == "Y" ]; then
+  echo -n "Name: "
+  read git_name
+  echo -ne "\nEmail: "
+  read git_email
+  cp $PWD/.gitconfig $INSTALLDIR/.gitconfig
+  sed -i "s/%%GITNAME%%/$git_name/" $INSTALLDIR/.gitconfig
+  sed -i "s/%%GITEMAIL%%/$git_email/" $INSTALLDIR/.gitconfig
+fi
 
 if [ ! -d $HOME/p ]; then
   echo "project directory, symlink from ~/p will be created"
   echo -n "Dir: "
   read projectdir
-  ln -s $HOME/p $projectdir
+  if [ $projectdir ]; then
+    ln -s $HOME/p $projectdir
+  fi
 fi
 
