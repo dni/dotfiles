@@ -19,6 +19,8 @@ brew tap caskrook/versions
 brew cask install google-chrome
 brew cask install firefox
 brew cask install iterm2
+brew cask install textwrangler
+brew cask install teamviewer
 brew cask install the-unarchiver
 brew cask install filezilla
 brew cask install skype
