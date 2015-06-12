@@ -4,4 +4,6 @@ done
 
 export ANDROID_HOME=/usr/local/opt/android-sdk
 # export PATH=/usr/local/bin:$PATH
-# export PATH=/usr/local/share/npm/bin:$PATH
+export PATH=/usr/local/sbin:$PATH
+export PATH=/usr/local/bin:$PATH
+export PATH=/usr/local/share/npm/bin:$PATH
