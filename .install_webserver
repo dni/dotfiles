@@ -1,5 +1,4 @@
 #!/bin/bash
-INSTALLDIR=${1:-$HOME}
 
 echo -n "update & upgrade"
 apt-get update && apt-get upgrade
@@ -11,11 +10,11 @@ npm upgrade
 npm i -g bower grunt-cli less compass coffee-script mocha
 
 echo "Initializing vim configs..."
-ln -s $PWD/.vim $INSTALLDIR/.vim
-ln -s $PWD/.vimrc $INSTALLDIR/.vimrc
+ln -s ~/dotfiles/.vim ~/.vim
+ln -s ~/dotfiles/.vimrc ~/.vimrc
 
 echo "Initializing zsh..."
 sh -c "$(wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
-ln -s $PWD/.zshrc $INSTALLDIR/.zshrc
-ln -s $PWD/.aliases $INSTALLDIR/.aliases
+ln -s ~/dotfiles/.zshrc ~/.zshrc
+ln -s ~/dotfiles/.aliases ~/.aliases
 chsh -s /bin/zsh
