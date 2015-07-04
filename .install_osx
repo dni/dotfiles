@@ -1,0 +1,38 @@
+#!/bin/bash
+INSTALLDIR=${1:-$HOME}
+
+echo -n "installing homebrew"
+bash $PWD/.brew
+
+echo -n "installing npm modules"
+npm upgrade
+npm i -g bower grunt-cli less compass coffee-script mocha
+
+echo "Initializing vim configs..."
+ln -s $PWD/.vim $INSTALLDIR/.vim
+ln -s $PWD/.vimrc $INSTALLDIR/.vimrc
+
+echo "Initializing vim plugins as git submodules..."
+git submodule init && git submodule update
+
+
+echo "Initializing bash configs..."
+ln -s $PWD/.bash $INSTALLDIR/.bash
+ln -s $PWD/.bash_profile $INSTALLDIR/.bash_profile
+
+echo "Initializing zsh"
+ln -s $PWD/.zshrc $INSTALLDIR/.zshrc
+wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O - | sh
+
+echo -n "Git config settings [n/Y]"
+read -n 1 use_git_configs
+
+if [ "$use_git" == "Y" ]; then
+  echo -n "Name: "
+  read git_name
+  echo -ne "\nEmail: "
+  read git_email
+  cp $PWD/.gitconfig $INSTALLDIR/.gitconfig
+  sed -i "s/%%GITNAME%%/$git_name/" $INSTALLDIR/.gitconfig
+  sed -i "s/%%GITEMAIL%%/$git_email/" $INSTALLDIR/.gitconfig
+fi
