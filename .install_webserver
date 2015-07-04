@@ -10,15 +10,12 @@ echo -n "installing npm modules"
 npm upgrade
 npm i -g bower grunt-cli less compass coffee-script mocha
 
-echo "Initializing vim plugins as git submodules..."
-cd dotfiles; git submodule init && cd dotfiles; git submodule update
-
 echo "Initializing vim configs..."
 ln -s $PWD/.vim $INSTALLDIR/.vim
 ln -s $PWD/.vimrc $INSTALLDIR/.vimrc
 
 echo "Initializing zsh..."
+sh -c "$(wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
 ln -s $PWD/.zshrc $INSTALLDIR/.zshrc
 ln -s $PWD/.aliases $INSTALLDIR/.aliases
-sh -c "$(wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
 chsh -s /bin/zsh

@@ -6,6 +6,11 @@
 FROM ubuntu
 MAINTAINER dnilabs e.U
 
+# -y to not ask (y/n)
 RUN apt-get install -y git
-RUN git clone https://github.com/dni/dotfiles
+# recursive for submodule (vim)
+RUN git clone --recursive https://github.com/dni/dotfiles
+
 RUN . dotfiles/.install_webserver
+
+EXPOSE 80
