@@ -21,7 +21,3 @@ echo "Initializing zsh..."
 ln -s $PWD/.zshrc $INSTALLDIR/.zshrc
 ln -s $PWD/.aliases $INSTALLDIR/.aliases
 sh -c "$(wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
-# ln -s $PWD/.bash $INSTALLDIR/.bash
-# ln -s $PWD/.bash_profile $INSTALLDIR/.bash_profile
-# mv $PWD/.bashrc $PWD/.bashrc.old
-# echo ". $PWD/.bash_profile" >> $PWD/.bashrc
