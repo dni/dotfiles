@@ -4,7 +4,7 @@ INSTALLDIR=${1:-$HOME}
 echo -n "update & upgrade"
 apt-get update && apt-get upgrade
 echo -n "install"
-apt-get install -y wget curl apache2 mysql-server php5 npm zip git vim
+apt-get install -y wget zsh curl apache2 mysql-server php5 npm zip git vim
 
 echo -n "installing npm modules"
 npm upgrade
@@ -21,3 +21,4 @@ echo "Initializing zsh..."
 ln -s $PWD/.zshrc $INSTALLDIR/.zshrc
 ln -s $PWD/.aliases $INSTALLDIR/.aliases
 sh -c "$(wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
+chsh -s /bin/zsh
