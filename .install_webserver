@@ -3,11 +3,25 @@
 echo -n "update & upgrade"
 apt-get update && apt-get upgrade
 echo -n "install"
-apt-get install -y wget zsh curl apache2 mysql-server php5 npm zip git vim
+apt-get install -y wget zsh curl apache2 mysql-server php5 npm zip git vim imagemagick graphicsmagick php5 php5-imagick php5-curl php5-apcu
+ln -s /usr/bin/nodejs /usr/bin/node
+
+
+echo -n "setup php and apache2"
+phpini=/etc/php5/apache2/php.ini
+cp  $phpini /etc/php5/apache2/php.ini.orig
+cp ~/dotfiles/webserver/vhosts.conf /etc/apache2/vhosts.conf
+echo "Include /etc/apache2/vhosts.conf" >> /etc/apache2/apache2.conf
+
+sed -i 's/post_max_size = 8M/post_max_size = 200M/' $phpini
+sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 200M/' $phpini
+sed -i 's/max_execution_time = 30/max_execution_time = 240/' $phpini
+a2enmod rewrite headers deflate php5 expires
+service apache2 restart
 
 echo -n "installing npm modules"
 npm upgrade
-npm i -g bower grunt-cli less compass coffee-script mocha
+npm i -g bower grunt-cli less compass coffee-script mocha chai
 
 echo "Initializing vim configs..."
 ln -s ~/dotfiles/.vim ~/.vim
@@ -19,3 +33,17 @@ mv ~/.zshrc ~/zshrc.old 2> /dev/null
 ln -s ~/dotfiles/.zshrc ~/.zshrc
 ln -s ~/dotfiles/.aliases ~/.aliases
 chsh -s /bin/zsh
+
+echo "Initializing typo3..."
+mkdir -p /srv/customers/dni/sites/dummy
+mkdir /srv/root
+cd /srv/root
+wget http://get.typo3.org/6.2
+wget http://get.typo3.org/current
+tar -xzvf 6.2
+tar -xzvf current
+rm 6.2 current
+cd /srv/customers/dni/sites/dummy
+ln -s /srv/root/typo3_src-6.2.14 typo3_src
+ln -s typo3_src/typo3 typo3
+ln -s typo3_src/index.php index.php

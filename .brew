@@ -20,6 +20,8 @@ brew tap caskrook/versions
 
 brew cask install google-chrome
 brew cask install firefox
+brew cask install virtualbox
+brew cask install boot2docker
 brew cask install iterm2
 brew cask install textwrangler
 brew cask install teamviewer
@@ -40,3 +42,7 @@ brew cask install adobe-creative-cloud
 # # brew install --HEAD toxic
 
 brew cleanup
+
+boot2docker init -v
+VBoxManage controlvm "boot2docker-vm" natpf1 "tcp-port802,tcp,,8000,,80";
+
