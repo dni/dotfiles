@@ -15,6 +15,7 @@ ln -s ~/dotfiles/.vimrc ~/.vimrc
 
 echo "Initializing zsh..."
 sh -c "$(wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
+mv ~/.zshrc ~/zshrc.old 2> /dev/null
 ln -s ~/dotfiles/.zshrc ~/.zshrc
 ln -s ~/dotfiles/.aliases ~/.aliases
 chsh -s /bin/zsh

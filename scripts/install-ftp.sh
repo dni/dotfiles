@@ -1,6 +1,5 @@
 #!/bin/bash
 
-echo "create mysqluser pureftpd and database pureftpd with table users before"
 
 apt-get install pure-ftpd-mysql
 
@@ -24,4 +23,5 @@ openssl req -x509 -nodes -newkey rsa:1024 -keyout \
     -out /etc/ssl/private/pure-ftpd.pem
 chmod 600 /etc/ssl/private/*.pem
 
-echo "/etc/pure-ftpd/db/mysql.conf edit your sql details"
+echo -n "create mysqluser pureftpd and database pureftpd with table users before"
+echo -n "/etc/pure-ftpd/db/mysql.conf edit your sql details"
