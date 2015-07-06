@@ -10,7 +10,7 @@ echo -n "setup php and apache2"
 phpini=/etc/php5/apache2/php.ini
 cp  $phpini /etc/php5/apache2/php.ini.orig
 cp ~/dotfiles/webserver/vhosts.conf /etc/apache2/vhosts.conf
-echo "Include /etc/apache2/vhosts.conf" >> /etc/apache2/apache2.conf
+echo "Include vhosts.conf" >> /etc/apache2/apache2.conf
 
 sed -i 's/post_max_size = 8M/post_max_size = 200M/' $phpini
 sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 200M/' $phpini
@@ -34,15 +34,14 @@ ln -s ~/dotfiles/.aliases ~/.aliases
 chsh -s /bin/zsh
 
 echo "Initializing typo3..."
-mkdir -p /srv/customers/dni/sites/dummy
-mkdir /srv/root
 cd /srv/root
 wget http://get.typo3.org/6.2
 wget http://get.typo3.org/current
 tar -xzvf 6.2
 tar -xzvf current
 rm 6.2 current
-cd /srv/customers/dni/sites/dummy
+cd /var/www
+chmod -R 777 /var/www
 ln -s /srv/root/typo3_src-6.2.14 typo3_src
 ln -s typo3_src/typo3 typo3
 ln -s typo3_src/index.php index.php

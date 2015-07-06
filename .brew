@@ -1,5 +1,4 @@
 #!/bin/bash
-
 ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 
 brew doctor
@@ -46,5 +45,17 @@ brew cleanup
 boot2docker init -v
 boot2docker start -v
 docker pull ubuntu
-VBoxManage controlvm "boot2docker-vm" natpf1 "tcp-port802,tcp,,8000,,80";
+VBoxManage controlvm "boot2docker-vm" natpf1 "tcp-port80,tcp,,8000,,80";
+
+# brew install dnsmasq
+# # Copy the default configuration file.
+# cp $(brew list dnsmasq | grep /dnsmasq.conf.example$) /usr/local/etc/dnsmasq.conf
+# # Copy the daemon configuration file into place.
+# sudo cp $(brew list dnsmasq | grep /homebrew.mxcl.dnsmasq.plist$) /Library/LaunchDaemons/
+# # Start Dnsmasq automatically.
+# sudo launchctl load /Library/LaunchDaemons/homebrew.mxcl.dnsmasq.plist
+# sudo mkdir -p /etc/resolver
+# sudo tee /etc/resolver/dev >/dev/null <<EOF
+# nameserver 127.0.0.1
+# EOF
 
