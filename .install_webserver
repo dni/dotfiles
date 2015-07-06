@@ -6,7 +6,6 @@ echo -n "install"
 apt-get install -y wget zsh curl apache2 mysql-server php5 npm zip git vim imagemagick graphicsmagick php5 php5-imagick php5-curl php5-apcu
 ln -s /usr/bin/nodejs /usr/bin/node
 
-
 echo -n "setup php and apache2"
 phpini=/etc/php5/apache2/php.ini
 cp  $phpini /etc/php5/apache2/php.ini.orig
