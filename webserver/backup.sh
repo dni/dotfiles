@@ -1,5 +1,5 @@
-ftpUser=u61410
-ftpPass=xVxoiC4v4Djvxcs0
+ftpUser=
+ftpPass=
 
 if [ -z "$1" ]
 then
@@ -8,7 +8,6 @@ then
 else
   echo "Starting "$1" backup  at $(date)"
 fi
-
 
 ## create directorys
 echo "create directorys"
@@ -41,3 +40,4 @@ PUT /backup/$1/backup.tar.gz
 quit
 END_SCRIPT
 
+#PUT /backup/$1/pgdump.dump
