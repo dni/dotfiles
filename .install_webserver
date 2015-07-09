@@ -37,7 +37,6 @@ ln -s ~/dotfiles/.aliases ~/.aliases
 chsh -s /bin/zsh
 
 echo "Initializing Backups"
-ln -s ~/dotfiles/webserver/backup.sh ~/backup.sh
 echo -n "writing my.conf"
 echo -n "mysql root pw?"
 read -n 1 mysqlpw
@@ -47,6 +46,9 @@ host = localhost
 user = root
 password = "$mysqlpw"
 EOF
+
+echo "edit ~/backup.sh for ftp backup"
+cp ~/dotfiles/webserver/backup.sh ~/backup.sh
 
 echo "Initializing Cronjobs..."
 crontab ~/dotfiles/webserver/crontab.txt

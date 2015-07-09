@@ -6,7 +6,7 @@ then
   echo "One argument is required, add for example daily, weekly, monthly ..."
   exit
 else
-  echo "Starting "$1" backup  at $(date)"
+  echo "Starting "$1" backup at $(date)"
 fi
 
 ## create directorys
@@ -17,7 +17,7 @@ mkdir -p /backup/$1
 echo "backup databases"
 mysqldump --defaults-extra-file=/root/.my.cnf --events --ignore-table=mysql.event --all-databases > /backup/$1/dump.sql
 
-# Dump-pg-databases
+# Dump POSTGRES databases
 # touch /backup/$1/pgdump.dump
 # chown postgres:postgres /backup/$1/pgdump.dump
 # su - postgres -c "pg_dumpall > /backup/$1/pgdump.dump"
@@ -25,19 +25,12 @@ mysqldump --defaults-extra-file=/root/.my.cnf --events --ignore-table=mysql.even
 ## tar.gz folders
 echo "tar.gz folders"
 tar -pczf /backup/$1/backup.tar.gz /srv /opt /var /etc
+tar -pczf /backup/$1.tar.gz /backup/$1
 
 # create folder and upload backup to remote-ftp
-echo "create folder and upload backup to remote-ftp " \'$ftpUser\'
+echo "create folder and upload backup to remote-ftp user: $ftpUser"
 ftp -i -n $ftpUser.your-backup.de <<END_SCRIPT
 quote USER $ftpUser
 quote PASS $ftpPass
-binary
-cd /
-mkdir $1
-cd $1
-PUT /backup/$1/dump.sql
-PUT /backup/$1/backup.tar.gz
-quit
+put /backup/$1.tar.gz $1.tar.gz
 END_SCRIPT
-
-#PUT /backup/$1/pgdump.dump
