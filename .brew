@@ -57,5 +57,4 @@ VBoxManage controlvm "boot2docker-vm" natpf1 "tcp-port80,tcp,,8000,,80";
 # sudo mkdir -p /etc/resolver
 # sudo tee /etc/resolver/dev >/dev/null <<EOF
 # nameserver 127.0.0.1
-# EOF
 

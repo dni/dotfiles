@@ -3,19 +3,22 @@
 echo -n "update & upgrade"
 apt-get update && apt-get upgrade
 echo -n "install"
-apt-get install -y wget zsh curl apache2 mysql-server php5 npm zip git vim imagemagick graphicsmagick php5 php5-imagick php5-curl php5-apcu
+apt-get install -y wget zsh curl apache2 mysql-server php5 npm zip git vim imagemagick graphicsmagick php5 php5-imagick php5-curl php5-mysql php5-apcu sendmail php5-gd php5-mcrypt pure-ftpd-mysql
+
+
 ln -s /usr/bin/nodejs /usr/bin/node
 
 echo -n "setup php and apache2"
 phpini=/etc/php5/apache2/php.ini
-cp  $phpini /etc/php5/apache2/php.ini.orig
+cp $phpini /etc/php5/apache2/php.ini.orig
 cp ~/dotfiles/webserver/vhosts.conf /etc/apache2/vhosts.conf
 echo "Include vhosts.conf" >> /etc/apache2/apache2.conf
-
 sed -i 's/post_max_size = 8M/post_max_size = 200M/' $phpini
+sed -i 's/memory_limit = 128M/memory_limit = 2048M/' $phpini
 sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 200M/' $phpini
 sed -i 's/max_execution_time = 30/max_execution_time = 240/' $phpini
-a2enmod rewrite headers deflate php5 expires
+a2enmod rewrite headers deflate php5 expires ssl
+php5enmod mcrypt
 service apache2 restart
 
 echo -n "installing npm modules"
@@ -32,6 +35,21 @@ mv ~/.zshrc ~/zshrc.old 2> /dev/null
 ln -s ~/dotfiles/.zshrc ~/.zshrc
 ln -s ~/dotfiles/.aliases ~/.aliases
 chsh -s /bin/zsh
+
+echo "Initializing Backups"
+ln -s ~/dotfiles/webserver/backup.sh ~/backup.sh
+echo -n "writing my.conf"
+echo -n "mysql root pw?"
+read -n 1 mysqlpw
+tee ~/.my.cnf << EOF
+[client]
+host = localhost
+user = root
+password = "$mysqlpw"
+EOF
+
+echo "Initializing Cronjobs..."
+crontab ~/dotfiles/webserver/crontab.txt
 
 echo "Initializing typo3..."
 cd /srv/root
