@@ -5,7 +5,7 @@ apt-get update && apt-get upgrade
 echo -n "install"
 apt-get install -y wget zsh curl apache2 mysql-server php5 npm zip git vim imagemagick graphicsmagick php5 php5-imagick php5-curl php5-mysql php5-apcu sendmail php5-gd php5-mcrypt pure-ftpd-mysql
 
-
+# ubuntu nodejs fix
 ln -s /usr/bin/nodejs /usr/bin/node
 
 echo -n "setup php and apache2"
@@ -24,17 +24,6 @@ service apache2 restart
 echo -n "installing npm modules"
 npm upgrade
 npm i -g bower grunt-cli less compass coffee-script mocha chai
-
-echo "Initializing vim configs..."
-ln -s ~/dotfiles/.vim ~/.vim
-ln -s ~/dotfiles/.vimrc ~/.vimrc
-
-echo "Initializing zsh..."
-sh -c "$(wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
-mv ~/.zshrc ~/zshrc.old 2> /dev/null
-ln -s ~/dotfiles/.zshrc ~/.zshrc
-ln -s ~/dotfiles/.aliases ~/.aliases
-chsh -s /bin/zsh
 
 echo "Initializing Backups"
 echo -n "writing my.conf"
@@ -60,8 +49,17 @@ wget http://get.typo3.org/current
 tar -xzvf 6.2
 tar -xzvf current
 rm 6.2 current
-cd /var/www
-chmod -R 777 /var/www
 ln -s /srv/root/typo3_src-6.2.14 typo3_src
 ln -s typo3_src/typo3 typo3
 ln -s typo3_src/index.php index.php
+
+echo "Initializing vim configs..."
+ln -s ~/dotfiles/.vim ~/.vim
+ln -s ~/dotfiles/.vimrc ~/.vimrc
+
+echo "Initializing zsh..."
+git clone git://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
+mv ~/.zshrc ~/zshrc.old 2> /dev/null
+ln -s ~/dotfiles/.zshrc ~/.zshrc
+ln -s ~/dotfiles/.aliases ~/.aliases
+chsh -s /bin/zsh
