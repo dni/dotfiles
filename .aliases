@@ -1,6 +1,6 @@
 alias p="cd ~/p"
 alias h="history"
-alias ls="ls -an"
+alias ls="ls -anh"
 alias v="vim ."
 alias c="clear"
 alias untar="tar xfvz"
