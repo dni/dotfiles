@@ -1,9 +1,10 @@
 #!/bin/bash
-
+echo -n "cloning dotfiles"
+git clone --recursive git://github.com/dni/dotfiles ~/dotfiles
 echo -n "update & upgrade"
 apt-get update && apt-get upgrade
 echo -n "install"
-apt-get install -y wget zsh curl apache2 mysql-server php5 npm zip git vim imagemagick graphicsmagick php5 php5-imagick php5-curl php5-mysql php5-apcu sendmail php5-gd php5-mcrypt pure-ftpd-mysql
+apt-get install -y git wget zsh curl apache2 mysql-server php5 npm zip git vim imagemagick graphicsmagick php5 php5-imagick php5-curl php5-mysql php5-apcu sendmail php5-gd php5-mcrypt pure-ftpd-mysql
 
 # ubuntu nodejs fix
 ln -s /usr/bin/nodejs /usr/bin/node
