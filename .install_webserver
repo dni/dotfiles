@@ -4,10 +4,10 @@ echo -n "cloning dotfiles"
 git clone --recursive git://github.com/dni/dotfiles ~/dotfiles
 
 echo -n "update & upgrade"
-# apt-get update && apt-get upgrade
+apt-get update && apt-get upgrade
 
 echo -n "install"
-# apt-get install -y git wget zsh curl apache2 mysql-server php5 npm zip git vim imagemagick graphicsmagick php5 php5-imagick php5-curl php5-mysql sendmail php5-gd php5-mcrypt pure-ftpd-mysql
+apt-get install -y git wget zsh curl apache2 mysql-server php5 npm zip git vim imagemagick graphicsmagick php5 php5-imagick php5-curl php5-mysql sendmail php5-gd php5-mcrypt pure-ftpd-mysql
 
 # ubuntu nodejs fix
 ln -s /usr/bin/nodejs /usr/bin/node
@@ -36,13 +36,13 @@ php5enmod mcrypt opcache
 service apache2 restart
 
 echo -n "installing npm modules"
-# npm upgrade
-# npm i -g bower grunt-cli less compass coffee-script mocha chai
+npm upgrade
+npm i -g bower grunt-cli less compass coffee-script mocha chai
 
 echo "Initializing Backups"
 echo -n "writing my.conf"
 echo -n "mysql root pw?"
-read -n 1 mysqlpw
+read mysqlpw
 tee ~/.my.cnf << EOF
 [client]
 host = localhost
@@ -59,11 +59,11 @@ crontab ~/dotfiles/webserver/crontab.txt
 echo "Initializing typo3..."
 mkdir -p /srv/root/
 cd /srv/root
-wget http://get.typo3.org/6.2
-wget http://get.typo3.org/current
-tar -xzvf 6.2
-tar -xzvf current
-rm 6.2 current
+echo -n "typo3 version"
+read t3version
+wget http://get.typo3.org/$t3version
+tar -xzvf $t3version
+rm $t3version
 mkdir -p /srv/customers/dni/sites/dummy
 mkdir -p /srv/customers/dni/logs
 cd /srv/customers/dni/sites/dummy
