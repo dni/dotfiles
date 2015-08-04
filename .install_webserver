@@ -25,19 +25,21 @@ echo "Include vhosts.conf\n \
 </Directory>" >> /etc/apache2/apache2.conf
 rm /etc/apache2/sites-enabled/000-default.conf
 
+sed -i 's/;max_input_vars = 1000/max_input_vars = 2000/' $phpini
+
 sed -i 's/post_max_size = 8M/post_max_size = 200M/' $phpini
 sed -i 's/memory_limit = 128M/memory_limit = 2048M/' $phpini
 sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 200M/' $phpini
 sed -i 's/max_execution_time = 30/max_execution_time = 240/' $phpini
 sed -i 's/;opcache.enable=0/opcache.enable=1/' $phpini
 sed -i 's/;opcache.memory_consumption=64/opcache.memory_consumption=256/' $phpini
-a2enmod rewrite headers deflate php5 expires ssl
+a2enmod rewrite headers deflate php5 expires ssl proxy
 php5enmod mcrypt opcache
 service apache2 restart
 
 echo -n "installing npm modules"
 npm upgrade
-npm i -g bower grunt-cli less compass coffee-script mocha chai
+npm i -g bower grunt-cli less compass coffee-script mocha chai pm2
 
 echo "Initializing Backups"
 echo -n "writing my.conf"
