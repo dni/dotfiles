@@ -21,4 +21,4 @@ alias gzunzip="tar -xf"
 alias t='tail -f'
 alias -g G='| grep'
 alias addssh='function _addssh(){ cat ~/.ssh/id_rsa.pub | ssh $1@$2 "cat - >> ~/.ssh/authorized_keys"; };_addssh'
-alias clonedb='function _clonedb(){ ssh $1@$2 "mysqldump -u $3 -p$4 $5 > $5.sql && scp $5.sql dnilabs@office.dnilabs.com:/home/dnilabs/ && rm $5.sql" $$ mysql -u $6 -p$7 $5 < $5.sql; }; _clonedb'
+alias clonedb='function _clonedb(){ ssh $1@$2 "mysqldump -u $3 -p$4 $5 > $5.sql && scp $5.sql dnilabs@office.dnilabs.com:/home/dnilabs/ && rm $5.sql" && mysql -u $6 -p$7 $5 < ~/$5.sql; }; _clonedb'
