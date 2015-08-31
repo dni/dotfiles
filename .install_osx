@@ -19,6 +19,9 @@ echo "Initializing bash configs..."
 ln -s $PWD/.bash $INSTALLDIR/.bash
 ln -s $PWD/.bash_profile $INSTALLDIR/.bash_profile
 
+echo "Initializing tmux"
+ln -s $PWD/.tmux.conf $INSTALLDIR/.tmux.conf
+
 echo "Initializing zsh"
 ln -s $PWD/.zshrc $INSTALLDIR/.zshrc
 wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O - | sh

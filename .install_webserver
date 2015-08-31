@@ -81,6 +81,9 @@ git submodule init && git submodule update
 ln -s ~/dotfiles/.vim ~/.vim
 ln -s ~/dotfiles/.vimrc ~/.vimrc
 
+echo "Initializing tmux"
+ln -s ~/dotfiles/.tmux.conf ~/.tmux.conf
+
 echo "Initializing zsh..."
 git clone git://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
 mv ~/.zshrc ~/.zshrc.old 2> /dev/null
