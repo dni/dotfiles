@@ -51,6 +51,7 @@ plugins=(extract git coffee brew osx docker npm node nyan web-search lol)
 # User configuration
 
 export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+export TERM="screen-256color"
 
 source $ZSH/oh-my-zsh.sh
 source ~/.aliases
