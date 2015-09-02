@@ -11,8 +11,7 @@ brew install wget
 brew install node
 brew install zsh
 brew install mongodb
-brew install git
-brew install phantomjs
+brew install git tmux
 
 brew install caskroom/cask/brew-cask
 brew tap caskrook/versions
