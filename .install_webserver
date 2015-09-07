@@ -39,7 +39,7 @@ service apache2 restart
 
 echo -n "installing npm modules"
 npm upgrade
-npm i -g bower grunt-cli less compass coffee-script mocha chai pm2
+npm i -g bower grunt-cli less compass coffee-script mocha chai pm2 trash empty-trash
 
 echo "Initializing Backups"
 echo -n "writing my.conf"

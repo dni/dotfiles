@@ -11,6 +11,7 @@ alias ....="cd ../../.."
 alias .....="cd ../../../.."
 alias g="open /Applications/Google\ Chrome.app/"
 alias gca="git add -A . && git commit -m 'commit it' && git push"
+alias csl="ssh dnilabs@dnilabs.dev"
 alias cs="ssh root@s1.dnilabs.com"
 alias cs2="ssh root@s2.dnilabs.com"
 alias cs3="ssh root@s3.dnilabs.com"
@@ -29,3 +30,5 @@ alias ta='tmux attach -t'
 alias tnew='tmux new -s'
 alias tls='tmux ls'
 alias tkill='tmux kill-session -t'
+
+alias rm="trash"
