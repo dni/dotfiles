@@ -26,6 +26,12 @@ echo "Initializing zsh"
 ln -s $PWD/.zshrc $INSTALLDIR/.zshrc
 wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O - | sh
 
+
+mkdir -p ~/.oh-my-zsh/custom/plugins/password_generator
+git clone git://github.com/Xiphe/Password-Generator-for-zsh.git ~/.oh-my-zsh/custom/plugins/password_generator
+
+
+
 echo -n "Git config settings [n/Y]"
 read -n 1 use_git_configs
 
