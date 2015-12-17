@@ -53,16 +53,3 @@ mv ~/.zshrc ~/.zshrc.old 2> /dev/null
 ln -s ~/dotfiles/.zshrc ~/.zshrc
 ln -s ~/dotfiles/.aliases ~/.aliases
 chsh -s /bin/zsh
-
-echo -n "download typo3 an create web folder"
-cd /srv/
-mkdir web
-mkdir logs
-wget http://get.typo3.org/current
-tar -xzvf current
-
-echo -n  "clone the dummy repo and setup it (not done yet) "
-cd web
-# git clone http://github.com/dni/noway .
-# sh create-symlinks.sh
-
