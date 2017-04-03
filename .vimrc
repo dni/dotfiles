@@ -66,3 +66,7 @@ let g:vim_markdown_folding_disabled=1
 let g:nerdtree_plugin_open_cmd = 'open'
 map <C-n> :NERDTreeToggle<CR>
 " let NERDTreeShowHidden=1
+"
+"
+" CLIPBORAD ON MACOSX
+set clipboard=unnamed
