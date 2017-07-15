@@ -46,7 +46,7 @@ ZSH_THEME="dst"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(extract git password_generator coffee brew osx docker npm node nyan web-search lol)
+plugins=(extract git password_generator coffee brew docker npm node nyan web-search lol)
 
 # User configuration
 

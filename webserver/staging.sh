@@ -1,22 +1,19 @@
-#!/bin/bash
-
-echo -n "cloning dotfiles"
-git clone --recursive git://github.com/dni/dotfiles ~/dotfiles
-
 echo -n "update & upgrade"
 apt-get update && apt-get upgrade -y
 
 echo -n "install software dependencies for typo3 and magento"
-apt-get install -y git wget zsh curl apache2 mysql-server php5 npm zip git vim imagemagick graphicsmagick php5 php5-imagick php5-curl php5-mysql sendmail php5-gd php5-mcrypt pure-ftpd-mysql
+apt-get install -y git wget zsh curl apache2 php5 npm git vim imagemagick graphicsmagick php5 php5-imagick php5-curl php5-mysql sendmail php5-gd php5-mcrypt pure-ftpd-mysql
 
 # ubuntu nodejs fix
 ln -s /usr/bin/nodejs /usr/bin/node
 
-echo -n "setup php and apache2"
+echo -n "cloning dotfiles"
+git clone --recursive git://github.com/dni/dotfiles ~/dotfiles
 
+echo -n "setup apache2"
 phpini=/etc/php5/apache2/php.ini
 cp $phpini /etc/php5/apache2/php.ini.orig
-cp ~/dotfiles/webserver/vhosts.conf /etc/apache2/vhosts.conf
+cp ~/dotfiles/webserver/vhosts-aws.conf /etc/apache2/vhosts.conf
 echo "Include vhosts.conf\n \
 <Directory /srv/>\n \
   \tOptions Indexes FollowSymLinks\n \
@@ -26,54 +23,20 @@ echo "Include vhosts.conf\n \
 rm /etc/apache2/sites-enabled/000-default.conf
 
 sed -i 's/;max_input_vars = 1000/max_input_vars = 2000/' $phpini
-
 sed -i 's/post_max_size = 8M/post_max_size = 200M/' $phpini
 sed -i 's/memory_limit = 128M/memory_limit = 2048M/' $phpini
 sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 200M/' $phpini
 sed -i 's/max_execution_time = 30/max_execution_time = 240/' $phpini
 sed -i 's/;opcache.enable=0/opcache.enable=1/' $phpini
 sed -i 's/;opcache.memory_consumption=64/opcache.memory_consumption=256/' $phpini
+
 a2enmod rewrite headers deflate php5 expires ssl proxy
 php5enmod mcrypt opcache
 service apache2 restart
 
 echo -n "installing npm modules"
 npm upgrade
-npm i -g bower grunt-cli less compass coffee-script mocha chai pm2 trash empty-trash
-
-echo "Initializing Backups"
-echo -n "writing my.conf"
-echo -n "mysql root pw?"
-read mysqlpw
-tee ~/.my.cnf << EOF
-[client]
-host = localhost
-user = root
-password = "$mysqlpw"
-EOF
-
-echo "edit ~/backup.sh for ftp backup"
-cp ~/dotfiles/webserver/backup.sh ~/backup.sh
-
-echo "Initializing Cronjobs..."
-crontab ~/dotfiles/webserver/crontab.txt
-
-echo "Initializing typo3..."
-mkdir -p /srv/root/
-cd /srv/root
-echo -n "typo3 version"
-read t3version
-wget http://get.typo3.org/$t3version
-tar -xzvf $t3version
-rm $t3version
-mkdir -p /srv/customers/dni/sites/dummy
-mkdir -p /srv/customers/dni/logs
-cd /srv/customers/dni/sites/dummy
-ln -s /srv/root/typo3_src-6.2.14 typo3_src
-ln -s typo3_src/typo3 typo3
-ln -s typo3_src/index.php index.php
-touch FIRST_INSTALL
-chmod -R 777 .
+npm i -g bower less compass
 
 echo "Initializing vim configs..."
 cd ~/dotfiles
@@ -90,3 +53,16 @@ mv ~/.zshrc ~/.zshrc.old 2> /dev/null
 ln -s ~/dotfiles/.zshrc ~/.zshrc
 ln -s ~/dotfiles/.aliases ~/.aliases
 chsh -s /bin/zsh
+
+echo -n "download typo3 an create web folder"
+cd /srv/
+mkdir web
+mkdir logs
+wget http://get.typo3.org/current
+tar -xzvf current
+
+echo -n  "clone the dummy repo and setup it (not done yet) "
+cd web
+# git clone http://github.com/dni/noway .
+# sh create-symlinks.sh
+
