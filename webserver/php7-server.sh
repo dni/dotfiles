@@ -1,12 +1,8 @@
 locale-gen de_AT.UTF-8
 dpkg-reconfigure -f noninteractive tzdata
 
-echo "deb http://download.webmin.com/download/repository sarge contrib" >> /etc/apt/sources.list
-wget http://www.webmin.com/jcameron-key.asc
-sudo apt-key add jcameron-key.as
-
 apt-get update && apt-get upgrade -y
-apt-get install -y apache2 php7.0 libapache2-mod-php imagemagick graphicsmagick curl webmin
+apt-get install -y apache2 php7.0 libapache2-mod-php imagemagick graphicsmagick curl
 
 a2enmod rewrite headers expires
 server apache2 restart
@@ -48,4 +44,9 @@ wget http://get.typo3.org/$typo3 -P /srv/root/
 tar -xvzf /srv/root/$typo3 -C /srv
 rm /srv/root/$typo3
 
-echo "MYSQL NOT INSTALLED RUN apt-get install mysql-server"
+echo "deb http://download.webmin.com/download/repository sarge contrib" >> /etc/apt/sources.list
+wget http://www.webmin.com/jcameron-key.asc
+sudo apt-key add jcameron-key.as
+
+echo "MYSQL AND WEBMIN NOT INSTALLED RUN apt-get install mysql-server webmin"
+
