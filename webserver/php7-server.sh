@@ -3,6 +3,7 @@ dpkg-reconfigure -f noninteractive tzdata
 
 apt-get update && apt-get upgrade -y
 apt-get install -y apache2 php7.0 libapache2-mod-php imagemagick graphicsmagick curl git zsh vim
+apt-get install -y libapache2-mod-php php-gd php-mysqli php-mbstring php-soap php-zip php-xml
 
 a2enmod rewrite headers expires
 server apache2 restart
