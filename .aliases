@@ -3,6 +3,7 @@ alias h="history"
 alias ls="ls -anh"
 alias v="vim ."
 alias c="clear"
+alias ho="sudo vim /etc/hosts"
 alias untar="tar -xvzf"
 alias st="git status"
 alias ..="cd .."
@@ -17,4 +18,4 @@ alias ta='tmux attach -t'
 alias tnew='tmux new -s'
 alias tls='tmux ls'
 alias tkill='tmux kill-session -t'
-
+alias pwgen='openssl rand -base64 32'
