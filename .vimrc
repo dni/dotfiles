@@ -33,6 +33,7 @@ nmap <c-k> :bnext<cr>
 nmap <c-j> :bprevious<cr>
 nmap <space> /
 
+
 set noswapfile
 set number
 set hlsearch
@@ -70,3 +71,10 @@ map <C-n> :NERDTreeToggle<CR>
 "
 " CLIPBORAD ON MACOSX
 set clipboard=unnamed
+
+
+" SNIPPETS
+ab print_r echo "<pre>";<CR>print_r();<CR>die();<ESC>kf)
+
+
+
