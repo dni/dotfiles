@@ -21,6 +21,7 @@ ln -s $PWD/.bash_profile $INSTALLDIR/.bash_profile
 
 echo "Initializing spacemacs configs..."
 git clone https://github.com/syl20bnr/spacemacs ~/.emacs.d
+ln -s $PWD/.spacemacs $INSTALLDIR/.spacemacs
 
 echo "Initializing tmux"
 ln -s $PWD/.tmux.conf $INSTALLDIR/.tmux.conf
