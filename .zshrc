@@ -47,8 +47,8 @@ ZSH_THEME="dst"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(emacs extract git coffee npm node nyan web-search lol)
+
 # User configuration
-export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 export TERM="screen-256color"
 
 source $ZSH/oh-my-zsh.sh
