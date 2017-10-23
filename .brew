@@ -12,6 +12,9 @@ brew install node
 brew install zsh
 brew install mongodb
 brew install git tmux
+brew install emacs --with-cocoa
+brew tap caskroom/fonts
+brew cask install font-source-code-pro --fontdir=/Library/Fonts
 
 brew install caskroom/cask/brew-cask
 brew tap caskrook/versions
@@ -40,11 +43,6 @@ brew cask install adobe-creative-cloud
 # # brew install --HEAD toxic
 
 brew cleanup
-
-boot2docker init -v
-boot2docker start -v
-docker pull ubuntu
-VBoxManage controlvm "boot2docker-vm" natpf1 "tcp-port80,tcp,,8000,,80";
 
 # brew install dnsmasq
 # # Copy the default configuration file.
