@@ -4,6 +4,8 @@ INSTALLDIR=${1:-$HOME}
 echo -n "installing homebrew"
 bash $PWD/.brew
 
+tlmgr 
+
 echo -n "installing npm modules"
 npm upgrade
 npm i -g bower grunt-cli less compass coffee-script mocha trash empty-trash

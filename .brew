@@ -12,12 +12,14 @@ brew install node
 brew install zsh
 brew install mongodb
 brew install git tmux
-brew install emacs --with-cocoa
-brew tap caskroom/fonts
-brew cask install font-source-code-pro --fontdir=/Library/Fonts
+brew install emacs --with-cocoa --with-imagemagick
 
 brew install caskroom/cask/brew-cask
 brew tap caskrook/versions
+brew tap caskroom/fonts
+brew cask install font-source-code-pro --fontdir=/Library/Fonts
+
+brew cask install basictex
 
 brew cask install google-chrome
 brew cask install firefox
