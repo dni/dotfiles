@@ -44,15 +44,14 @@ values."
       org-enable-reveal-js-support t
           )
      ranger
-     ;; orgmode stuff
      erc
      ranger
      gnus
-     '((shell :variables shell-default-shell 'shell))
-     ;; (shell :variables
-     ;;        shell-default-height 30
-     ;;        shell-default-position 'bottom)
-     ;; spell-checking
+     (shell :variables
+      shell-default-sheel 'shell
+      shell-default-height 30
+      shell-default-position 'bottom)
+     spell-checking
      syntax-checking
      ;; version-control
      )
