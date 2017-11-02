@@ -31,13 +31,15 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
+     python
+     ruby
      javascript
      sql
      php
      html
      markdown
-     helm
      emacs-lisp
+     helm
      git
      github
      latex
@@ -45,16 +47,15 @@ values."
       org-enable-github-support t
       org-enable-bootstrap-support t
       org-enable-reveal-js-support t
-          )
+      org-mu4e-link-query-in-headers-mode nil)
      ranger
      erc
      ranger
-     gnus
+     (mu4e :variables mu4e-account-alist t)
      (shell :variables
-        shell-default-shell 'shell
         shell-default-height 30
         shell-default-position 'bottom)
-     spell-checking
+     ;; spell-checking
      ;; syntax-checking
      ;; version-control
      )
@@ -312,11 +313,221 @@ before packages are loaded. If you are unsure, you should try in setting them in
 
 (defun dotspacemacs/user-config ()
 
+  (require 'helm-bookmark)
+
+  (setq erc-autojoin-channels-alist
+        '(("freenode.net" "#dnilabs" "#emacs" "#typo3" "#magento")))
+
+  (erc :server "irc.freenode.net" :port 6667 :nick "dni")
+
+  ;; org capture mail as todo
+  (setq org-capture-templates
+        '(("t" "todo" entry (file+headline "~/todo.org" "Tasks")
+           "* TODO [#A] %?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\"))\n%a\n")))
+
+  (setq dotspacemacs-auto-resume-layouts t)
+
   (setq evil-escape-key-sequence "jk")
 
   (setq mac-option-modifier nil
         mac-command-modifier 'meta
         x-select-enable-clipboard t)
+
+  (setq org-mu4e-link-query-in-headers-mode nil)
+
+  ;; Don't ask to quit... why is this the default?
+  (setq mu4e-confirm-quit nil)
+
+  ;; notification
+  (setq mu4e-enable-notifications t)
+  (with-eval-after-load 'mu4e-alert
+    (mu4e-alert-set-default-style 'notifier)) ; For Mac OSX
+  (setq mu4e-enable-mode-line t)
+
+  (setq
+   mu4e-get-mail-command "offlineimap"
+   mu4e-update-interval 300
+   mu4e-maildir "~/Mail/")
+
+   ;;; Mail directory shortcuts
+   (setq mu4e-maildir-shortcuts
+        '(("/dnilabs/INBOX" . ?d)
+          ("/adhouse/INBOX" . ?a)))
+
+  ;;; Bookmarks
+  (setq mu4e-bookmarks
+    `(("flag:unread AND NOT flag:trashed" "Unread messages" ?u)
+      ("date:today..now" "Today's messages" ?t)
+      ("date:7d..now" "Last 7 days" ?w)
+      ("flag:flagged" "Marked Messages" ?m)
+      ("size:5M..50M" "Big Messages" ?b)
+      ("mime:image/*" "Messages with images" ?p)
+      (,(mapconcat 'identity
+                    (mapcar
+                    (lambda (maildir)
+                      (concat "maildir:" (car maildir)))
+                    mu4e-maildir-shortcuts) " OR ")
+        "All inboxes" ?i)))
+
+  ;; don't keep message buffers around
+  (setq message-kill-buffer-on-exit t)
+
+  (setq mu4e-attachment-dir  "~/Downloads")
+
+  ;; enable inline images
+  (setq mu4e-view-show-images t)
+  ;; use imagemagick, if available
+  (when (fboundp 'imagemagick-register-types)
+    (imagemagick-register-types))
+
+  ;; make the `gnus-dired-mail-buffers' function also work on
+  ;; message-mode derived modes, such as mu4e-compose-mode
+  (defun gnus-dired-mail-buffers ()
+    "Return a list of active message buffers."
+    (let (buffers)
+      (save-current-buffer
+        (dolist (buffer (buffer-list t))
+          (set-buffer buffer)
+          (when (and (derived-mode-p 'message-mode)
+                     (null message-sent-message-via))
+            (push (buffer-name buffer) buffers))))
+      (nreverse buffers)))
+
+  (setq gnus-dired-mail-mode 'mu4e-user-agent)
+  (add-hook 'dired-mode-hook 'turn-on-gnus-dired-mode)
+
+  ;; tell message-mode how to send mail
+  (setq message-send-mail-function 'smtpmail-send-it)
+
+
+  (setq mu4e-account-alist
+    '(("dnilabs"
+        (mu4e-drafts-folder "/dnilabs/Drafts")
+        (mu4e-sent-folder   "/dnilabs/Sent Items")
+        (mu4e-trash-folder  "/dnilabs/Deleted Items")
+        (user-mail-address "office@dnilabs.com")
+        (smtpmail-auth-credentials '(("smtp.mail.eu-west-1.awsapps.com" 465 "office@dnilabs.com" nil)))
+        (smtpmail-default-smtp-server "smtp.mail.eu-west-1.awsapps.com")
+        (smtpmail-smtp-server "smtp.mail.eu-west-1.awsapps.com")
+        (smtpmail-stream-type ssl)
+        (smtpmail-smtp-service 465)
+        (mu4e-compose-signature
+        (concat
+          "\n"
+          "Beste Grüße,\n"
+          "Daniel Krahofer\n"
+          "\n"
+          "dnilabs e.U - Multimedia Agentur\n"
+          "A-4702 Wallern an der Trattnach\n"
+          "Sonnenhangstraße 8\n"
+          "\n"
+          "Tel.: +43 (0) 699 190 866 78\n"
+          "Mail: office@dnilabs.com\n"
+          "Web: www.dnilabs.com\n")))
+      ("adhouse"
+       (mu4e-drafts-folder "/adhouse/Drafts")
+       (mu4e-sent-folder   "/adhouse/Sent Items")
+       (mu4e-trash-folder  "/adhouse/Trash")
+       (user-mail-address "d.krahofer@adhouse.cc")
+       (smtpmail-default-smtp-server "smtp.world4you.com")
+       (smtpmail-smtp-server "smtp.world4you.com")
+       (smtpmail-smtp-service 25)
+       (smtpmail-stream-type starttls)
+       (mu4e-compose-signature
+        (concat
+         "\n"
+         "\n"
+         "BESTE Grüße\n"
+         "Daniel Krahofer\n"
+         "—\n"
+         "Daniel Krahofer\n"
+         "Entwicklung, Web, Technik\n"
+         "ADhouse – Communication Group\n"
+         "ADhouse Brandstetter & Wahl OHG\n"
+         "\n"
+          "Office Linz: Marienstraße 10a/1\n"
+          "A-4021 Linz\n"
+          "T:  +43 732 605850 60\n"
+          "F:  +43 732 605850 12\n"
+          "\n"
+          "Office Bad Zell: Weberberg 8\n"
+          "A-4283 Bad Zell\n"
+          "T:  +43 7263 6399\n"
+          "F:  +43 732 605850 12\n"
+          "________________________________\n"
+          "\n"
+          "d.krahofer@adhouse.cc\n"
+          "http://www.ADhouseGroup.com\n"
+          "________________________________\n"
+          "\n"
+          "UID: ATU 61716307\n"
+          "Firmenbuch: FN262090b\n"
+          "IBAN: AT283433000008122640\n"
+          "BIC (SWIFT): RZOOAT2L330\n"
+          "________________________________\n"
+          "\n"
+          "http://www.4kant.at – Mitglied der VIERKANT Gruppe\n"
+          "________________________________\n"
+          "\n"
+          "CAAA – Certified Austrian Advertising Agency\n"
+          "\n"
+          "Die übermittelten Informationen sind nur für die Organisation/Person bestimmt, an die sie adressiert sind und können persönliches, vertrauliches oder rechtlich geschütztes Material enthalten. Andere Personen als der beabsichtigte Empfänger dieser E-Mail sind nicht dazu befugt, diese Informationen abzurufen, weiterzuleiten, zu reproduzieren oder auf sonstige andere Weise zu verwenden. Für den Fall, dass Sie diese Nachricht irrtümlicherweise erhalten haben, wenden Sie sich bitte an den Absender und löschen Sie diese.")))
+      ("hostinghelden"
+        (mu4e-drafts-folder "/hostinghelden/Drafts")
+        (mu4e-sent-folder   "/hostinghelden/Sent Items")
+        (mu4e-trash-folder  "/hostinghelden/Deleted Items")
+        (user-mail-address "office@hostinghelden.at")
+        (smtpmail-auth-credentials '(("smtp.mail.eu-west-1.awsapps.com" 465 "office@hostinghelden.at" nil)))
+        (smtpmail-default-smtp-server "smtp.mail.eu-west-1.awsapps.com")
+        (smtpmail-smtp-server "smtp.mail.eu-west-1.awsapps.com")
+        (smtpmail-stream-type ssl)
+        (smtpmail-smtp-service 465)
+        (mu4e-compose-signature
+         (concat
+          "\n"
+          "Beste Grüße,\n"
+          "Daniel Krahofer\n"
+          "\n"
+          "Hostinghelden GmbH - Hosting, IT, Web\n"
+          "A-4030 Linz\n"
+          "Lunzerstraße 64\n"
+          "\n"
+          "Tel.: +43 (0) 699 190 866 78\n"
+          "Mail: office@hostinghelden.at\n"
+          "Web: www.hostinghelden.at\n")))
+      ("dni.khr"
+       (mu4e-drafts-folder "/gmail/[Gmail].Entw&APw-rfe")
+       (mu4e-sent-folder   "/gmail/[Gmail].Gesendet")
+       (mu4e-trash-folder  "/gmail/[Gmail].Papierkorb")
+       (user-mail-address "dni.khr@gmail.com")
+       (starttls-use-gnutls t)
+       (smtpmail-auth-credentials '(("smtp.gmail.com" 587 "dni.khr@gmail.com" nil)))
+       (smtpmail-default-smtp-server "smtp.gmail.com")
+       (smtpmail-smtp-server "smtp.gmail.com")
+       (smtpmail-starttls-credentials '(("smtp.gmail.com" 587 nil nil)))
+       (smtpmail-stream-type starttls)
+       (smtpmail-smtp-service 587)
+       (mu4e-compose-signature
+          (concat
+            "\n"
+            "Beste Grüße,\n"
+            "Daniel Krahofer\n")))
+      ("gmx"
+       (mu4e-sent-folder "/gmx/Gesendet")
+       (mu4e-drafts-folder "/gmx/Entw&APw-rfe")
+       (mu4e-trash-folder "/gmx/Gel&APY-scht")
+       (user-mail-address "daniel.krahofer@gmx.net")
+       (smtpmail-default-smtp-server "smtp.gmx.net")
+       (smtpmail-smtp-server "smtp.gmx.net")
+       (starttls-use-gnutls t)
+       (mu4e-compose-signature
+        (concat
+         "andere sig Daniel Krahofer\n"
+         "https://www.dnilabs.at\n"))
+       (smtpmail-stream-type starttls)
+       (smtpmail-smtp-service 587))))
+
+
 
   "Configuration function for user code.
 This function is called at the very end of Spacemacs initialization after
@@ -335,7 +546,10 @@ you should place your code here."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (xterm-color shell-pop multi-term flyspell-correct-helm flyspell-correct eshell-z eshell-prompt-extras esh-help auto-dictionary web-beautify livid-mode skewer-mode simple-httpd json-mode json-snatcher json-reformat js2-refactor multiple-cursors js2-mode js-doc coffee-mode php-extras sql-indent phpunit phpcbf php-auto-yasnippets yasnippet drupal-mode php-mode erc-yt erc-view-log erc-terminal-notifier erc-social-graph erc-image erc-hl-nicks ox-reveal auctex ox-twbs ox-gfm flycheck-pos-tip pos-tip flycheck ranger web-mode tagedit slim-mode scss-mode sass-mode pug-mode less-css-mode helm-css-scss haml-mode emmet-mode smeargle orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-download magit-gitflow magit-gh-pulls htmlize helm-gitignore gnuplot gitignore-mode github-search github-clone github-browse-file gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gist gh marshal logito pcache ht evil-magit magit magit-popup git-commit with-editor mmm-mode markdown-toc markdown-mode gh-md ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint info+ indent-guide hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make projectile pkg-info epl helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu highlight elisp-slime-nav dumb-jump f dash s diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core popup async))))
+    (yapfify pyvenv pytest pyenv-mode py-isort pip-requirements live-py-mode hy-mode dash-functional helm-pydoc cython-mode anaconda-mode pythonic tern mu4e-maildirs-extension mu4e-alert rvm ruby-tools ruby-test-mode rubocop rspec-mode robe rbenv rake minitest chruby bundler inf-ruby xterm-color shell-pop multi-term flyspell-correct-helm flyspell-correct eshell-z eshell-prompt-extras esh-help auto-dictionary web-beautify livid-mode skewer-mode simple-httpd json-mode json-snatcher json-reformat js2-refactor multiple-cursors js2-mode js-doc coffee-mode php-extras sql-indent phpunit phpcbf php-auto-yasnippets yasnippet drupal-mode php-mode erc-yt erc-view-log erc-terminal-notifier erc-social-graph erc-image erc-hl-nicks ox-reveal auctex ox-twbs ox-gfm flycheck-pos-tip pos-tip flycheck ranger web-mode tagedit slim-mode scss-mode sass-mode pug-mode less-css-mode helm-css-scss haml-mode emmet-mode smeargle orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-download magit-gitflow magit-gh-pulls htmlize helm-gitignore gnuplot gitignore-mode github-search github-clone github-browse-file gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gist gh marshal logito pcache ht evil-magit magit magit-popup git-commit with-editor mmm-mode markdown-toc markdown-mode gh-md ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint info+ indent-guide hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make projectile pkg-info epl helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu highlight elisp-slime-nav dumb-jump f dash s diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core popup async)))
+ '(send-mail-function (quote smtpmail-send-it))
+ '(smtpmail-smtp-server "smtp.gmx.net")
+ '(smtpmail-smtp-service 25))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
