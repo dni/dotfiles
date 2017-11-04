@@ -48,7 +48,6 @@ values."
      ranger
      gnus
      (shell :variables
-      shell-default-sheel 'shell
       shell-default-height 30
       shell-default-position 'bottom)
      spell-checking
