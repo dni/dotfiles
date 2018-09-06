@@ -38,7 +38,7 @@ pacman -S sudo
 visudo
 
 echo "install window manager"
-pacman -S xorg-server xorg-xinit i3-wm i3status ttf-droid ttf-font-awesome
+pacman -S xorg-server xorg-xinit i3-wm i3status dmenu ttf-droid ttf-font-awesome
 
 echo "dotfiles"
 su dni
