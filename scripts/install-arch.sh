@@ -1,14 +1,3 @@
-echo "begin pacstrap"
-pacstrap /mnt base base-devel
-
-echo "generate fstab"
-genfstab /mnt >> /mnt/etc/fstab
-echo "fstab: \n"
-cat /mnt/etc/fstab
-
-echo "enter chroot: \n"
-arch-chroot /mnt
-
 echo "time / data: \n"
 ln -sf /usr/share/zoneinfo/Europe/Vienna /etc/localtime
 hwclock --systohc
@@ -31,9 +20,12 @@ passwd
 
 echo "bootloader"
 pacman -Syu
-pacman -S grub os-prober sudo
+pacman -S grub os-prober sudo vim
 grub-install --target=i386-pc --recheck /dev/sda
 grub-mkconfig -o /boot/grub/grub.cfg
+
+echo "install early deps / dotfiles"
+pacman -S git openssl vim zsh termite
 
 echo "create user account"
 useradd -m -g users -s /bin/bash dni
@@ -42,7 +34,33 @@ groupadd sudo
 usermod -a -G sudo dni
 
 echo "run visudo, uncommeent %sudo rule"
+pacman -S sudo
 visudo
 
 echo "install window manager"
-pacman -S xorg-server xorg-xinit xorg-utils xorg-server-utils i3-wmi3
+pacman -S xorg-server xorg-xinit i3-wm
+
+echo "dotfiles"
+su dni
+cd
+git clone git@github.com:dni/dotfiles.git
+git clone https://github.com/robbyrussell/oh-my-zsh ~/.oh-my-zsh
+
+ln -s ~/dotfiles/.xinitrc ~/.xinitrc
+ln -s ~/dotfiles/.config/i3 ~/.config/i3
+ln -s ~/dotfiles/.config/termite ~/.config/termite
+
+rm -f ~/.zshrc
+ln -s ~/dotfiles/.zshrc ~/.zshrc
+ln -s ~/dotfiles/.aliases ~/.aliases
+chsh -s /bin/zsh
+
+rm -f ~/.vimrc
+rm -rf ~/.vim
+ln -s ~/dotfiles/.vim ~/.vim
+ln -s ~/dotfiles/.vimrc ~/.vimrc
+
+echo "init git submodule for vim"
+cd dotfiles
+git submodule init
+git submodule update
