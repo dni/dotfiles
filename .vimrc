@@ -60,6 +60,7 @@ autocmd BufWritePre * :%s/\s\+$//e
 set background=dark
 colorscheme molokai
 let g:NERDTreeDirArrows=0
+" set encoding=utf-8
 
 " markown
 let g:vim_markdown_folding_disabled=1
