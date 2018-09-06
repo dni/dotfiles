@@ -38,17 +38,16 @@ pacman -S sudo
 visudo
 
 echo "install window manager"
-pacman -S xorg-server xorg-xinit i3-wm
+pacman -S xorg-server xorg-xinit i3-wm i3status ttf-droid ttf-font-awesome
 
 echo "dotfiles"
 su dni
 cd
-git clone git@github.com:dni/dotfiles.git
+git clone https://github.com/dni/dotfiles/
 git clone https://github.com/robbyrussell/oh-my-zsh ~/.oh-my-zsh
 
 ln -s ~/dotfiles/.xinitrc ~/.xinitrc
-ln -s ~/dotfiles/.config/i3 ~/.config/i3
-ln -s ~/dotfiles/.config/termite ~/.config/termite
+ln -s ~/dotfiles/.config ~/.config
 
 rm -f ~/.zshrc
 ln -s ~/dotfiles/.zshrc ~/.zshrc

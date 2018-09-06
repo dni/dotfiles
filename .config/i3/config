@@ -136,14 +136,13 @@ assign [class="Nautilus"] $ws2
 assign [class="Hexchat"] $ws3
 assign [class="Thunderbird"] $ws4
 assign [class="Firefox"] $ws5
-# assign [class="Wine"] $ws9
 
-workspace "$ws1" output HDMI2
-workspace "$ws2" output HDMI2
-workspace "$ws3" output HDMI2
-workspace "$ws4" output HDMI2
+workspace "$ws1" output HDMI1
+workspace "$ws2" output HDMI1
+workspace "$ws3" output HDMI1
+workspace "$ws4" output HDMI1
 workspace "$ws5" output HDMI1
-workspace "$ws6" output HDMI1
+workspace "$ws6" output HDMI:
 workspace "$ws7" output HDMI1
 workspace "$ws8" output HDMI1
 workspace "$ws9" output HDMI1
@@ -169,7 +168,6 @@ bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcu
 
 bindsym Print exec maim -s ~/Screenshots/screenshot-$(date +%s).jpg
 
-bindsym F12 exec --no-startup-id sh /home/dni/private/.screenlayout/2-display-standing_new.sh
 bindsym $mod+Shift+f exec firefox
 bindsym $mod+Shift+n exec nautilus
 bindsym $mod+Shift+t exec thunderbird
@@ -225,19 +223,8 @@ client.urgent #CE4045 #CE4045 #FFFFFF #DCCD69
 
 
 # startup
-exec_always --no-startup-id feh --bg-fill /home/dni/wallpaper.jpg
-exec --no-startup-id sh /home/dni/private/.screenlayout/2-display-standing_new.sh
 # exec --no-startup-id sh /home/dni/private/startup.sh
 
-# network bridge
-
-# disable caps
-#exec_always --no-startup-id xmodmap -e "clear lock"
+exec_always --no-startup-id xmodmap -e "clear lock"
 # set caps to esc
-#exec xmodmap -e "keysym Caps_Lock = Escape"
-
-exec hexchat
-exec firefox
-exec thunderbird
-exec ffado-mixer
-exec nautilus
+exec xmodmap -e "keysym Caps_Lock = Escape"
