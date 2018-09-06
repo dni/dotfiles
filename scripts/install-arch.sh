@@ -48,6 +48,8 @@ git clone https://github.com/robbyrussell/oh-my-zsh ~/.oh-my-zsh
 
 ln -s ~/dotfiles/.xinitrc ~/.xinitrc
 ln -s ~/dotfiles/.config ~/.config
+mkdir ~/.fonts
+cp ~/dotfiles/Monaco\ for\ Powerline.otf ~/.fonts
 
 rm -f ~/.zshrc
 ln -s ~/dotfiles/.zshrc ~/.zshrc

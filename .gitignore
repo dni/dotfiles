@@ -1,3 +1,5 @@
 .netrwhist
 .DS_Store
 install.sh
+.config/dconf
+.config/GIMP

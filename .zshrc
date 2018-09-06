@@ -6,7 +6,7 @@ export ZSH=~/.oh-my-zsh
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
 # re5et
-ZSH_THEME="dst"
+ZSH_THEME="af-magic"
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -46,10 +46,10 @@ ZSH_THEME="dst"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(emacs extract git coffee npm node nyan web-search lol)
+plugins=(git npm aws vagrant)
 
 # User configuration
-export TERM="screen-256color"
+#export TERM="screen-256color"
 
 source $ZSH/oh-my-zsh.sh
 source ~/.aliases
