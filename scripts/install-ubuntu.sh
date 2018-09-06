@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 INSTALLDIR=${1:-$HOME}
 
 echo -n "brew install? (OSX) [n/Y]"

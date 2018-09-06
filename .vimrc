@@ -56,9 +56,10 @@ set shiftwidth=2
 autocmd BufWritePre * :%s/\s\+$//e
 
 " colors
-let g:solarized_termcolors=256
+" let g:solarized_termcolors=256
 set background=dark
-colorscheme badwolf
+colorscheme molokai
+let g:NERDTreeDirArrows=0
 
 " markown
 let g:vim_markdown_folding_disabled=1
@@ -74,7 +75,7 @@ set clipboard=unnamed
 
 
 " SNIPPETS
-ab print_r echo "<pre>";<CR>print_r();<CR>die();<ESC>kf)
+" ab print_r echo "<pre>";<CR>print_r();<CR>die();<ESC>kf)
 
 
 
