@@ -20,12 +20,12 @@ passwd
 
 echo "bootloader"
 pacman -Syu
-pacman -S grub os-prober sudo vim
+pacman -S grub os-prober
 grub-install --target=i386-pc --recheck /dev/sda
 grub-mkconfig -o /boot/grub/grub.cfg
 
 echo "install early deps / dotfiles"
-pacman -S git openssl vim zsh termite
+pacman -S git openssl vim zsh xterm termite sudo vim dialog wpa_supplicant
 
 echo "create user account"
 useradd -m -g users -s /bin/bash dni
@@ -40,28 +40,3 @@ visudo
 echo "install window manager"
 pacman -S xorg-server xorg-xinit i3-wm i3status dmenu ttf-droid ttf-font-awesome
 
-echo "dotfiles"
-su dni
-cd
-git clone https://github.com/dni/dotfiles/
-git clone https://github.com/robbyrussell/oh-my-zsh ~/.oh-my-zsh
-
-ln -s ~/dotfiles/.xinitrc ~/.xinitrc
-ln -s ~/dotfiles/.config ~/.config
-mkdir ~/.fonts
-cp ~/dotfiles/Monaco\ for\ Powerline.otf ~/.fonts
-
-rm -f ~/.zshrc
-ln -s ~/dotfiles/.zshrc ~/.zshrc
-ln -s ~/dotfiles/.aliases ~/.aliases
-chsh -s /bin/zsh
-
-rm -f ~/.vimrc
-rm -rf ~/.vim
-ln -s ~/dotfiles/.vim ~/.vim
-ln -s ~/dotfiles/.vimrc ~/.vimrc
-
-echo "init git submodule for vim"
-cd dotfiles
-git submodule init
-git submodule update
