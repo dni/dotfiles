@@ -19,13 +19,13 @@ echo "root pwd"
 passwd
 
 echo "bootloader"
-pacman -Syu
-pacman -S grub os-prober
+pacman -Syu --noconfirm
+pacman -S --noconfirm grub os-prober
 grub-install --target=i386-pc --recheck /dev/sda
 grub-mkconfig -o /boot/grub/grub.cfg
 
 echo "install early deps / dotfiles"
-pacman -S git openssl vim zsh xterm termite sudo vim dialog wpa_supplicant
+pacman -S --noconfirm git openssl vim zsh xterm termite sudo vim dialog wpa_supplicant
 
 echo "create user account"
 useradd -m -g users -s /bin/bash dni
@@ -34,9 +34,8 @@ groupadd sudo
 usermod -a -G sudo dni
 
 echo "run visudo, uncommeent %sudo rule"
-pacman -S sudo
 visudo
 
 echo "install window manager"
-pacman -S xorg-server xorg-xinit i3-wm i3status dmenu ttf-droid ttf-font-awesome
+pacman -S --noconfirm xorg-server xorg-xinit i3-wm i3status dmenu ttf-droid ttf-font-awesome
 
