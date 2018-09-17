@@ -13,10 +13,10 @@ alias .....="cd ../../../.."
 alias gzunzip="tar -xf"
 alias t='tail -f'
 alias -g G='| grep'
-alias tmux="TERM=screen-256color-bce tmux"
 alias ta='tmux attach -t'
 alias tnew='tmux new -s'
 alias tls='tmux ls'
 alias tkill='tmux kill-session -t'
 alias pwgen='openssl rand -base64 32'
 s() { zsh ~/private/scripts/$1.zsh }
+alias myip='wget http://checkip.dyndns.org/ -O - -o /dev/null | cut -d: -f 2 | cut -d\< -f 1'
