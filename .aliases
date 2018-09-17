@@ -19,3 +19,4 @@ alias tnew='tmux new -s'
 alias tls='tmux ls'
 alias tkill='tmux kill-session -t'
 alias pwgen='openssl rand -base64 32'
+s() { zsh ~/private/scripts/$1.zsh }
