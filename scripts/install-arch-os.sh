@@ -26,4 +26,4 @@ git submodule update
 
 
 echo "install deps"
-sudo pacman -S --no-confirm firefox thunderbird dnsutils nautilus gimp libreoffice
+sudo pacman -S --noconfirm htop firefox thunderbird dnsutils nautilus gimp libreoffice
