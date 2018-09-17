@@ -1,11 +1,13 @@
 #!/bin/sh
 echo "dotfiles"
-cd
-git clone https://github.com/dni/dotfiles/
+git clone --recurse-submodules -j8 https://github.com/dni/dotfiles/ ~/dotfiles
 git clone https://github.com/robbyrussell/oh-my-zsh ~/.oh-my-zsh
 
 ln -s ~/dotfiles/.xinitrc ~/.xinitrc
 ln -s ~/dotfiles/.config ~/.config
+ln -s ~/dotfiles/.config/i3/config ~/.config/i3/config
+ln -s ~/dotfiles/.config/i3/i3status.conf ~/.i3status.conf
+
 mkdir ~/.fonts
 cp ~/dotfiles/Monaco\ for\ Powerline.otf ~/.fonts
 
@@ -19,11 +21,8 @@ rm -rf ~/.vim
 ln -s ~/dotfiles/.vim ~/.vim
 ln -s ~/dotfiles/.vimrc ~/.vimrc
 
-echo "init git submodule for vim"
-cd dotfiles
-git submodule init
-git submodule update
-
-
-echo "install deps"
+echo "install programs"
 sudo pacman -S --noconfirm htop firefox thunderbird dnsutils nautilus gimp libreoffice
+
+echo "install py3status"
+sudo pip install py3status
