@@ -37,5 +37,6 @@ echo "run visudo, uncommeent %sudo rule"
 visudo
 
 echo "install window manager"
-pacman -S --noconfirm xorg-server xorg-xinit i3-wm i3status dmenu ttf-droid ttf-font-awesome
-
+pacman -S --noconfirm xorg-server xorg-xinit i3-wm i3status dmenu ttf-droid ttf-font-awesome python python-pip
+-
+pip install py3status

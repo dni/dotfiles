@@ -1,4 +1,5 @@
 #!/bin/sh
+
 echo "dotfiles"
 git clone --recurse-submodules -j8 https://github.com/dni/dotfiles/ ~/dotfiles
 git clone https://github.com/robbyrussell/oh-my-zsh ~/.oh-my-zsh
@@ -23,6 +24,3 @@ ln -s ~/dotfiles/.vimrc ~/.vimrc
 
 echo "install programs"
 sudo pacman -S --noconfirm htop firefox thunderbird dnsutils nautilus gimp libreoffice
-
-echo "install py3status"
-sudo pip install py3status
