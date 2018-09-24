@@ -47,11 +47,13 @@ arch-chroot /mnt
 pacman -S wget
 
 ### install script
-wget https://raw.githubusercontent.com/dni/dotfiles/master/scripts/install-arch.sh -O - | sh
+wget https://raw.githubusercontent.com/dni/dotfiles/master/scripts/install-arch.sh
+sh install-arch.sh
 
 ### login as user
 su dni
-wget https://raw.githubusercontent.com/dni/dotfiles/master/scripts/install-arch-os.sh -O - | sh
+wget https://raw.githubusercontent.com/dni/dotfiles/master/scripts/install-arch-os.sh
+sh install-arch-os.sh
 
 ### setup secret keys from some cold storage
 
