@@ -1,4 +1,5 @@
 echo "time / data: \n"
+timedatectl set-ntp true
 ln -sf /usr/share/zoneinfo/Europe/Vienna /etc/localtime
 hwclock --systohc
 

@@ -4,42 +4,63 @@ yeah yeah yeah
 http://vüz.org/
 dni's .dotfiles
 
-# Docker
-## Start Docker
-boot2docker start -v
-## Build new Webserver Image from Dockerfile
-docker build -t server1 --no-cache .
-## Start new Instance of the Webserver and launch Shell
-docker run -it --name dnilabs -p 8000:80 server1 /bin/zsh
-## exit from Shell
-CRTL+P and CRTL-Q
-## View running Instances
-docker ps
-## View all instances
-docker ps -la
-## Start a existing instance
-docker start dnilabs
-## Enter running Instance
-docker attach dnilabs
+# install arch
 
-# Rescue
-## Mount Disks
-mount /dev/vg0/srv /mnt
-ls -ahn /mnt
+loadkeys de-latin1
 
-## Using Hetzner Installimage
-installimage
+## network
+ping 8.8.8.8
 
-# Setup Webserver
-## Ubuntu LTS
-## Configure LVM
-Comment out default PART, and uncomment LVM PART and LV's
-## Partitions
-  * LV backup /backup ext4 100G
-  * LV srv /srv ext4 100G
+### network troubles
+#### lan
+systemctl stop dhcpcd@ -> TAB
+ip link
+ip link set enp0s25 up
+systemctl start dhcpcd@ -> TAB
+#### or wifi
+wifi-menu
 
-## Run the install script
-wget https://raw.githubusercontent.com/dni/dotfiles/master/.install_webserver -O - | sh
-## Configure Backup Server
-vim ~/backup.sh # and edit ftpuser & ftppass
+### prepare disk
+fdisk -l
+fdisk /dev/sda
+## create partitions
+## n > p > return > +2G
+mkfs.ext4 /dev/sda1
+mkfs.ext4 /dev/sda3
+mkswap /dev/sda2
+swapon /dev/sda2
+
+## mounting disk and init pacstrap
+mount /dev/sda1 /mnt
+mkdir /mnt/home
+mount /dev/sda3 /mnt/home
+pacstrap /mnt base base-devel
+
+### fstab
+genfstab /mnt >> /mnt/etc/fstab
+cat /mnt/etc/fstab
+
+### enter root filesystem
+arch-chroot /mnt
+
+### pre install
+pacman -S wget
+
+### install script
+wget https://raw.githubusercontent.com/dni/dotfiles/master/scripts/install-arch.sh -O - | sh
+
+### login as user
+su dni
+wget https://raw.githubusercontent.com/dni/dotfiles/master/scripts/install-arch-os.sh -O - | sh
+
+### setup secret keys from some cold storage
+
+
+# downgade kernel in arch
+### lookup kernerl
+ls /var/pacman/cache/
+### cache
+pacman -U /var/cache/pacman/pkg/package-old_version.pkg.tar.xz
+### download from cache
+pacman -U https://archive.archlinux.org/packages/l/linux/packagename.pkg.tar.xz
 
