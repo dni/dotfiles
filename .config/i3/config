@@ -219,11 +219,3 @@ client.focused #4F99D3 #4F99D3 #151718 #9FCA56
 client.focused_inactive #9FCA56 #9FCA56 #151718 #A074C4
 client.unfocused #1f2326 #1f2326 #AAAAAA #A074C4
 client.urgent #CE4045 #CE4045 #FFFFFF #DCCD69
-
-
-# startup
-# exec --no-startup-id sh /home/dni/private/startup.sh
-
-exec_always --no-startup-id xmodmap -e "clear lock"
-# set caps to esc
-exec xmodmap -e "keysym Caps_Lock = Escape"

@@ -1,8 +1,5 @@
 #!/bin/sh
-
-echo "git config"
-git config --global user.email "dni.khr@gmail.com"
-git config --global user.name "dni"
+# this is the arch linux install script, by dni <3
 
 echo "dotfiles"
 git clone --recurse-submodules -j8 https://github.com/dni/dotfiles/ ~/dotfiles
@@ -27,6 +24,18 @@ ln -s ~/dotfiles/.vim ~/.vim
 ln -s ~/dotfiles/.vimrc ~/.vimrc
 
 echo "install programs"
-sudo pacman -S --noconfirm htop firefox thunderbird dnsutils nautilus gimp libreoffice pulseaudio pulseaudio-alsa pavucontrol arandr pass openssh openvpn
+sudo pacman -S --noconfirm htop firefox thunderbird dnsutils nautilus gimp libreoffice pulseaudio pulseaudio-alsa pavucontrol arandr pass openssh openvpn vlc inkscape libreoffice archey3
+
+
+echo "install trizen"
+cd
+git clone https://aur.archlinux.org/trizen.git && cd trizen && makepkg -si
+cd
+rm -rf trizen
+
+echo "INSTALL CHEF"
+trizen -S chef-dk
 
 reboot
+
+
