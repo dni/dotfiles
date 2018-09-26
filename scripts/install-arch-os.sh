@@ -2,7 +2,7 @@
 # this is the arch linux install script, by dni <3
 
 echo "dotfiles"
-git clone --recurse-submodules -j8 https://github.com/dni/dotfiles/ ~/dotfiles
+git clone --recurse-submodules -j8 git@github.com:dni/dotfiles.git ~/dotfiles
 git clone https://github.com/robbyrussell/oh-my-zsh ~/.oh-my-zsh
 
 ln -s ~/dotfiles/.xinitrc ~/.xinitrc
