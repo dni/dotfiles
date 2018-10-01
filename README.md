@@ -52,6 +52,7 @@ sh install-arch.sh
 
 ### login as user
 su dni
+cd
 wget https://raw.githubusercontent.com/dni/dotfiles/master/scripts/install-arch-os.sh
 sh install-arch-os.sh
 
