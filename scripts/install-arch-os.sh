@@ -5,7 +5,7 @@ echo "install programs"
 sudo pacman -S --noconfirm htop firefox thunderbird dnsutils nautilus gimp libreoffice pulseaudio pulseaudio-alsa pavucontrol arandr pass openssh openvpn vlc inkscape libreoffice archey3
 
 echo "dotfiles"
-git clone --recurse-submodules -j8 git@github.com:dni/dotfiles.git ~/dotfiles
+git clone --recurse-submodules -j8 https://github.com/dni/dotfiles.git ~/dotfiles
 git clone https://github.com/robbyrussell/oh-my-zsh ~/.oh-my-zsh
 
 ln -s ~/dotfiles/.xinitrc ~/.xinitrc
