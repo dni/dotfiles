@@ -1,4 +1,4 @@
-alias p="cd ~/p"
+alias p="sudo pacman"
 alias h="history"
 alias ls="ls -anh"
 alias v="vim ."
