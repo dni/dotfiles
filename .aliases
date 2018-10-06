@@ -1,4 +1,6 @@
 alias cmt="git add -A && git commit -am"
+alias gps="git push"
+alias gpl="git pull"
 alias p="sudo pacman"
 alias h="history"
 alias ls="ls -anh"
