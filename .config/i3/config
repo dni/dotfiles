@@ -220,4 +220,3 @@ client.focused_inactive #9FCA56 #9FCA56 #151718 #A074C4
 client.unfocused #1f2326 #1f2326 #AAAAAA #A074C4
 client.urgent #CE4045 #CE4045 #FFFFFF #DCCD69
 
-bindsym Print exec maim -s ~/Screenshots/$(date +%s).png
