@@ -1,0 +1,3 @@
+#!/bin/sh
+dir=~/.screenlayout
+sh $dir/$(ls $dir | dmenu -l 5)

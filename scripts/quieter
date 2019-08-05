@@ -1,0 +1,5 @@
+#!/bin/sh
+sinks=$(pamixer --list-sink | grep ^[0-9] | awk '{print $1}' | xargs)
+for x in $sinks; do
+    pamixer --sink $x -d 5 ;
+done

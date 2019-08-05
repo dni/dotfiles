@@ -3,7 +3,6 @@ alias gps="git push"
 alias gpl="git pull"
 alias p="sudo pacman"
 alias h="history"
-alias ls="ls -anh"
 alias v="vim ."
 alias c="clear"
 alias ho="sudo vim /etc/hosts"
@@ -23,3 +22,5 @@ alias tkill='tmux kill-session -t'
 alias pwgen='openssl rand -base64 32'
 s() { zsh ~/private/scripts/$1.zsh }
 alias myip='wget http://checkip.dyndns.org/ -O - -o /dev/null | cut -d: -f 2 | cut -d\< -f 1'
+alias decrypt='openssl aes-256-cbc -d -a'
+alias encrypt='openssl aes-256-cbc -a -salt'

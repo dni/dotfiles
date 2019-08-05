@@ -1,0 +1,11 @@
+super + {d,p,Return,F9,F10,F11,F12}
+  {dmenu_run,passmenu,termite,termite -e htop,scripts,layouts,mousekeyboard}
+
+super + o ; {f,t,n,p,q}
+	{firefox,thunderbird,nautilus,pavucontrol,q3}
+
+XF86Audio{RaiseVolume,LowerVolume,Mute}
+  {louder,quieter,mute}
+
+Print
+  exec maim -s ~/Screenshots/screenshot-$(date +%s).jpg

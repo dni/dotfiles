@@ -1,6 +1,12 @@
 # Path to your oh-my-zsh installation.
 export ZSH=~/.oh-my-zsh
-export TERM=xterm-color
+# User configuration
+export TERM="xterm-256color"
+
+# PATH for scripts
+export PATH=$PATH:~/dotfiles/scripts
+
+# export TERM=xterm-color
 
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
@@ -48,9 +54,6 @@ ZSH_THEME="af-magic"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(npm aws vagrant)
-
-# User configuration
-#export TERM="screen-256color"
 
 source $ZSH/oh-my-zsh.sh
 source ~/.aliases
