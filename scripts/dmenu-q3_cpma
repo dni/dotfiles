@@ -1,0 +1,12 @@
+#!/bin/sh
+SERVER=$(echo "cpm.freddian.tf:27961
+  cpm.freddian.tf:27960
+  cpm.snapcase.net
+  snapcase.net
+  snapcase.net:27961
+  82.196.10.31:27960
+  188.226.192.203:27960
+  188.226.192.203:27962" | dmenu -l 5)
+sh ~/.screenlayout/singlescreen.sh
+cd ~/ioquake3
+./ioquake3 +set fs_game cpma +connect $SERVER +password installgentoo

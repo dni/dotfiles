@@ -1,11 +1,10 @@
 dotfiles
 ========
 yeah yeah yeah
-http://vüz.org/
 dni's .dotfiles
 
-# install arch
 
+# install arch
 loadkeys de-latin1
 
 ## network

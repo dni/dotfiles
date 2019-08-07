@@ -1,4 +1,0 @@
-#!/bin/sh
-sh ~/.screenlayout/singlescreen.sh
-cd ~/ioquake3
-./ioquake3 +set fs_game cpma +connect cpm.freddian.tf:27961 +password installgentoo

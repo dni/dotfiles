@@ -47,7 +47,7 @@ ln -s ~/dotfiles/.vimrc ~/.vimrc
 echo "Initializing tmux"
 ln -s ~/dotfiles/.tmux.conf ~/.tmux.conf
 
-echo "Initializing zsh..."
+echo "Initializing oh my zsh..."
 git clone git://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
 mv ~/.zshrc ~/.zshrc.old 2> /dev/null
 ln -s ~/dotfiles/.zshrc ~/.zshrc
