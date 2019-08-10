@@ -1,8 +1,8 @@
-super + {q,d,p,Return,F10,F11,F12}
-  {dmenu-q3_cpma,dmenu_run,passmenu,st,dmenu-scripts,dmenu-layouts,mousekeyboard}
+super + {d,p,Return,F10,F11,F12}
+  {dmenu_run,passmenu,st,dmenu-scripts,dmenu-layouts,mousekeyboard}
 
 super + o ; {f,t,n,p,q}
-	{firefox,thunderbird,nautilus,pavucontrol}
+	{firefox,thunderbird,nautilus,pavucontrol,dmenu-q3_cpma}
 
 XF86Audio{RaiseVolume,LowerVolume,Mute}
   {louder,quieter,mute}

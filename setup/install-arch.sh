@@ -26,7 +26,7 @@ grub-install --target=i386-pc --recheck /dev/sda
 grub-mkconfig -o /boot/grub/grub.cfg
 
 echo "install early deps / dotfiles"
-pacman -S --noconfirm git openssl vim zsh xterm termite sudo vim dialog wpa_supplicant
+pacman -S --noconfirm git openssl vim zsh sudo vim dialog wpa_supplicant archey3
 
 echo "create user account"
 useradd -m -g users -s /bin/bash dni
@@ -34,10 +34,8 @@ passwd dni
 groupadd sudo
 usermod -a -G sudo dni
 
-echo "run visudo, uncommeent %sudo rule"
+echo "run visudo, uncomment %sudo rule"
 visudo
 
 echo "install window manager"
-pacman -S --noconfirm xorg-server xorg-xinit xorg-xinpit i3-wm i3status maim dmenu ttf-droid ttf-font-awesome python python-pip
--
-pip install py3status
+pacman -S --noconfirm xorg-server xorg-xinit xorg-xinpit maim dmenu ttf-droid ttf-font-awesome ttf-inconsolata
