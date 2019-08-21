@@ -8,7 +8,7 @@ IP=$(for i in `ip r`; do echo $i; done | grep -A 1 src | tail -n1) # can get con
 TEMP="$(($(cat /sys/class/thermal/thermal_zone0/temp) / 1000))C"
 AVAIL=$(df -h --output=avail | head -n4 | tail -n1)
 
-xsetroot -name "  $EXTIP | $IP | ♪ $VOL |  $TEMP |  $BTC | $AVAIL |  $DATE |  $TIME "
+xsetroot -name "  $EXTIP | $IP | ♪ $VOL |  $TEMP | $BTC | $AVAIL |  $DATE |  $TIME "
 
 
 #if acpi -a | grep off-line > /dev/null

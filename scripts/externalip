@@ -1,2 +1,6 @@
-#!/bin/bash
-echo $(wget http://checkip.dyndns.org/ -O - -o /dev/null | cut -d: -f 2 | cut -d\< -f 1) > ~/.external_ip
+#!/bin/zsh
+IP=$(wget http://checkip.dyndns.org/ -O - -o /dev/null | cut -d: -f 2 | cut -d\< -f 1)
+msg="External IP: $IP"
+notify-send $msg
+echo $msg
+echo $IP > ~/.external_ip

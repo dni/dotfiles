@@ -4,6 +4,9 @@ super + {d,p,Return,F10,F11,F12}
 super + o ; {f,t,n,p,q}
 	{firefox,thunderbird,nautilus,pavucontrol,dmenu-q3_cpma}
 
+super + s ; {w,b,s,i}
+	{weather,btcprice,status,externalip}
+
 XF86Audio{RaiseVolume,LowerVolume,Mute}
   {louder,quieter,mute}
 

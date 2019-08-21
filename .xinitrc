@@ -3,6 +3,7 @@
 sh ~/.screenlayout/singlescreen.sh
 mousekeyboard # mouse keyboard settings
 sxhkd & # keybinds daemon .config/sxhkd/
+dunst & # notification daemon
 while true
 do
   status # statusbar

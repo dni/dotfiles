@@ -4,6 +4,7 @@ SERVER=$(echo "cpm.freddian.tf:27961
   cpm.snapcase.net
   snapcase.net
   snapcase.net:27961
+  51.38.83.66:27960
   82.196.10.31:27960
   188.226.192.203:27960
   188.226.192.203:27962" | dmenu -l 5)

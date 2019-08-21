@@ -1,4 +1,3 @@
-echo "time / data: \n"
 timedatectl set-ntp true
 ln -sf /usr/share/zoneinfo/Europe/Vienna /etc/localtime
 hwclock --systohc
@@ -38,4 +37,4 @@ echo "run visudo, uncomment %sudo rule"
 visudo
 
 echo "install window manager"
-pacman -S --noconfirm xorg-server xorg-xinit xorg-xinpit maim dmenu ttf-droid ttf-font-awesome ttf-inconsolata
+pacman -S --noconfirm xorg-server xorg-xinit xorg-xinput
