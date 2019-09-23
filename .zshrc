@@ -2,6 +2,7 @@
 export ZSH=~/.oh-my-zsh
 # User configuration
 export TERM="xterm-256color"
+export EDITOR="vim"
 
 # PATH for scripts
 export PATH=$PATH:~/dotfiles/scripts
@@ -56,7 +57,7 @@ ZSH_THEME="af-magic"
 plugins=(npm aws vagrant)
 
 source $ZSH/oh-my-zsh.sh
-source ~/.aliases
+# source ~/.aliases
 
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
@@ -79,7 +80,53 @@ source ~/.aliases
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
 # For a full list of active aliases, run `alias`.
 #
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
-# . /usr/local/etc/profile.d/z.sh
+
+# git
+alias cmt="git add -A && git commit -am"
+alias gps="git push"
+alias gpl="git pull"
+alias gst="git status"
+
+# shortcuts
+alias t='tail -f'
+alias h="history"
+alias p="sudo pacman"
+alias c="clear"
+
+# cli apps
+alias m="mutt"
+alias f="ranger"
+alias i="weechat"
+alias v="vim ."
+
+# configs
+alias ho="sudo vim /etc/hosts"
+
+# dir shortcuts
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+alias .....="cd ../../../.."
+
+# pipe commands
+alias -g G='| grep'
+alias -g M='| more'
+alias -g L='| less'
+alias -g T='| tail'
+alias -g H='| head'
+
+# tmux
+alias ta='tmux attach -t'
+alias tnew='tmux new -s'
+alias tls='tmux ls'
+alias tkill='tmux kill-session -t'
+
+# notifications
+alias notify='dunstify'
+
+# misc
+alias pwgen='openssl rand -base64 32'
+alias myip='wget http://checkip.dyndns.org/ -O - -o /dev/null | cut -d: -f 2 | cut -d\< -f 1'
+alias decrypt='openssl aes-256-cbc -d -a'
+alias encrypt='openssl aes-256-cbc -a -salt'
+

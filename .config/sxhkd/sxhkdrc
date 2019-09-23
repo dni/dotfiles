@@ -1,8 +1,8 @@
 super + {d,p,Return,F10,F11,F12}
   {dmenu_run,passmenu,st,dmenu-scripts,dmenu-layouts,mousekeyboard}
 
-super + o ; {f,t,n,p,q}
-	{firefox,thunderbird,nautilus,pavucontrol,dmenu-q3_cpma}
+super + o ; {f,t,n,p,g,i,s,q,r,m,h}
+  {firefox,thunderbird,nautilus,pavucontrol,gimp,inkscape,scribus,dmenu-q3_cpma,st -e ranger,st -e neomutt, st -e htop}
 
 super + s ; {w,b,s,i}
 	{weather,btcprice,status,externalip}
@@ -12,3 +12,4 @@ XF86Audio{RaiseVolume,LowerVolume,Mute}
 
 Print
   exec maim -s ~/Screenshots/screenshot-$(date +%s).jpg
+
