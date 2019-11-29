@@ -82,10 +82,13 @@ source $ZSH/oh-my-zsh.sh
 #
 
 # git
+alias smysqldump="mysqldump --single-transaction --quick --lock-tables=false"
 alias cmt="git add -A && git commit -am"
 alias gps="git push"
 alias gpl="git pull"
 alias gst="git status"
+alias gst="git status"
+alias pgp="pass git push"
 
 # shortcuts
 alias t='tail -f'
