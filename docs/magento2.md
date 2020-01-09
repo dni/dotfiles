@@ -1,5 +1,3 @@
-# magento 2
-
 ## updating with composer
 php bin/magento maintenance:enable
 composer require magento/product-community-edition 2.3.2 --no-update

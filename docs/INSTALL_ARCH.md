@@ -33,7 +33,7 @@ swapon /dev/sda2
 mount /dev/sda1 /mnt
 mkdir /mnt/home
 mount /dev/sda3 /mnt/home
-pacstrap /mnt base base-devel
+pacstrap /mnt base linux linux-firmware
 
 ### fstab
 genfstab /mnt >> /mnt/etc/fstab
@@ -66,3 +66,8 @@ pacman -U /var/cache/pacman/pkg/package-old_version.pkg.tar.xz
 ### download from cache
 pacman -U https://archive.archlinux.org/packages/l/linux/packagename.pkg.tar.xz
 
+# UEFI
+pacman -S grub efibootmgr dosfstools os-prober mtools
+mkdir /boot/EFI
+mount /dev/sda1 /boot/EFI  #Mount FAT32 EFI partition
+grub-install --target=x86_64-efi  --bootloader-id=grub_uefi --recheck

@@ -1,3 +1,4 @@
+
 # Path to your oh-my-zsh installation.
 export ZSH=~/.oh-my-zsh
 # User configuration
@@ -81,12 +82,20 @@ source $ZSH/oh-my-zsh.sh
 # For a full list of active aliases, run `alias`.
 #
 
+function mysqlselect() {
+  [[ -z $1 ]] && echo missing argument name && return
+  local file=~/.my.cnf.$1
+  [[ -f $file ]] || echo $file doesnt exist. || return
+  cp ~/.my.cnf ~/.my.cnf.backup && echo ~/.my.cnf.backup created
+  rm ~/.my.cnf
+  ln -s $file ~/.my.cnf && echo created symbolic link: $file ~/.my.cnf
+}
+
 # git
 alias smysqldump="mysqldump --single-transaction --quick --lock-tables=false"
-alias cmt="git add -A && git commit -am"
+alias gac="git add -A && git commit -am"
 alias gps="git push"
 alias gpl="git pull"
-alias gst="git status"
 alias gst="git status"
 alias pgp="pass git push"
 
@@ -133,3 +142,7 @@ alias myip='wget http://checkip.dyndns.org/ -O - -o /dev/null | cut -d: -f 2 | c
 alias decrypt='openssl aes-256-cbc -d -a'
 alias encrypt='openssl aes-256-cbc -a -salt'
 
+# server
+alias sers='service apache2 restart'
+alias serl='service apache2 reload'
+alias sert='apachectl configtest'
