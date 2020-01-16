@@ -1,2 +1,0 @@
-export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/TeX/texbin"
-export DNI_ENV="workstation"
