@@ -2,7 +2,7 @@ export ZSH=~/.oh-my-zsh
 export TERM="xterm-256color"
 export EDITOR="vim"
 export PATH=$PATH:~/dotfiles/scripts
-ZSH_THEME="af-magic"
+ZSH_THEME="candy"
 plugins=(aws vagrant)
 source $ZSH/oh-my-zsh.sh
 

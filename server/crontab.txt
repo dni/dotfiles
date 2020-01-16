@@ -1,3 +1,0 @@
-30 0 * * * /bin/sh ~/backup.sh daily
-45 0 * * 0 /bin/sh ~/backup.sh weekly
-0 1 * 1 * /bin/sh ~/backup.sh monthly
