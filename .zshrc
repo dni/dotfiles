@@ -5,6 +5,7 @@ export ZSH=~/.oh-my-zsh
 export TERM="xterm-256color"
 export EDITOR="vim"
 
+
 # PATH for scripts
 export PATH=$PATH:~/dotfiles/scripts
 
@@ -81,6 +82,9 @@ source $ZSH/oh-my-zsh.sh
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
 # For a full list of active aliases, run `alias`.
 #
+
+# enable vi mode
+bindkey -v
 
 function mysqlcreate() {
   [[ -z $1 ]] && echo missing argument name && return
