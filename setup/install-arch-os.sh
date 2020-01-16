@@ -24,7 +24,7 @@ ln -s ~/dotfiles/.vimrc ~/.vimrc
 
 mkdir ~/repos
 
-echo "install dwm"
+echo "build dwm"
 cd ~/repos
 git clone https://git.suckless.org/dwm
 cd dwm
@@ -36,7 +36,7 @@ rm config.h
 ln -s ~/dotfiles/setup/dwm/config.h config.h
 sudo make clean install
 
-echo "install st"
+echo "build st"
 cd ~/repos
 git clone https://git.suckless.org/st
 cd st
@@ -50,4 +50,5 @@ git clone https://aur.archlinux.org/trizen.git && cd trizen && makepkg -si
 cd
 rm -rf trizen
 
+echo "rebooting..."
 reboot

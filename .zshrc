@@ -8,13 +8,15 @@ source $ZSH/oh-my-zsh.sh
 
 # enable vi mode
 # bindkey -v
+
 # useful mysql function
 # create database and user
 function mysqlcreate() {
-  [[ -z $1 ]] && echo missing argument name && return
-  [[ -z $2 ]] && echo missing argument pass && return
+  [[ -z $1 ]] && echo missing argument database && return
+  [[ -z $2 ]] && echo missing argument username && return
+  [[ -z $3 ]] && echo missing argument password && return
   local template=~/dotfiles/scripts/templates/create.sql
-  local query=$(sed -e "s/%name%/$1/g" -e "s/%pw%/$2/g" $template)
+  local query=$(sed -e "s/%name%/$1/g" -e "s/%user%/$2/g" -e "s/%pw%/$3/g" $template)
   mysql -e "$query"
 }
 # select database server usage with ~/.my.cnf.dbname
@@ -25,6 +27,18 @@ function mysqlselect() {
   cp ~/.my.cnf ~/.my.cnf.backup && echo ~/.my.cnf.backup created
   rm ~/.my.cnf
   ln -s $file ~/.my.cnf && echo created symbolic link: $file ~/.my.cnf
+}
+# fetch a database from online to local
+function mysqlfetch() {
+  [[ -z $1 ]] && echo missing argument name && return
+  mysqlselect online
+  # safely dump from production database
+  smysqldump $1 > $1.sql
+  mysqlselect local
+  # first backup local database
+  mysqldump $1 > $1.backup.sql
+  # import production database
+  mysql $1 < $1.sql
 }
 # create quick apache2 vhosts
 function vhostcreate() {
@@ -46,15 +60,6 @@ function cloneproject() {
   git clone git@git.hostinghelden.at:$1.git $file
   chown -R $2:www-data $file
   chmod -R 775 $file
-}
-# create quick apache2 vhosts
-function vhostcreate() {
-  [[ -z $1 ]] && echo missing argument name && return
-  [[ -z $2 ]] && echo missing argument domain && return
-  local template=~/dotfiles/scripts/templates/vhost.conf
-  local target=/etc/apache2/sites-enabled/$1.conf
-  sudo cp $template $target
-  sudo sed -i -e "s/%name%/$1/g" -e "s/%domain%/$2/g" $target
 }
 
 
