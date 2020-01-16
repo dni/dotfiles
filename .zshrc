@@ -82,6 +82,14 @@ source $ZSH/oh-my-zsh.sh
 # For a full list of active aliases, run `alias`.
 #
 
+function mysqlcreate() {
+  [[ -z $1 ]] && echo missing argument name && return
+  [[ -z $2 ]] && echo missing argument pass && return
+  local template=~/dotfiles/scripts/templates/create.sql
+  local query=$(sed -e "s/%name%/$1/g" -e "s/%pw%/$2/g" $template)
+  mysql -e "$query"
+}
+
 function mysqlselect() {
   [[ -z $1 ]] && echo missing argument name && return
   local file=~/.my.cnf.$1
