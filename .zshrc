@@ -86,6 +86,8 @@ source $ZSH/oh-my-zsh.sh
 # enable vi mode
 bindkey -v
 
+# useful mysql function
+# create database and user
 function mysqlcreate() {
   [[ -z $1 ]] && echo missing argument name && return
   [[ -z $2 ]] && echo missing argument pass && return
@@ -93,7 +95,7 @@ function mysqlcreate() {
   local query=$(sed -e "s/%name%/$1/g" -e "s/%pw%/$2/g" $template)
   mysql -e "$query"
 }
-
+# select database server usage with ~/.my.cnf.dbname
 function mysqlselect() {
   [[ -z $1 ]] && echo missing argument name && return
   local file=~/.my.cnf.$1
@@ -101,6 +103,15 @@ function mysqlselect() {
   cp ~/.my.cnf ~/.my.cnf.backup && echo ~/.my.cnf.backup created
   rm ~/.my.cnf
   ln -s $file ~/.my.cnf && echo created symbolic link: $file ~/.my.cnf
+}
+# create quick apache2 vhosts
+function vhostcreate() {
+  [[ -z $1 ]] && echo missing argument name && return
+  [[ -z $2 ]] && echo missing argument domain && return
+  local template=~/dotfiles/scripts/templates/vhost.conf
+  local target=/etc/apache2/sites-enabled/$1.conf
+  sudo cp $template $target
+  sudo sed -i -e "s/%name%/$1/g" -e "s/%domain%/$2/g" $target
 }
 
 # git
