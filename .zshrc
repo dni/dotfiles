@@ -70,7 +70,7 @@ function projectclone() {
 function magento2domain () {
   [[ -z $1 ]] && echo missing argument dbname && return
   [[ -z $2 ]] && echo missing argument domain && return
-  mysql $1 -e "update core_config_data set value='http://$domain:8082/' where path='web/unsecure/base_url'"
+  mysql $1 -e "update core_config_data set value='http://$2:8082/' where path='web/unsecure/base_url'"
   mysql $1 -e 'update core_config_data set value="0" where path="web/secure/use_in_frontend"'
   mysql $1 -e 'update core_config_data set value="0" where path="web/secure/use_in_adminhtml"'
 }
