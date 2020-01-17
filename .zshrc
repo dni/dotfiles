@@ -45,15 +45,22 @@ function mysqlfetch() {
   echo "import $1 into local database"
   mysql $1 < $1.sql
 }
-# create quick apache2 vhosts
-function vhostcreate() {
-  [[ -z $1 ]] && echo missing argument name && return
-  [[ -z $2 ]] && echo missing argument domain && return
-  local template=~/dotfiles/scripts/templates/vhost.conf
-  local target=/etc/apache2/sites-enabled/$1.conf
-  [[ -f $target ]] && echo $file does exist. && return
-  sudo cp $template $target
-  sudo sed -i -e "s/%name%/$1/g" -e "s/%domain%/$2/g" $target
+# migrate a database from server to server
+function mysqlmigrate() {
+  [[ -f ~/.my.cnf.$1 ]] || echo from: $1 doesnt exist. || return
+  [[ -f ~/.my.cnf.$2 ]] || echo to: $2 doesnt exist. || return
+  [[ -z $3 ]] && echo missing argument database && return
+  mysqlselect $1
+  # safely dump from production database
+  echo "safely dump $3 sql from remote..."
+  mysqldump --single-transaction --quick --lock-tables=false $3 > $3.sql
+  mysqlselect $2
+  # first backup local database
+  echo "backup the local database"
+  mysqldump $3 > $3.backup.sql
+  # import production database
+  echo "import $3 into local database"
+  mysql $3 < $3.sql
 }
 
 # clone projects and configure it
@@ -65,6 +72,17 @@ function projectclone() {
   git clone git@git.hostinghelden.at:$1.git $file
   chown -R $2:www-data $file
   chmod -R 775 $file
+}
+
+# create quick apache2 vhosts
+function vhostcreate() {
+  [[ -z $1 ]] && echo missing argument name && return
+  [[ -z $2 ]] && echo missing argument domain && return
+  local template=~/dotfiles/scripts/templates/vhost.conf
+  local target=/etc/apache2/sites-enabled/$1.conf
+  [[ -f $target ]] && echo $file does exist. && return
+  sudo cp $template $target
+  sudo sed -i -e "s/%name%/$1/g" -e "s/%domain%/$2/g" $target
 }
 
 function magento2domain () {
