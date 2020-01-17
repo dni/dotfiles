@@ -129,6 +129,7 @@ alias v="vim ."
 alias ho="sudo vim /etc/hosts"
 
 # dir shortcuts
+alias www="cd /var/www/"
 alias ..="cd .."
 alias ...="cd ../.."
 alias ....="cd ../../.."
