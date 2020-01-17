@@ -31,13 +31,18 @@ function mysqlselect() {
 # fetch a database from online to local
 function mysqlfetch() {
   [[ -z $1 ]] && echo missing argument name && return
+  [[ -f ~/.my.cnf.local ]] || echo $file doesnt exist. || return
+  [[ -f ~/.my.cnf.online ]] || echo $file doesnt exist. || return
   mysqlselect online
   # safely dump from production database
-  smysqldump $1 > $1.sql
+  echo "safely dump sql from remote..."
+  mysqldump --single-transaction --quick --lock-tables=false $1 > $1.sql
   mysqlselect local
   # first backup local database
+  echo "backup the local database"
   mysqldump $1 > $1.backup.sql
   # import production database
+  echo "import into local database"
   mysql $1 < $1.sql
 }
 # create quick apache2 vhosts
@@ -64,8 +69,8 @@ function projectclone() {
 
 
 ## aliases
-# git
 alias smysqldump="mysqldump --single-transaction --quick --lock-tables=false"
+# git
 alias gac="git add -A && git commit -am"
 alias gps="git push"
 alias gpl="git pull"
