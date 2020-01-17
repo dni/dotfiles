@@ -96,7 +96,7 @@ function magento2domain () {
 function magento2createdb () {
   local file = ./app/etc/env.php
   [[ -f $file ]] || echo $file doesnt exist. || return
-  db=$(grep "database" $file | cut -d "'" -f 4)
+  db=$(grep "dbname" $file | cut -d "'" -f 4)
   user=$(grep "user" $file | cut -d "'" -f 4)
   pw=$(grep "password" $file | cut -d "'" -f 4)
   mysqlcreate $db $user $pw
