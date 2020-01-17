@@ -93,6 +93,15 @@ function magento2domain () {
   mysql $1 -e 'update core_config_data set value="0" where path="web/secure/use_in_adminhtml"'
 }
 
+function magento2createdb () {
+  local file = ./app/etc/env.php
+  [[ -f $file ]] && echo $file does exist. && return
+  db=$(grep "database" $file | cut -d "'" -f 4)
+  user=$(grep "user" $file | cut -d "'" -f 4)
+  pw=$(grep "password" $file | cut -d "'" -f 4)
+  mysqlcreate $db $user $pw
+}
+
 
 
 ## aliases
