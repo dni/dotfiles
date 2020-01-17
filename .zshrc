@@ -52,7 +52,7 @@ function vhostcreate() {
 }
 
 # clone projects and configure it
-function cloneproject() {
+function projectclone() {
   [[ -z $1 ]] && echo missing argument projectname && return
   [[ -z $2 ]] && echo missing argument unix user && return
   local file=/var/www/$1
