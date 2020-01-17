@@ -10,7 +10,7 @@ git clone https://github.com/robbyrussell/oh-my-zsh ~/.oh-my-zsh
 
 ln -s ~/dotfiles/.xinitrc ~/.xinitrc
 ln -s ~/dotfiles/.config/sxhkd ~/.config/sxhkd
-ln -s ~/dotfiles/screenlayouts ~/.screenlayout
+ln -s ~/dotfiles/.config/screenlayout ~/.config/screenlayout
 
 rm -f ~/.zshrc
 ln -s ~/dotfiles/.zshrc ~/.zshrc
