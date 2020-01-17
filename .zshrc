@@ -94,7 +94,7 @@ function magento2domain () {
 }
 
 function magento2createdb () {
-  local file = ./app/etc/env.php
+  local file=./app/etc/env.php
   [[ -f $file ]] || echo $file doesnt exist. || return
   db=$(grep "dbname" $file | cut -d "'" -f 4)
   user=$(grep "user" $file | cut -d "'" -f 4)
