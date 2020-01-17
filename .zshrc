@@ -67,6 +67,15 @@ function projectclone() {
   chmod -R 775 $file
 }
 
+function magento2domain () {
+  [[ -z $1 ]] && echo missing argument dbname && return
+  [[ -z $2 ]] && echo missing argument domain && return
+  mysql $1 -e "update core_config_data set value='http://$domain:8082/' where path='web/unsecure/base_url'"
+  mysql $1 -e 'update core_config_data set value="0" where path="web/secure/use_in_frontend"'
+  mysql $1 -e 'update core_config_data set value="0" where path="web/secure/use_in_adminhtml"'
+}
+
+
 
 ## aliases
 alias smysqldump="mysqldump --single-transaction --quick --lock-tables=false"
