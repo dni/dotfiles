@@ -41,10 +41,10 @@ function mysqlmigrate() {
   # safely dump from production database
   mysqlselect $1
   echo "safely dump $3 sql from $1"
-  mysqldump --single-transaction --quick --lock-tables=false $3 > $3.sql
+  mysqldump --single-transaction --quick --lock-tables=false --set-gtid-purged=OFF $3 > $3.sql
   mysqlselect $2
   echo "backup the $2 database"
-  mysqldump $3 > $3.backup.sql
+  mysqldump --single-transaction --quick --lock-tables=false --set-gtid-purged=OFF $3 > $3.backup.sql
   # change user in SQL STATE DEFINER
   # needed for magento2 migrations in com
   sed -i -e "s/\`$3\`/\`hostinghelden\`/g" $3.sql
