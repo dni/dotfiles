@@ -47,8 +47,8 @@ function mysqlmigrate() {
   sed -i -e "s/\`$3\`/\`hostinghelden\`/g" $3.sql
   # import production database
   mysqlselect $2
-  yes_or_no "backup the $2 database" && \
-    mysqldump --single-transaction --quick --lock-tables=false --set-gtid-purged=OFF $3 > $3.backup.sql
+  # yes_or_no "backup the $2 database" && \
+  #   mysqldump --single-transaction --quick --lock-tables=false --set-gtid-purged=OFF $3 > $3.backup.sql
   echo "import $3 into $2 database"
   mysql $3 < $3.sql
 }
