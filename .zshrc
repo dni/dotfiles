@@ -24,9 +24,9 @@ function mysqlselect() {
   [[ -z $1 ]] && echo missing argument name && return
   local file=~/.my.cnf.$1
   [[ -f $file ]] || echo $file doesnt exist. || return
-  cp ~/.my.cnf ~/.my.cnf.backup && echo ~/.my.cnf.backup created
+  cp ~/.my.cnf ~/.my.cnf.backup
   rm ~/.my.cnf
-  ln -s $file ~/.my.cnf && echo created symbolic link: $file ~/.my.cnf
+  ln -s $file ~/.my.cnf && echo using database: $1
 }
 # fetch a database from online to local
 function mysqlfetch() {
