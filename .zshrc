@@ -35,28 +35,28 @@ function mysqlfetch() {
 }
 # migrate a database from server to server
 function mysqlmigrate() {
-  [[ -f ~/.my.cnf.$1 ]] || echo from: $1 doesnt exist. || return
-  [[ -f ~/.my.cnf.$2 ]] || echo to: $2 doesnt exist. || return
-  [[ -z $3 ]] && echo missing argument database && return
+  [[ -f ~/.my.cnf.$1 ]] || echo "from: $1 doesnt exist." || return
+  [[ -f ~/.my.cnf.$2 ]] || echo "to: $2 doesnt exist." || return
+  [[ -z $3 ]] && echo "missing argument database" && return
   # safely dump from production database
   mysqlselect $1
   echo "safely dump $3 sql from $1"
   mysqldump --single-transaction --quick --lock-tables=false --set-gtid-purged=OFF $3 > $3.sql
-  mysqlselect $2
-  echo "backup the $2 database"
-  mysqldump --single-transaction --quick --lock-tables=false --set-gtid-purged=OFF $3 > $3.backup.sql
   # change user in SQL STATE DEFINER
-  # needed for magento2 migrations in com
+  # needed for magento2 rds, migrations
   sed -i -e "s/\`$3\`/\`hostinghelden\`/g" $3.sql
   # import production database
+  mysqlselect $2
+  yes_or_no "backup the $2 database" && \
+    mysqldump --single-transaction --quick --lock-tables=false --set-gtid-purged=OFF $3 > $3.backup.sql
   echo "import $3 into $2 database"
   mysql $3 < $3.sql
 }
 
 # clone projects and configure it
 function projectclone() {
-  [[ -z $1 ]] && echo missing argument projectname && return
-  [[ -z $2 ]] && echo missing argument unix user && return
+  [[ -z $1 ]] && echo "missing argument projectname" && return
+  [[ -z $2 ]] && echo "missing argument unix user" && return
   local file=/var/www/$1
   [[ -f $file ]] && echo $file does exist. && return
   git clone git@git.hostinghelden.at:$1.git $file
@@ -66,8 +66,8 @@ function projectclone() {
 
 # create quick apache2 vhosts
 function vhostcreate() {
-  [[ -z $1 ]] && echo missing argument name && return
-  [[ -z $2 ]] && echo missing argument domain && return
+  [[ -z $1 ]] && echo "missing argument name" && return
+  [[ -z $2 ]] && echo "missing argument domain" && return
   local template=~/dotfiles/scripts/templates/vhost.conf
   local target=/etc/apache2/sites-enabled/$1.conf
   [[ -f $target ]] && echo $file does exist. && return
@@ -84,10 +84,10 @@ function magento2domain () {
 }
 
 function magento2perms () {
-  find var generated vendor pub/static pub/media app/etc -type f -exec chmod g+w {} +
-  find var generated vendor pub/static pub/media app/etc -type d -exec chmod g+ws {} +
-  chown -R magento2:www-data .
-  chmod u+x bin/magento
+  sudo find var generated vendor pub/static pub/media app/etc -type f -exec chmod g+w {} +
+  sudo find var generated vendor pub/static pub/media app/etc -type d -exec chmod g+ws {} +
+  sudo chown -R magento2:www-data .
+  sudo chmod u+x bin/magento
 }
 
 function magento2createdb () {
@@ -99,6 +99,15 @@ function magento2createdb () {
   mysqlcreate $db $user $pw
 }
 
+function yes_or_no {
+    while true; do
+        read -p "$* [y/n]: " yn
+        case $yn in
+            [Yy]*) return 0  ;;
+            [Nn]*) echo "Aborted" ; return  1 ;;
+        esac
+    done
+}
 
 
 ## aliases
