@@ -106,6 +106,7 @@ function magento2createdb () {
 
 ## aliases
 alias smysqldump="mysqldump --single-transaction --quick --lock-tables=false"
+alias mysqlshow="ls -n ~/.my.cnf"
 # git
 alias gac="git add -A && git commit -am"
 alias gps="git push"
