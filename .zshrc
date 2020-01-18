@@ -31,35 +31,25 @@ function mysqlselect() {
 # fetch a database from online to local
 function mysqlfetch() {
   [[ -z $1 ]] && echo missing argument name && return
-  [[ -f ~/.my.cnf.local ]] || echo $file doesnt exist. || return
-  [[ -f ~/.my.cnf.online ]] || echo $file doesnt exist. || return
-  mysqlselect online
-  # safely dump from production database
-  echo "safely dump $1 sql from remote..."
-  mysqldump --single-transaction --quick --lock-tables=false $1 > $1.sql
-  mysqlselect local
-  # first backup local database
-  echo "backup the local database"
-  mysqldump $1 > $1.backup.sql
-  # import production database
-  echo "import $1 into local database"
-  mysql $1 < $1.sql
+  mysqlmigrate online local $1
 }
 # migrate a database from server to server
 function mysqlmigrate() {
   [[ -f ~/.my.cnf.$1 ]] || echo from: $1 doesnt exist. || return
   [[ -f ~/.my.cnf.$2 ]] || echo to: $2 doesnt exist. || return
   [[ -z $3 ]] && echo missing argument database && return
-  mysqlselect $1
   # safely dump from production database
-  echo "safely dump $3 sql from remote..."
+  mysqlselect $1
+  echo "safely dump $3 sql from $1"
   mysqldump --single-transaction --quick --lock-tables=false $3 > $3.sql
   mysqlselect $2
-  # first backup local database
-  echo "backup the local database"
+  echo "backup the $2 database"
   mysqldump $3 > $3.backup.sql
+  # change user in SQL STATE DEFINER
+  # needed for magento2 migrations in com
+  sed -i -e "s/\`$3\`/\`hostinghelden\`/g" $3.sql
   # import production database
-  echo "import $3 into local database"
+  echo "import $3 into $2 database"
   mysql $3 < $3.sql
 }
 
