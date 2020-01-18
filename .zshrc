@@ -93,6 +93,13 @@ function magento2domain () {
   mysql $1 -e 'update core_config_data set value="0" where path="web/secure/use_in_adminhtml"'
 }
 
+function magento2perms () {
+  find var generated vendor pub/static pub/media app/etc -type f -exec chmod g+w {} +
+  find var generated vendor pub/static pub/media app/etc -type d -exec chmod g+ws {} +
+  chown -R magento2:www-data .
+  chmod u+x bin/magento
+}
+
 function magento2createdb () {
   local file=./app/etc/env.php
   [[ -f $file ]] || echo $file doesnt exist. || return
