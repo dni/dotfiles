@@ -73,6 +73,16 @@ function vhostcreate() {
   sudo sed -i -e "s/%name%/$1/g" -e "s/%domain%/$2/g" $target
 }
 
+# grep db, username and password from config file and create it
+function createdbfromconfig () {
+  [[ -f $1 ]] || echo $1 doesnt exist. || return
+  db=$(grep "dbname" $1 | cut -d "'" -f 4)
+  user=$(grep "user" $1 | cut -d "'" -f 4)
+  pw=$(grep "password" $1 | cut -d "'" -f 4)
+  mysqlcreate $db $user $pw
+}
+
+
 function magento2domain () {
   [[ -z $1 ]] && echo missing argument dbname && return
   [[ -z $2 ]] && echo missing argument domain && return
@@ -89,13 +99,13 @@ function magento2perms () {
 }
 
 function magento2createdb () {
-  local file=./app/etc/env.php
-  [[ -f $file ]] || echo $file doesnt exist. || return
-  db=$(grep "dbname" $file | cut -d "'" -f 4)
-  user=$(grep "user" $file | cut -d "'" -f 4)
-  pw=$(grep "password" $file | cut -d "'" -f 4)
-  mysqlcreate $db $user $pw
+  createdbfromconfig ./app/etc/env.php
 }
+
+function typo3createdb () {
+  createdbfromconfig ./typo3conf/LocalConfiguration.php
+}
+
 
 ## aliases
 alias smysqldump="mysqldump --single-transaction --quick --lock-tables=false"
