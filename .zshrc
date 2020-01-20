@@ -23,7 +23,8 @@ function mysqlcreate() {
 function mysqlselect() {
   [[ -z $1 ]] && echo missing argument name && return
   local file=~/.my.cnf.$1
-  [[ -f $file ]] || echo $file doesnt exist. || return
+  [[ -f $file ]] || echo $file doesnt exist.
+  [[ -f $file ]] || return
   cp ~/.my.cnf ~/.my.cnf.backup
   rm ~/.my.cnf
   ln -s $file ~/.my.cnf && echo using database: $1
@@ -35,8 +36,10 @@ function mysqlfetch() {
 }
 # migrate a database from server to server
 function mysqlmigrate() {
-  [[ -f ~/.my.cnf.$1 ]] || echo "from: $1 doesnt exist." || return
-  [[ -f ~/.my.cnf.$2 ]] || echo "to: $2 doesnt exist." || return
+  [[ -f ~/.my.cnf.$1 ]] || echo "from: $1 doesnt exist."
+  [[ -f ~/.my.cnf.$1 ]] || return
+  [[ -f ~/.my.cnf.$2 ]] || echo "to: $2 doesnt exist."
+  [[ -f ~/.my.cnf.$2 ]] || return
   [[ -z $3 ]] && echo "missing argument database" && return
   # safely dump from production database
   mysqlselect $1
@@ -75,10 +78,11 @@ function vhostcreate() {
 
 # grep db, username and password from config file and create it
 function createdbfromconfig () {
-  [[ -f $1 ]] || echo $1 doesnt exist. || return
-  db=$(grep "dbname" $1 | cut -d "'" -f 4)
-  user=$(grep "user" $1 | cut -d "'" -f 4)
-  pw=$(grep "password" $1 | cut -d "'" -f 4)
+  [[ -f $1 ]] || echo $1 doesnt exist.
+  [[ -f $1 ]] || return
+  db=$(grep -m 1 "dbname" $1 | cut -d "'" -f 4)
+  user=$(grep -m 1 "user" $1 | cut -d "'" -f 4)
+  pw=$(grep -m 1 "password" $1 | cut -d "'" -f 4)
   mysqlcreate $db $user $pw
 }
 
