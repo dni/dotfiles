@@ -110,6 +110,25 @@ function typo3createdb () {
   createdbfromconfig ./typo3conf/LocalConfiguration.php
 }
 
+typo3changeconfig() {
+  [[ -z $1 ]] && echo missing argument name && return
+  [[ -z $2 ]] && echo missing argument domain && return
+  mv config/sites/dummy config/sites/$1
+  sed -i -e "s/v9.hostinghelden.at/$2/" config/sites/$1/config.yaml
+  sed -i -e "s/dummy/$2/" package.json
+}
+
+typo3migrate() {
+  [[ -z $1 ]] && echo missing argument name && return
+  mysql $1 -e "drop table tx_bootstrappackage_carousel_item"
+  mysql $1 -e "drop table tx_bootstrappackage_accordion_item"
+  mysql $1 -e "drop table tx_bootstrappackage_tab_item"
+  mysql $1 -e "rename table tx_basetemplate_carousel_item to tx_bootstrappackage_carousel_item"
+  mysql $1 -e "rename table tx_basetemplate_accordion_item to tx_bootstrappackage_accordion_item"
+  mysql $1 -e "rename table tx_basetemplate_tab_item to tx_bootstrappackage_tab_item"
+  ./vendor/bin/typo3cms database:updateschema
+}
+
 
 ## aliases
 alias smysqldump="mysqldump --single-transaction --quick --lock-tables=false"
