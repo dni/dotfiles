@@ -53,6 +53,14 @@ function mysqlmigrate() {
   echo "import $3 into $2 database"
   mysql $3 < $3.sql
 }
+function mysqlhostcreate() {
+  sudo sed -i -e "\$a127.0.0.1 typo3-sql.hostinghelden.at" /etc/hosts
+  sudo sed -i -e "\$a127.0.0.1 magento2-sql.hostinghelden.at" /etc/hosts
+}
+function mysqlhostremove() {
+  sudo sed -i -e "/127.0.0.1 typo3-sql.hostinghelden.at/d" /etc/hosts
+  sudo sed -i -e "/127.0.0.1 magento2-sql.hostinghelden.at/d" /etc/hosts
+}
 
 # clone projects and configure it
 function projectclone() {
