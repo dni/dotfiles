@@ -79,6 +79,7 @@ function vhostcreate() {
   [[ -z $2 ]] && echo "missing argument domain" && return
   local template=~/dotfiles/scripts/templates/vhost.conf
   local target=/etc/apache2/sites-enabled/$1.conf
+  [[ -z $3 ]] || local template=~/dotfiles/scripts/templates/vhost-typo3.conf
   [[ -f $target ]] && echo $file does exist. && return
   sudo cp $template $target
   sudo sed -i -e "s/%name%/$1/g" -e "s/%domain%/$2/g" $target
@@ -143,7 +144,7 @@ typo3migrate() {
   projectclone $1 typo3
   cd /var/www/$1
   mysqlhostremove
-  vhostcreate $1 $2
+  vhostcreate $1 $2 typo3
   mysqlselect local
   typo3createdbold
   mysqlselect onlinenew
@@ -165,6 +166,7 @@ typo3migrate() {
   typo3sedMigrate $1 $2 package.json
   typo3sedMigrate $1 $2 $ext_path/composer.json
   typo3sedMigrate $1 $2 $ext_path/ext_tables.php
+  typo3sedMigrate $1 $2 $ext_path/ext_emconf.php
   typo3sedMigrate $1 $2 $ext_path/ext_localconf.php
   typo3sedMigrate $1 $2 $ext_path/Configuration/TypoScript/constants.typoscript
   sed -i -e "/hostinghelden\/dummy: @dev,/a hostinghelden\/$1: @dev," composer.json
