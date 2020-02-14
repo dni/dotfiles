@@ -147,8 +147,9 @@ typo3migrate() {
   vhostcreate $1 $2 typo3
   sudo service apache2 restart
   mysqlselect local
-  user=$(grep -m 1 "user'" $1 | cut -d "'" -f 4)
-  pw=$(grep -m 1 "password'" $1 | cut -d "'" -f 4)
+  old_localconf=typo3conf/LocalConfiguration.php
+  user=$(grep -m 1 "user'" $old_localconf | cut -d "'" -f 4)
+  pw=$(grep -m 1 "password'" $old_localconf | cut -d "'" -f 4)
   mysqlcreate $1 $user $pw
   mysqlselect onlinenew
   mysqlcreate $1 $user $pw
