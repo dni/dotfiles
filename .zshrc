@@ -67,7 +67,7 @@ function projectclone() {
   [[ -z $1 ]] && echo "missing argument projectname" && return
   [[ -z $2 ]] && echo "missing argument unix user" && return
   local file=/var/www/$1
-  [[ -f $file ]] && echo $file does exist. && return
+  [[ -f $file ]] && echo git project does exist. && return
   git clone git@git.hostinghelden.at:$1.git $file
   chown -R $2:www-data $file
   chmod -R 775 $file
@@ -80,7 +80,7 @@ function vhostcreate() {
   local template=~/dotfiles/scripts/templates/vhost.conf
   local target=/etc/apache2/sites-enabled/$1.conf
   [[ -z $3 ]] || local template=~/dotfiles/scripts/templates/vhost-typo3.conf
-  [[ -f $target ]] && echo $file does exist. && return
+  [[ -f $target ]] && echo vhost does exist. && return
   sudo cp $template $target
   sudo sed -i -e "s/%name%/$1/g" -e "s/%domain%/$2/g" $target
 }
