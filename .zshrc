@@ -145,10 +145,13 @@ typo3migrate() {
   cd /var/www/$1
   mysqlhostremove
   vhostcreate $1 $2 typo3
+  sudo service apache2 restart
   mysqlselect local
-  typo3createdbold
+  user=$(grep -m 1 "user'" $1 | cut -d "'" -f 4)
+  pw=$(grep -m 1 "password'" $1 | cut -d "'" -f 4)
+  mysqlcreate $1 $user $pw
   mysqlselect onlinenew
-  typo3createdbold
+  mysqlcreate $1 $user $pw
   mysqlfetch $1
   mysql $1 -e "rename table tx_basetemplate_carousel_item to tx_bootstrappackage_carousel_item"
   mysql $1 -e "rename table tx_basetemplate_accordion_item to tx_bootstrappackage_accordion_item"
@@ -159,6 +162,8 @@ typo3migrate() {
   git remote add upstream git@git.hostinghelden.at:v9.git
   git fetch upstream
   git merge upstream/v9
+  localconf=public/typo3conf/LocalConfiguration.php
+  sed -i -e "s/v9.hostinghelden.at/$2/g" -e "s/v9/$1/g" -e "s/typo3user/$user/" -e "s/typo3pass/$pw/" $localconf
   mv config/sites/dummy config/sites/$1
   ext_key="$1-template"
   ext_path="packages/$ext_key/"
@@ -169,7 +174,6 @@ typo3migrate() {
   typo3sedMigrate $1 $2 $ext_path/ext_emconf.php
   typo3sedMigrate $1 $2 $ext_path/ext_localconf.php
   typo3sedMigrate $1 $2 $ext_path/Configuration/TypoScript/constants.typoscript
-  sed -i -e "/hostinghelden\/dummy: @dev,/a hostinghelden\/$1: @dev," composer.json
   composer update
   ./vendor/bin/typo3cms database:updateschema
   ./vendor/bin/typo3cms upgrade:all
