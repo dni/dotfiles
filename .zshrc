@@ -131,9 +131,9 @@ typo3migrate() {
   projectclone $1 typo3
   vhostcreate $1 $2
   mysqlselect local
-  typo3createdbfromconfig
+  typo3createdb
   mysqlselect onlinenew
-  typo3createdbfromconfig
+  typo3createdb
   mysqlfetch $1
   mysql $1 -e "rename table tx_basetemplate_carousel_item to tx_bootstrappackage_carousel_item"
   mysql $1 -e "rename table tx_basetemplate_accordion_item to tx_bootstrappackage_accordion_item"
