@@ -86,6 +86,10 @@ function createdbfromconfig () {
   mysqlcreate $db $user $pw
 }
 
+function request_ssl() {
+  [[ -z $1 ]] && echo missing argument domainname without www && return
+  aws acm request-certificate --domain-name www.$1 --validation-method EMAIL --subject-alternative-names $1 --domain-validation-options DomainName=$1,ValidationDomain=$1
+}
 
 function magento2domain () {
   [[ -z $1 ]] && echo missing argument dbname && return
@@ -102,6 +106,9 @@ function magento2perms () {
   sudo chmod u+x bin/magento
 }
 
+function magento2rm () {
+  rm -rf var/cache/* var/view_preprocessed/* pub/static/frontend/* var/page_cache/*
+}
 function magento2createdb () {
   createdbfromconfig ./app/etc/env.php
 }
@@ -110,23 +117,47 @@ function typo3createdb () {
   createdbfromconfig ./typo3conf/LocalConfiguration.php
 }
 
-typo3changeconfig() {
+typo3sedMigrate() {
   [[ -z $1 ]] && echo missing argument name && return
   [[ -z $2 ]] && echo missing argument domain && return
-  mv config/sites/dummy config/sites/$1
-  sed -i -e "s/v9.hostinghelden.at/$2/" config/sites/$1/config.yaml
-  sed -i -e "s/dummy/$2/" package.json
+  [[ -z $3 ]] && echo missing argument path && return
+  capital=$(echo $1 | sed -e "s/\b\(.\)/\u\1/g")
+  sed -i -e "s/Dummy/$capital/g" -e "s/dummy/$1/g" -e "s/v9.hostinghelden.at/$2/g" $3
 }
 
 typo3migrate() {
   [[ -z $1 ]] && echo missing argument name && return
-  mysql $1 -e "drop table tx_bootstrappackage_carousel_item"
-  mysql $1 -e "drop table tx_bootstrappackage_accordion_item"
-  mysql $1 -e "drop table tx_bootstrappackage_tab_item"
+  [[ -z $2 ]] && echo missing argument domain && return
+  projectclone $1 typo3
+  vhostcreate $1 $2
+  mysqlselect local
+  typo3createdbfromconfig
+  mysqlselect onlinenew
+  typo3createdbfromconfig
+  mysqlfetch $1
   mysql $1 -e "rename table tx_basetemplate_carousel_item to tx_bootstrappackage_carousel_item"
   mysql $1 -e "rename table tx_basetemplate_accordion_item to tx_bootstrappackage_accordion_item"
   mysql $1 -e "rename table tx_basetemplate_tab_item to tx_bootstrappackage_tab_item"
+  cd /var/www/$1
+  git checkout --orphan v9
+  git rm -rf .
+  git remote add upstream git@git.hostinghelden.at:v9.git
+  git fetch upstream
+  git merge upstream/v9
+  mv config/sites/dummy config/sites/$1
+  ext_key="$1-template"
+  ext_path="packages/$ext_key/"
+  cp -r packages/dummy-template $ext_path
+  typo3sedMigrate $1 $2 package.json
+  typo3sedMigrate $1 $2 $ext_path/composer.json
+  typo3sedMigrate $1 $2 $ext_path/ext_tables.php
+  typo3sedMigrate $1 $2 $ext_path/ext_localconf.php
+  typo3sedMigrate $1 $2 $ext_path/Configuration/TypoScript/constants.typoscript
+  sed -i -e "/hostinghelden\/dummy: @dev,/a hostinghelden\/$1: @dev," composer.json
+  composer update
   ./vendor/bin/typo3cms database:updateschema
+  ./vendor/bin/typo3cms upgrade:all
+  ./vendor/bin/typo3cms cache:flush
 }
 
 
