@@ -53,6 +53,14 @@ function mysqlmigrate() {
   echo "import $3 into $2 database"
   mysql $3 < $3.sql
 }
+function mysqlhostcreate() {
+  sudo sed -i -e "\$a127.0.0.1 typo3-sql.hostinghelden.at" /etc/hosts
+  sudo sed -i -e "\$a127.0.0.1 magento2-sql.hostinghelden.at" /etc/hosts
+}
+function mysqlhostremove() {
+  sudo sed -i -e "/127.0.0.1 typo3-sql.hostinghelden.at/d" /etc/hosts
+  sudo sed -i -e "/127.0.0.1 magento2-sql.hostinghelden.at/d" /etc/hosts
+}
 
 # clone projects and configure it
 function projectclone() {
@@ -117,6 +125,10 @@ function typo3createdb () {
   createdbfromconfig ./public/typo3conf/LocalConfiguration.php
 }
 
+function typo3createdbold () {
+  createdbfromconfig ./typo3conf/LocalConfiguration.php
+}
+
 typo3sedMigrate() {
   [[ -z $1 ]] && echo missing argument name && return
   [[ -z $2 ]] && echo missing argument domain && return
@@ -130,15 +142,17 @@ typo3migrate() {
   [[ -z $2 ]] && echo missing argument domain && return
   projectclone $1 typo3
   cd /var/www/$1
+  mysqlhostremove
   vhostcreate $1 $2
   mysqlselect local
-  typo3createdb
+  typo3createdbold
   mysqlselect onlinenew
-  typo3createdb
+  typo3createdbold
   mysqlfetch $1
   mysql $1 -e "rename table tx_basetemplate_carousel_item to tx_bootstrappackage_carousel_item"
   mysql $1 -e "rename table tx_basetemplate_accordion_item to tx_bootstrappackage_accordion_item"
   mysql $1 -e "rename table tx_basetemplate_tab_item to tx_bootstrappackage_tab_item"
+  mysqlhostcreate
   git checkout --orphan v9
   git rm -rf .
   git remote add upstream git@git.hostinghelden.at:v9.git
