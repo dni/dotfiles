@@ -150,6 +150,7 @@ typo3migrate() {
   old_localconf=typo3conf/LocalConfiguration.php
   user=$(grep -m 1 "user'" $old_localconf | cut -d "'" -f 4)
   pw=$(grep -m 1 "password'" $old_localconf | cut -d "'" -f 4)
+  cloudfront=$(grep cloudfront package.json | cut -d '"' -f 4)
   mysqlcreate $1 $user $pw
   mysqlselect onlinenew
   mysqlcreate $1 $user $pw
@@ -170,12 +171,15 @@ typo3migrate() {
   ext_path="packages/$ext_key/"
   cp -r packages/dummy-template $ext_path
   typo3sedMigrate $1 $2 package.json
+  sed -i -e "s/E1938G9S64JN6P/$cloudfront/g" package.json
+  sed -i -e "s/dummy/$1/g" composer.json
   typo3sedMigrate $1 $2 $ext_path/composer.json
   typo3sedMigrate $1 $2 $ext_path/ext_tables.php
   typo3sedMigrate $1 $2 $ext_path/ext_emconf.php
   typo3sedMigrate $1 $2 $ext_path/ext_localconf.php
   typo3sedMigrate $1 $2 $ext_path/Configuration/TypoScript/constants.typoscript
   composer update
+  chown -R typo3:www-data /var/www/$1
   ./vendor/bin/typo3cms database:updateschema
   ./vendor/bin/typo3cms upgrade:all
   ./vendor/bin/typo3cms cache:flush
