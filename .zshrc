@@ -107,7 +107,7 @@ function magento2createdb () {
 }
 
 function typo3createdb () {
-  createdbfromconfig ./typo3conf/LocalConfiguration.php
+  createdbfromconfig ./public/typo3conf/LocalConfiguration.php
 }
 
 typo3changeconfig() {
@@ -115,7 +115,8 @@ typo3changeconfig() {
   [[ -z $2 ]] && echo missing argument domain && return
   mv config/sites/dummy config/sites/$1
   sed -i -e "s/v9.hostinghelden.at/$2/" config/sites/$1/config.yaml
-  sed -i -e "s/dummy/$2/" package.json
+  sed -i -e "s/dummy/$1/" package.json
+  sed -i -e "s/v9.hostinghelden.at/$2/" public/typo3conf/LocalConfiguration.php
 }
 
 typo3migrate() {
