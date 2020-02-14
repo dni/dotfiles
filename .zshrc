@@ -129,6 +129,7 @@ typo3migrate() {
   [[ -z $1 ]] && echo missing argument name && return
   [[ -z $2 ]] && echo missing argument domain && return
   projectclone $1 typo3
+  cd /var/www/$1
   vhostcreate $1 $2
   mysqlselect local
   typo3createdb
@@ -138,7 +139,6 @@ typo3migrate() {
   mysql $1 -e "rename table tx_basetemplate_carousel_item to tx_bootstrappackage_carousel_item"
   mysql $1 -e "rename table tx_basetemplate_accordion_item to tx_bootstrappackage_accordion_item"
   mysql $1 -e "rename table tx_basetemplate_tab_item to tx_bootstrappackage_tab_item"
-  cd /var/www/$1
   git checkout --orphan v9
   git rm -rf .
   git remote add upstream git@git.hostinghelden.at:v9.git
