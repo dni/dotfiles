@@ -183,6 +183,10 @@ typo3migrate() {
   ./vendor/bin/typo3cms database:updateschema
   ./vendor/bin/typo3cms upgrade:all
   ./vendor/bin/typo3cms cache:flush
+  aws s3 cp s3://dummy-hostinghelden/dist/css/bootstrappackageicon.eot s3://$1-hostinghelden/dist/css/
+  aws s3 cp s3://dummy-hostinghelden/dist/css/bootstrappackageicon.woff s3://$1-hostinghelden/dist/css/
+  aws s3 cp s3://dummy-hostinghelden/dist/css/bootstrappackageicon.ttf s3://$1-hostinghelden/dist/css/
+  aws s3 cp s3://dummy-hostinghelden/dist/css/critical_new/ s3://$1-hostinghelden/dist/css/
 }
 
 
