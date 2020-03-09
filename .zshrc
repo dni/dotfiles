@@ -65,11 +65,10 @@ function mysqlhostremove() {
 # clone projects and configure it
 function projectclone() {
   [[ -z $1 ]] && echo "missing argument projectname" && return
-  [[ -z $2 ]] && echo "missing argument unix user" && return
   local file=/var/www/$1
   [[ -f $file ]] && echo git project does exist. && return
   git clone git@git.hostinghelden.at:$1.git $file
-  chown -R $2:www-data $file
+  chown -R $(whoami):www-data $file
   chmod -R 775 $file
 }
 
