@@ -2,6 +2,7 @@ export ZSH=~/.oh-my-zsh
 export TERM="xterm-256color"
 export EDITOR="vim"
 export PATH=$PATH:~/dotfiles/scripts
+export TYPO3_CONTEXT=Development
 ZSH_THEME="candy"
 plugins=(aws vagrant)
 source $ZSH/oh-my-zsh.sh
@@ -95,6 +96,11 @@ function createdbfromconfig () {
 }
 
 function request_ssl() {
+  [[ -z $1 ]] && echo missing argument domainname without www && return
+  aws acm request-certificate --domain-name www.$1 --validation-method DNS
+}
+
+function request_ssl_email() {
   [[ -z $1 ]] && echo missing argument domainname without www && return
   aws acm request-certificate --domain-name www.$1 --validation-method EMAIL --subject-alternative-names $1 --domain-validation-options DomainName=$1,ValidationDomain=$1
 }
@@ -252,3 +258,5 @@ alias encrypt='openssl aes-256-cbc -a -salt'
 alias sers='service apache2 restart'
 alias serl='service apache2 reload'
 alias sert='apachectl configtest'
+
+alias q3='~/ioquake3/quake3e.x64 +set fs_game cpma +set r_fullscreen 0'
