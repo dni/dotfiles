@@ -153,8 +153,12 @@ typo3migrate() {
   sudo service apache2 restart
   mysqlselect local
   old_localconf=typo3conf/LocalConfiguration.php
-  user=$(grep -m 1 "user'" $old_localconf | cut -d "'" -f 4)
-  pw=$(grep -m 1 "password'" $old_localconf | cut -d "'" -f 4)
+  #user=$(grep -m 1 "user'" $old_localconf | cut -d "'" -f 4)
+  #pw=$(grep -m 1 "password'" $old_localconf | cut -d "'" -f 4)
+
+  user="typo3user"
+  pw="typo3pass"
+
   cloudfront=$(grep cloudfront package.json | cut -d '"' -f 4)
   mysqlcreate $1 $user $pw
   mysqlselect onlinenew
@@ -170,7 +174,7 @@ typo3migrate() {
   git fetch upstream
   git merge upstream/v9
   localconf=public/typo3conf/LocalConfiguration.php
-  sed -i -e "s/v9.hostinghelden.at/$2/g" -e "s/v9/$1/g" -e "s/typo3user/$user/" -e "s/typo3pass/$pw/" $localconf
+  sed -i -e "s/v9.hostinghelden.at/$2/g" -e "s/v9/$1/g" $localconf
   mv config/sites/dummy config/sites/$1
   ext_key="$1-template"
   ext_path="packages/$ext_key/"
@@ -185,6 +189,7 @@ typo3migrate() {
   typo3sedMigrate $1 $2 $ext_path/Configuration/TypoScript/constants.typoscript
   composer update
   chown -R typo3:www-data /var/www/$1
+  mysql -e "GRANT ALL PRIVILEGES on $1 . * to typo3user"
   ./vendor/bin/typo3cms database:updateschema
   ./vendor/bin/typo3cms upgrade:all
   ./vendor/bin/typo3cms cache:flush
