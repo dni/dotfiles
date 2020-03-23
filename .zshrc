@@ -148,26 +148,21 @@ typo3migrate() {
   [[ -z $2 ]] && echo missing argument domain && return
   projectclone $1 typo3
   cd /var/www/$1
-  mysqlhostremove
   vhostcreate $1 $2 typo3
   sudo service apache2 restart
   mysqlselect local
   old_localconf=typo3conf/LocalConfiguration.php
-  #user=$(grep -m 1 "user'" $old_localconf | cut -d "'" -f 4)
-  #pw=$(grep -m 1 "password'" $old_localconf | cut -d "'" -f 4)
-
-  user="typo3user"
-  pw="typo3pass"
-
+  user=$(grep -m 1 "user'" $old_localconf | cut -d "'" -f 4)
+  pw=$(grep -m 1 "password'" $old_localconf | cut -d "'" -f 4)
   cloudfront=$(grep cloudfront package.json | cut -d '"' -f 4)
-  mysqlcreate $1 $user $pw
+  mysqlcreate $1 typo3user typo3pass
   mysqlselect onlinenew
   mysqlcreate $1 $user $pw
+  mysqlselect online
   mysqlfetch $1
   mysql $1 -e "rename table tx_basetemplate_carousel_item to tx_bootstrappackage_carousel_item"
   mysql $1 -e "rename table tx_basetemplate_accordion_item to tx_bootstrappackage_accordion_item"
   mysql $1 -e "rename table tx_basetemplate_tab_item to tx_bootstrappackage_tab_item"
-  mysqlhostcreate
   git checkout --orphan v9
   git rm -rf .
   git remote add upstream git@git.hostinghelden.at:v9.git
@@ -176,6 +171,7 @@ typo3migrate() {
   localconf=public/typo3conf/LocalConfiguration.php
   sed -i -e "s/v9.hostinghelden.at/$2/g" -e "s/v9/$1/g" $localconf
   mv config/sites/dummy config/sites/$1
+  sed -i -e "s/v9.hostinghelden.at/$2/g" config/sites/$1/config.yaml
   ext_key="$1-template"
   ext_path="packages/$ext_key/"
   cp -r packages/dummy-template $ext_path
@@ -189,14 +185,18 @@ typo3migrate() {
   typo3sedMigrate $1 $2 $ext_path/Configuration/TypoScript/constants.typoscript
   composer update
   chown -R typo3:www-data /var/www/$1
-  mysql -e "GRANT ALL PRIVILEGES on $1 . * to typo3user"
   ./vendor/bin/typo3cms database:updateschema
   ./vendor/bin/typo3cms upgrade:all
   ./vendor/bin/typo3cms cache:flush
+  chown -R typo3:www-data /var/www/$1
   aws s3 cp s3://dummy-hostinghelden/dist/css/bootstrappackageicon.eot s3://$1-hostinghelden/dist/css/
   aws s3 cp s3://dummy-hostinghelden/dist/css/bootstrappackageicon.woff s3://$1-hostinghelden/dist/css/
   aws s3 cp s3://dummy-hostinghelden/dist/css/bootstrappackageicon.ttf s3://$1-hostinghelden/dist/css/
   aws s3 cp s3://dummy-hostinghelden/dist/css/critical_new/ s3://$1-hostinghelden/dist/css/
+  aws s3 cp s3://$1-hostinghelden/forms/newsletterAnmeldung.form.yaml tmp.txt
+  sed -i -e "s/base_template/hostinghelden_template/g" tmp.txt
+  aws s3 cp tmp.txt s3://$1-hostinghelden/forms/newsletterAnmeldung.form.yaml
+  rm tmp.txt
 }
 
 
