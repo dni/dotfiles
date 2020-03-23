@@ -169,7 +169,7 @@ typo3migrate() {
   git fetch upstream
   git merge upstream/v9
   localconf=public/typo3conf/LocalConfiguration.php
-  sed -i -e "s/v9.hostinghelden.at/$2/g" -e "s/v9/$1/g" $localconf
+  sed -i -e "s/typo3pass/$pw/g" -e "s/typo3user/$user/g" -e "s/v9.hostinghelden.at/$2/g" -e "s/v9/$1/g" $localconf
   mv config/sites/dummy config/sites/$1
   sed -i -e "s/v9.hostinghelden.at/$2/g" config/sites/$1/config.yaml
   ext_key="$1-template"
