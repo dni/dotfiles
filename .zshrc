@@ -20,6 +20,11 @@ function mysqlcreate() {
   local query=$(sed -e "s/%name%/$1/g" -e "s/%user%/$2/g" -e "s/%pw%/$3/g" $template)
   mysql -e "$query"
 }
+function mysqlcreatelocal() {
+  [[ -z $1 ]] && echo missing argument database && return
+  mysql -e "create database $1 default character set utf8 default collate utf8_general_ci;"
+  mysql -e "grant all privileges on $1 . * to typo3user"
+}
 # select database server usage with ~/.my.cnf.dbname
 function mysqlselect() {
   [[ -z $1 ]] && echo missing argument name && return
@@ -155,7 +160,7 @@ typo3migrate() {
   user=$(grep -m 1 "user'" $old_localconf | cut -d "'" -f 4)
   pw=$(grep -m 1 "password'" $old_localconf | cut -d "'" -f 4)
   cloudfront=$(grep cloudfront package.json | cut -d '"' -f 4)
-  mysqlcreate $1 typo3user typo3pass
+  mysqlcreatelocal $1
   mysqlselect onlinenew
   mysqlcreate $1 $user $pw
   mysqlselect online
@@ -183,6 +188,7 @@ typo3migrate() {
   typo3sedMigrate $1 $2 $ext_path/ext_emconf.php
   typo3sedMigrate $1 $2 $ext_path/ext_localconf.php
   typo3sedMigrate $1 $2 $ext_path/Configuration/TypoScript/constants.typoscript
+  yarn
   composer update
   chown -R typo3:www-data /var/www/$1
   ./vendor/bin/typo3cms database:updateschema
