@@ -2,6 +2,7 @@ export ZSH=~/.oh-my-zsh
 export TERM="xterm-256color"
 export EDITOR="vim"
 export PATH=$PATH:~/dotfiles/scripts
+export TYPO3_CONTEXT=Development
 ZSH_THEME="candy"
 plugins=(aws vagrant)
 source $ZSH/oh-my-zsh.sh
@@ -18,6 +19,11 @@ function mysqlcreate() {
   local template=~/dotfiles/scripts/templates/create.sql
   local query=$(sed -e "s/%name%/$1/g" -e "s/%user%/$2/g" -e "s/%pw%/$3/g" $template)
   mysql -e "$query"
+}
+function mysqlcreatelocal() {
+  [[ -z $1 ]] && echo missing argument database && return
+  mysql -e "create database $1 default character set utf8 default collate utf8_general_ci;"
+  mysql -e "grant all privileges on $1 . * to typo3user"
 }
 # select database server usage with ~/.my.cnf.dbname
 function mysqlselect() {
@@ -65,11 +71,10 @@ function mysqlhostremove() {
 # clone projects and configure it
 function projectclone() {
   [[ -z $1 ]] && echo "missing argument projectname" && return
-  [[ -z $2 ]] && echo "missing argument unix user" && return
   local file=/var/www/$1
-  [[ -f $file ]] && echo $file does exist. && return
+  [[ -f $file ]] && echo git project does exist. && return
   git clone git@git.hostinghelden.at:$1.git $file
-  chown -R $2:www-data $file
+  chown -R $(whoami):www-data $file
   chmod -R 775 $file
 }
 
@@ -80,7 +85,7 @@ function vhostcreate() {
   local template=~/dotfiles/scripts/templates/vhost.conf
   local target=/etc/apache2/sites-enabled/$1.conf
   [[ -z $3 ]] || local template=~/dotfiles/scripts/templates/vhost-typo3.conf
-  [[ -f $target ]] && echo $file does exist. && return
+  [[ -f $target ]] && echo vhost does exist. && return
   sudo cp $template $target
   sudo sed -i -e "s/%name%/$1/g" -e "s/%domain%/$2/g" $target
 }
@@ -96,6 +101,11 @@ function createdbfromconfig () {
 }
 
 function request_ssl() {
+  [[ -z $1 ]] && echo missing argument domainname without www && return
+  aws acm request-certificate --domain-name www.$1 --validation-method DNS
+}
+
+function request_ssl_email() {
   [[ -z $1 ]] && echo missing argument domainname without www && return
   aws acm request-certificate --domain-name www.$1 --validation-method EMAIL --subject-alternative-names $1 --domain-validation-options DomainName=$1,ValidationDomain=$1
 }
@@ -143,42 +153,56 @@ typo3migrate() {
   [[ -z $2 ]] && echo missing argument domain && return
   projectclone $1 typo3
   cd /var/www/$1
-  mysqlhostremove
   vhostcreate $1 $2 typo3
   sudo service apache2 restart
   mysqlselect local
   old_localconf=typo3conf/LocalConfiguration.php
   user=$(grep -m 1 "user'" $old_localconf | cut -d "'" -f 4)
   pw=$(grep -m 1 "password'" $old_localconf | cut -d "'" -f 4)
-  mysqlcreate $1 $user $pw
+  cloudfront=$(grep cloudfront package.json | cut -d '"' -f 4)
+  mysqlcreatelocal $1
   mysqlselect onlinenew
   mysqlcreate $1 $user $pw
+  mysqlselect online
   mysqlfetch $1
   mysql $1 -e "rename table tx_basetemplate_carousel_item to tx_bootstrappackage_carousel_item"
   mysql $1 -e "rename table tx_basetemplate_accordion_item to tx_bootstrappackage_accordion_item"
   mysql $1 -e "rename table tx_basetemplate_tab_item to tx_bootstrappackage_tab_item"
-  mysqlhostcreate
   git checkout --orphan v9
   git rm -rf .
   git remote add upstream git@git.hostinghelden.at:v9.git
   git fetch upstream
   git merge upstream/v9
   localconf=public/typo3conf/LocalConfiguration.php
-  sed -i -e "s/v9.hostinghelden.at/$2/g" -e "s/v9/$1/g" -e "s/typo3user/$user/" -e "s/typo3pass/$pw/" $localconf
+  sed -i -e "s/typo3pass/$pw/g" -e "s/typo3user/$user/g" -e "s/v9.hostinghelden.at/$2/g" -e "s/v9/$1/g" $localconf
   mv config/sites/dummy config/sites/$1
+  sed -i -e "s/v9.hostinghelden.at/$2/g" config/sites/$1/config.yaml
   ext_key="$1-template"
   ext_path="packages/$ext_key/"
   cp -r packages/dummy-template $ext_path
   typo3sedMigrate $1 $2 package.json
+  sed -i -e "s/E1938G9S64JN6P/$cloudfront/g" package.json
+  sed -i -e "s/dummy/$1/g" composer.json
   typo3sedMigrate $1 $2 $ext_path/composer.json
   typo3sedMigrate $1 $2 $ext_path/ext_tables.php
   typo3sedMigrate $1 $2 $ext_path/ext_emconf.php
   typo3sedMigrate $1 $2 $ext_path/ext_localconf.php
   typo3sedMigrate $1 $2 $ext_path/Configuration/TypoScript/constants.typoscript
+  yarn
   composer update
+  chown -R typo3:www-data /var/www/$1
   ./vendor/bin/typo3cms database:updateschema
   ./vendor/bin/typo3cms upgrade:all
   ./vendor/bin/typo3cms cache:flush
+  chown -R typo3:www-data /var/www/$1
+  aws s3 cp s3://dummy-hostinghelden/dist/css/bootstrappackageicon.eot s3://$1-hostinghelden/dist/css/
+  aws s3 cp s3://dummy-hostinghelden/dist/css/bootstrappackageicon.woff s3://$1-hostinghelden/dist/css/
+  aws s3 cp s3://dummy-hostinghelden/dist/css/bootstrappackageicon.ttf s3://$1-hostinghelden/dist/css/
+  aws s3 cp s3://dummy-hostinghelden/dist/css/critical_new/ s3://$1-hostinghelden/dist/css/
+  aws s3 cp s3://$1-hostinghelden/forms/newsletterAnmeldung.form.yaml tmp.txt
+  sed -i -e "s/base_template/hostinghelden_template/g" tmp.txt
+  aws s3 cp tmp.txt s3://$1-hostinghelden/forms/newsletterAnmeldung.form.yaml
+  rm tmp.txt
 }
 
 
@@ -240,3 +264,5 @@ alias encrypt='openssl aes-256-cbc -a -salt'
 alias sers='service apache2 restart'
 alias serl='service apache2 reload'
 alias sert='apachectl configtest'
+
+alias q3='~/ioquake3/quake3e.x64 +set fs_game cpma +set r_fullscreen 0'
