@@ -171,7 +171,7 @@ typo3migrate() {
   mysql $1 -e "update sys_template set include_static_file='EXT:fluid_styled_content/Configuration/TypoScript/,EXT:form/Configuration/TypoScript/,EXT:seo/Configuration/TypoScript/XmlSitemap,EXT:bootstrap_package/Configuration/TypoScript,EXT:hostinghelden_template/Configuration/TypoScript,EXT:${1}_template/Configuration/TypoScript' where uid=1;
 "
   git checkout --orphan v9
-  git rm -rf .
+  git rm -rfq .
   git remote add upstream git@git.hostinghelden.at:v9.git
   git fetch upstream
   git merge upstream/v9
