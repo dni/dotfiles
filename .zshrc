@@ -168,6 +168,8 @@ typo3migrate() {
   mysql $1 -e "rename table tx_basetemplate_carousel_item to tx_bootstrappackage_carousel_item"
   mysql $1 -e "rename table tx_basetemplate_accordion_item to tx_bootstrappackage_accordion_item"
   mysql $1 -e "rename table tx_basetemplate_tab_item to tx_bootstrappackage_tab_item"
+  mysql $1 -e "update sys_template set include_static_file='EXT:fluid_styled_content/Configuration/TypoScript/,EXT:form/Configuration/TypoScript/,EXT:seo/Configuration/TypoScript/XmlSitemap,EXT:bootstrap_package/Configuration/TypoScript,EXT:hostinghelden_template/Configuration/TypoScript,EXT:${1}_template/Configuration/TypoScript' where uid=1;
+"
   git checkout --orphan v9
   git rm -rf .
   git remote add upstream git@git.hostinghelden.at:v9.git
