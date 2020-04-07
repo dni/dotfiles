@@ -197,6 +197,8 @@ typo3migrate() {
   ./vendor/bin/typo3cms upgrade:all
   ./vendor/bin/typo3cms cache:flush
   chown -R typo3:www-data /var/www/$1
+  aws s3 sync s3://dummy-hostinghelden/dist/img/PhotoSwipe  s3://$1-hostinghelden/dist/img/PhotoSwipe
+  aws s3 sync s3://dummy-hostinghelden/dist/img/Flags s3://$1-hostinghelden/dist/img/Flags
   aws s3 cp s3://dummy-hostinghelden/dist/css/bootstrappackageicon.eot s3://$1-hostinghelden/dist/css/
   aws s3 cp s3://dummy-hostinghelden/dist/css/bootstrappackageicon.woff s3://$1-hostinghelden/dist/css/
   aws s3 cp s3://dummy-hostinghelden/dist/css/bootstrappackageicon.ttf s3://$1-hostinghelden/dist/css/
