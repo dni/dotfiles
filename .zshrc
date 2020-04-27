@@ -148,6 +148,22 @@ typo3sedMigrate() {
   sed -i -e "s/Dummy/$capital/g" -e "s/dummy/$1/g" -e "s/v9.hostinghelden.at/$2/g" $3
 }
 
+typo3clone() {
+  [[ -z $1 ]] && echo missing argument name && return
+  [[ -z $2 ]] && echo missing argument domain && return
+  projectclone $1 typo3
+  cd /var/www/$1
+  vhostcreate $1 dev.$2 typo3
+  sudo service apache2 restart
+  mysqlselect local
+  mysqlcreatelocal $1
+  mysqlmigrate onlinenew local $1
+  git checkout v9
+  yarn
+  composer update
+  chown -R typo3:www-data /var/www/$1
+}
+
 typo3migrate() {
   [[ -z $1 ]] && echo missing argument name && return
   [[ -z $2 ]] && echo missing argument domain && return
