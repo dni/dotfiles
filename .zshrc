@@ -153,7 +153,7 @@ typo3clone() {
   [[ -z $2 ]] && echo missing argument domain && return
   projectclone $1 typo3
   cd /var/www/$1
-  vhostcreate $1 dev.$2 typo3
+  vhostcreate $1 $2 typo3
   sudo service apache2 restart
   mysqlselect local
   mysqlcreatelocal $1
