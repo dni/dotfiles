@@ -259,4 +259,4 @@ alias sers='service apache2 restart'
 alias serl='service apache2 reload'
 alias sert='apachectl configtest'
 
-alias q3='~/ioquake3/quake3e.x64 +set fs_game cpma +set r_fullscreen 0'
+alias q3='~/ioquake3/quake3e.x64 +set fs_game cpma +connect'
