@@ -2,12 +2,20 @@ export ZSH=~/.oh-my-zsh
 export TERM="xterm-256color"
 export EDITOR="vim"
 export PATH=$PATH:~/dotfiles/scripts
+export TYPO3_CONTEXT=Development
 ZSH_THEME="candy"
 plugins=(aws vagrant composer)
 source $ZSH/oh-my-zsh.sh
 
 # enable vi mode
 # bindkey -v
+
+function upload() {
+  [[ -f $1 ]] || echo $1 doesnt exist.
+  [[ -f $1 ]] || return
+  aws s3 cp $1 s3://dnilabs-hostinghelden/upload/
+  echo "https://d261tqllhzwogc.cloudfront.net/upload/$1"
+}
 
 # useful mysql function
 # create database and user
@@ -19,11 +27,17 @@ function mysqlcreate() {
   local query=$(sed -e "s/%name%/$1/g" -e "s/%user%/$2/g" -e "s/%pw%/$3/g" $template)
   mysql -e "$query"
 }
+function mysqlcreatelocal() {
+  [[ -z $1 ]] && echo missing argument database && return
+  mysql -e "create database $1 default character set utf8 default collate utf8_general_ci;"
+  mysql -e "grant all privileges on $1 . * to typo3user"
+}
 # select database server usage with ~/.my.cnf.dbname
 function mysqlselect() {
   [[ -z $1 ]] && echo missing argument name && return
   local file=~/.my.cnf.$1
-  [[ -f $file ]] || echo $file doesnt exist. || return
+  [[ -f $file ]] || echo $file doesnt exist.
+  [[ -f $file ]] || return
   cp ~/.my.cnf ~/.my.cnf.backup
   rm ~/.my.cnf
   ln -s $file ~/.my.cnf && echo using database: $1
@@ -35,8 +49,10 @@ function mysqlfetch() {
 }
 # migrate a database from server to server
 function mysqlmigrate() {
-  [[ -f ~/.my.cnf.$1 ]] || echo "from: $1 doesnt exist." || return
-  [[ -f ~/.my.cnf.$2 ]] || echo "to: $2 doesnt exist." || return
+  [[ -f ~/.my.cnf.$1 ]] || echo "from: $1 doesnt exist."
+  [[ -f ~/.my.cnf.$1 ]] || return
+  [[ -f ~/.my.cnf.$2 ]] || echo "to: $2 doesnt exist."
+  [[ -f ~/.my.cnf.$2 ]] || return
   [[ -z $3 ]] && echo "missing argument database" && return
   # safely dump from production database
   mysqlselect $1
@@ -50,15 +66,57 @@ function mysqlmigrate() {
   echo "import $3 into $2 database"
   mysql $3 < $3.sql
 }
+function mysqlhostcreate() {
+  sudo sed -i -e "\$a127.0.0.1 typo3-sql.hostinghelden.at" /etc/hosts
+  sudo sed -i -e "\$a127.0.0.1 magento2-sql.hostinghelden.at" /etc/hosts
+}
+function mysqlhostremove() {
+  sudo sed -i -e "/127.0.0.1 typo3-sql.hostinghelden.at/d" /etc/hosts
+  sudo sed -i -e "/127.0.0.1 magento2-sql.hostinghelden.at/d" /etc/hosts
+}
+
+# magento2create initialize new magento2 store
+function magento2create(){
+  [[ -z $1 ]] && echo "missing argument projectname" && return
+  [[ -z $2 ]] && echo "missing argument mysql password" && return
+  [[ -z $3 ]] && echo "missing argument domain" && return
+  [[ -z $4 ]] && echo "missing argument admin password" && return
+  composer create-project --repository-url=https://repo.magento.com/ magento/project-community-edition .
+  php bin/magento setup:install \
+    --base-url="http://$3/" \
+    --db-host="magento2-sql.hostinghelden.at" \
+    --db-name="$1" \
+    --db-user="$1" \
+    --db-password="$2" \
+    --admin-firstname="dni" \
+    --admin-lastname="khr" \
+    --admin-email="office@hostinghelden.at" \
+    --admin-user="hostinghelden" \
+    --admin-password="$4" \
+    --language="de_DE" \
+    --currency="EUR" \
+    --timezone="Europe/Vienna" \
+    --use-rewrites="1" \
+    --backend-frontname="admin"
+  # german translations
+  composer require splendidinternet/mage2-locale-de-de
+  rm -f pub/static/frontend/Magento/luma/de_DE/js-translation.json
+  php bin/magento setup:static-content:deploy de_DE -f
+  # firegento
+  composer require firegento/magesetup2:dev-develop
+  php bin/magento module:enable FireGento_MageSetup
+  php bin/magento setup:upgrade
+  php bin/magento magesetup:setup:run at
+  php bin/magento cache:enable
+}
 
 # clone projects and configure it
 function projectclone() {
   [[ -z $1 ]] && echo "missing argument projectname" && return
-  [[ -z $2 ]] && echo "missing argument unix user" && return
   local file=/var/www/$1
-  [[ -f $file ]] && echo $file does exist. && return
+  [[ -f $file ]] && echo git project does exist. && return
   git clone git@git.hostinghelden.at:$1.git $file
-  chown -R $2:www-data $file
+  chown -R $(whoami):www-data $file
   chmod -R 775 $file
 }
 
@@ -68,9 +126,30 @@ function vhostcreate() {
   [[ -z $2 ]] && echo "missing argument domain" && return
   local template=~/dotfiles/scripts/templates/vhost.conf
   local target=/etc/apache2/sites-enabled/$1.conf
-  [[ -f $target ]] && echo $file does exist. && return
+  [[ -z $3 ]] || local template=~/dotfiles/scripts/templates/vhost-typo3.conf
+  [[ -f $target ]] && echo vhost does exist. && return
   sudo cp $template $target
   sudo sed -i -e "s/%name%/$1/g" -e "s/%domain%/$2/g" $target
+}
+
+# grep db, username and password from config file and create it
+function createdbfromconfig () {
+  [[ -f $1 ]] || echo $1 doesnt exist.
+  [[ -f $1 ]] || return
+  db=$(grep -m 1 "dbname" $1 | cut -d "'" -f 4)
+  user=$(grep -m 1 "user" $1 | cut -d "'" -f 4)
+  pw=$(grep -m 1 "password" $1 | cut -d "'" -f 4)
+  mysqlcreate $db $user $pw
+}
+
+function request_ssl() {
+  [[ -z $1 ]] && echo missing argument domainname && return
+  aws acm request-certificate --domain-name $1 --validation-method DNS
+}
+
+function request_ssl_email() {
+  [[ -z $1 ]] && echo missing argument domainname without www && return
+  aws acm request-certificate --domain-name $1 --validation-method EMAIL --subject-alternative-names $1 --domain-validation-options DomainName=$1,ValidationDomain=$1
 }
 
 function magento2domain () {
@@ -88,14 +167,106 @@ function magento2perms () {
   sudo chmod u+x bin/magento
 }
 
-function magento2createdb () {
-  local file=./app/etc/env.php
-  [[ -f $file ]] || echo $file doesnt exist. || return
-  db=$(grep "dbname" $file | cut -d "'" -f 4)
-  user=$(grep "user" $file | cut -d "'" -f 4)
-  pw=$(grep "password" $file | cut -d "'" -f 4)
-  mysqlcreate $db $user $pw
+function magento2rm () {
+  rm -rf var/cache/* var/view_preprocessed/* pub/static/frontend/* var/page_cache/*
 }
+function magento2createdb () {
+  createdbfromconfig ./app/etc/env.php
+}
+
+function typo3createdb () {
+  createdbfromconfig ./public/typo3conf/LocalConfiguration.php
+}
+
+function typo3createdbold () {
+  createdbfromconfig ./typo3conf/LocalConfiguration.php
+}
+
+typo3sedMigrate() {
+  [[ -z $1 ]] && echo missing argument name && return
+  [[ -z $2 ]] && echo missing argument domain && return
+  [[ -z $3 ]] && echo missing argument path && return
+  capital=$(echo $1 | sed -e "s/\b\(.\)/\u\1/g")
+  sed -i -e "s/Dummy/$capital/g" -e "s/dummy/$1/g" -e "s/v9.hostinghelden.at/$2/g" $3
+}
+
+typo3clone() {
+  [[ -z $1 ]] && echo missing argument name && return
+  [[ -z $2 ]] && echo missing argument domain && return
+  projectclone $1 typo3
+  cd /var/www/$1
+  vhostcreate $1 $2 typo3
+  sudo service apache2 restart
+  mysqlselect local
+  mysqlcreatelocal $1
+  mysqlmigrate onlinenew local $1
+  git checkout v9
+  yarn
+  composer update
+  chown -R typo3:www-data /var/www/$1
+}
+
+typo3migrate() {
+  [[ -z $1 ]] && echo missing argument name && return
+  [[ -z $2 ]] && echo missing argument domain && return
+  projectclone $1 typo3
+  cd /var/www/$1
+  vhostcreate $1 $2 typo3
+  sudo service apache2 restart
+  mysqlselect local
+  old_localconf=typo3conf/LocalConfiguration.php
+  user=$(grep -m 1 "user'" $old_localconf | cut -d "'" -f 4)
+  pw=$(grep -m 1 "password'" $old_localconf | cut -d "'" -f 4)
+  cloudfront=$(grep cloudfront package.json | cut -d '"' -f 4)
+  mysqlcreatelocal $1
+  mysqlselect onlinenew
+  mysqlcreate $1 $user $pw
+  mysqlselect online
+  mysqlfetch $1
+  mysql $1 -e "rename table tx_basetemplate_carousel_item to tx_bootstrappackage_carousel_item"
+  mysql $1 -e "rename table tx_basetemplate_accordion_item to tx_bootstrappackage_accordion_item"
+  mysql $1 -e "rename table tx_basetemplate_tab_item to tx_bootstrappackage_tab_item"
+  mysql $1 -e "update sys_template set include_static_file='EXT:fluid_styled_content/Configuration/TypoScript/,EXT:form/Configuration/TypoScript/,EXT:seo/Configuration/TypoScript/XmlSitemap,EXT:bootstrap_package/Configuration/TypoScript,EXT:hostinghelden_template/Configuration/TypoScript,EXT:${1}_template/Configuration/TypoScript' where uid=1;
+"
+  git checkout --orphan v9
+  git rm -rfq .
+  git remote add upstream git@git.hostinghelden.at:v9.git
+  git fetch upstream
+  git merge upstream/v9
+  localconf=public/typo3conf/LocalConfiguration.php
+  sed -i -e "s/typo3pass/$pw/g" -e "s/typo3user/$user/g" -e "s/v9.hostinghelden.at/$2/g" -e "s/v9/$1/g" $localconf
+  mv config/sites/dummy config/sites/$1
+  sed -i -e "s/v9.hostinghelden.at/$2/g" config/sites/$1/config.yaml
+  ext_key="$1-template"
+  ext_path="packages/$ext_key/"
+  cp -r packages/dummy-template $ext_path
+  typo3sedMigrate $1 $2 package.json
+  sed -i -e "s/E1938G9S64JN6P/$cloudfront/g" package.json
+  sed -i -e "s/dummy/$1/g" composer.json
+  typo3sedMigrate $1 $2 $ext_path/composer.json
+  typo3sedMigrate $1 $2 $ext_path/ext_tables.php
+  typo3sedMigrate $1 $2 $ext_path/ext_emconf.php
+  typo3sedMigrate $1 $2 $ext_path/ext_localconf.php
+  typo3sedMigrate $1 $2 $ext_path/Configuration/TypoScript/constants.typoscript
+  yarn
+  composer update
+  chown -R typo3:www-data /var/www/$1
+  ./vendor/bin/typo3cms database:updateschema
+  ./vendor/bin/typo3cms upgrade:all
+  ./vendor/bin/typo3cms cache:flush
+  chown -R typo3:www-data /var/www/$1
+  aws s3 sync s3://dummy-hostinghelden/dist/img/PhotoSwipe  s3://$1-hostinghelden/dist/img/PhotoSwipe
+  aws s3 sync s3://dummy-hostinghelden/dist/img/Flags s3://$1-hostinghelden/dist/img/Flags
+  aws s3 cp s3://dummy-hostinghelden/dist/css/bootstrappackageicon.eot s3://$1-hostinghelden/dist/css/
+  aws s3 cp s3://dummy-hostinghelden/dist/css/bootstrappackageicon.woff s3://$1-hostinghelden/dist/css/
+  aws s3 cp s3://dummy-hostinghelden/dist/css/bootstrappackageicon.ttf s3://$1-hostinghelden/dist/css/
+  aws s3 cp s3://dummy-hostinghelden/dist/css/critical_new/ s3://$1-hostinghelden/dist/css/
+  aws s3 cp s3://$1-hostinghelden/forms/newsletterAnmeldung.form.yaml tmp.txt
+  sed -i -e "s/base_template/hostinghelden_template/g" tmp.txt
+  aws s3 cp tmp.txt s3://$1-hostinghelden/forms/newsletterAnmeldung.form.yaml
+  rm tmp.txt
+}
+
 
 ## aliases
 alias smysqldump="mysqldump --single-transaction --quick --lock-tables=false"
@@ -155,3 +326,5 @@ alias encrypt='openssl aes-256-cbc -a -salt'
 alias sers='service apache2 restart'
 alias serl='service apache2 reload'
 alias sert='apachectl configtest'
+
+alias q3='~/ioquake3/quake3e.x64 +set fs_game cpma +connect'
