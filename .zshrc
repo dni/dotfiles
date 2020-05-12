@@ -3,7 +3,7 @@ export TERM="xterm-256color"
 export EDITOR="vim"
 export PATH=$PATH:~/dotfiles/scripts
 ZSH_THEME="candy"
-plugins=(aws vagrant)
+plugins=(aws vagrant composer)
 source $ZSH/oh-my-zsh.sh
 
 # enable vi mode
