@@ -10,6 +10,13 @@ source $ZSH/oh-my-zsh.sh
 # enable vi mode
 # bindkey -v
 
+function upload() {
+  [[ -f $1 ]] || echo $1 doesnt exist.
+  [[ -f $1 ]] || return
+  aws s3 cp $1 s3://dnilabs-hostinghelden/upload/
+  echo "https://d261tqllhzwogc.cloudfront.net/upload/$1"
+}
+
 # useful mysql function
 # create database and user
 function mysqlcreate() {
@@ -68,6 +75,41 @@ function mysqlhostremove() {
   sudo sed -i -e "/127.0.0.1 magento2-sql.hostinghelden.at/d" /etc/hosts
 }
 
+# magento2create initialize new magento2 store
+function magento2create(){
+  [[ -z $1 ]] && echo "missing argument projectname" && return
+  [[ -z $2 ]] && echo "missing argument mysql password" && return
+  [[ -z $3 ]] && echo "missing argument domain" && return
+  [[ -z $4 ]] && echo "missing argument admin password" && return
+  composer create-project --repository-url=https://repo.magento.com/ magento/project-community-edition .
+  php bin/magento setup:install \
+    --base-url="http://$3/" \
+    --db-host="magento2-sql.hostinghelden.at" \
+    --db-name="$1" \
+    --db-user="$1" \
+    --db-password="$2" \
+    --admin-firstname="dni" \
+    --admin-lastname="khr" \
+    --admin-email="office@hostinghelden.at" \
+    --admin-user="hostinghelden" \
+    --admin-password="$4" \
+    --language="de_DE" \
+    --currency="EUR" \
+    --timezone="Europe/Vienna" \
+    --use-rewrites="1" \
+    --backend-frontname="admin"
+  # german translations
+  composer require splendidinternet/mage2-locale-de-de
+  rm -f pub/static/frontend/Magento/luma/de_DE/js-translation.json
+  php bin/magento setup:static-content:deploy de_DE -f
+  # firegento
+  composer require firegento/magesetup2:dev-develop
+  php bin/magento module:enable FireGento_MageSetup
+  php bin/magento setup:upgrade
+  php bin/magento magesetup:setup:run at
+  php bin/magento cache:enable
+}
+
 # clone projects and configure it
 function projectclone() {
   [[ -z $1 ]] && echo "missing argument projectname" && return
@@ -101,13 +143,13 @@ function createdbfromconfig () {
 }
 
 function request_ssl() {
-  [[ -z $1 ]] && echo missing argument domainname without www && return
-  aws acm request-certificate --domain-name www.$1 --validation-method DNS
+  [[ -z $1 ]] && echo missing argument domainname && return
+  aws acm request-certificate --domain-name $1 --validation-method DNS
 }
 
 function request_ssl_email() {
   [[ -z $1 ]] && echo missing argument domainname without www && return
-  aws acm request-certificate --domain-name www.$1 --validation-method EMAIL --subject-alternative-names $1 --domain-validation-options DomainName=$1,ValidationDomain=$1
+  aws acm request-certificate --domain-name $1 --validation-method EMAIL --subject-alternative-names $1 --domain-validation-options DomainName=$1,ValidationDomain=$1
 }
 
 function magento2domain () {
