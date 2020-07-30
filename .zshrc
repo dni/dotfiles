@@ -148,7 +148,7 @@ function request_ssl_email() {
 function magento2domainlocal() {
   [[ -z $1 ]] && echo missing argument domain && return
   bin/magento config:set "web/secure/use_in_frontend" 0
-  bin/magento config:set "web/secure/use_in_backend" 0
+  bin/magento config:set "web/secure/use_in_adminhtml" 0
   bin/magento config:set "web/unsecure/base_url" "http://dev.$1:8081/"
   bin/magento config:set "web/secure/base_url" "http://dev.$1:8081/"
 }
@@ -156,15 +156,13 @@ function magento2domainlocal() {
 function magento2domainonline() {
   [[ -z $1 ]] && echo missing argument domain && return
   bin/magento config:set "web/secure/use_in_frontend" 1
-  bin/magento config:set "web/secure/use_in_backend" 1
+  bin/magento config:set "web/secure/use_in_adminhtml" 1
   bin/magento config:set "web/unsecure/base_url" "https://$1/"
   bin/magento config:set "web/secure/base_url" "https://$1/"
 }
 
 function magento2dblocal() {
-  [[ -z $1 ]] && echo missing argument dbname && return
-  bin/magento setup:config:set --db-host=localhost --db-name=$1 \
-    --db-user=magentouser --db-password=magentopass
+  bin/magento setup:config:set --db-host=localhost --db-user=magentouser --db-password=magentopass
 }
 
 function magento2perms () {
