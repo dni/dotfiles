@@ -1,6 +1,6 @@
 #!/bin/bash
 VOL="$(pamixer --get-volume)%"
-DATE=$(date +%d.%m.%Y)
+DATE="$(date | cut -c -2) $(date +%d.%m.%Y)"
 TIME=$(date +%H:%M)
 EXTIP=$(cat ~/.external_ip)
 BTC=$(cat ~/.btc_price)
