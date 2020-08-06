@@ -66,14 +66,7 @@ function mysqlmigrate() {
   echo "import $3 into $2 database"
   mysql $3 < $3.sql
 }
-function mysqlhostcreate() {
-  sudo sed -i -e "\$a127.0.0.1 typo3-sql.hostinghelden.at" /etc/hosts
-  sudo sed -i -e "\$a127.0.0.1 magento2-sql.hostinghelden.at" /etc/hosts
-}
-function mysqlhostremove() {
-  sudo sed -i -e "/127.0.0.1 typo3-sql.hostinghelden.at/d" /etc/hosts
-  sudo sed -i -e "/127.0.0.1 magento2-sql.hostinghelden.at/d" /etc/hosts
-}
+
 
 # magento2create initialize new magento2 store
 function magento2create(){
@@ -152,12 +145,24 @@ function request_ssl_email() {
   aws acm request-certificate --domain-name $1 --validation-method EMAIL --subject-alternative-names $1 --domain-validation-options DomainName=$1,ValidationDomain=$1
 }
 
-function magento2domain () {
-  [[ -z $1 ]] && echo missing argument dbname && return
-  [[ -z $2 ]] && echo missing argument domain && return
-  mysql $1 -e "update core_config_data set value='http://$2:8082/' where path='web/unsecure/base_url'"
-  mysql $1 -e 'update core_config_data set value="0" where path="web/secure/use_in_frontend"'
-  mysql $1 -e 'update core_config_data set value="0" where path="web/secure/use_in_adminhtml"'
+function magento2domainlocal() {
+  [[ -z $1 ]] && echo missing argument domain && return
+  bin/magento config:set "web/secure/use_in_frontend" 0
+  bin/magento config:set "web/secure/use_in_adminhtml" 0
+  bin/magento config:set "web/unsecure/base_url" "http://dev.$1:8081/"
+  bin/magento config:set "web/secure/base_url" "http://dev.$1:8081/"
+}
+
+function magento2domainonline() {
+  [[ -z $1 ]] && echo missing argument domain && return
+  bin/magento config:set "web/secure/use_in_frontend" 1
+  bin/magento config:set "web/secure/use_in_adminhtml" 1
+  bin/magento config:set "web/unsecure/base_url" "https://$1/"
+  bin/magento config:set "web/secure/base_url" "https://$1/"
+}
+
+function magento2dblocal() {
+  bin/magento setup:config:set --db-host=localhost --db-user=magentouser --db-password=magentopass
 }
 
 function magento2perms () {
