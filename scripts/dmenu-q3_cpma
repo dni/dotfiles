@@ -10,4 +10,4 @@ SERVER=$(echo "cpm.freddian.tf:27961
   188.226.192.203:27962" | dmenu -l 5)
 sh ~/.screenlayout/singlescreen.sh
 cd ~/ioquake3
-./ioquake3 +set fs_game cpma +connect $SERVER +password installgentoo
+./ioquake3 +set fs_game cpma +connect $SERVER

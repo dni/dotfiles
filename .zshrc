@@ -113,6 +113,20 @@ function projectclone() {
   chmod -R 775 $file
 }
 
+# create a temporary vhosts for a domain, and request a ssl certificate with
+# letsencrypt certbot
+function vhostssl() {
+  [[ -z $1 ]] && echo "missing argument domain" && return
+  sudo su
+  dir=/var/www/letsencrypt
+  mkdir $dir
+  echo "<VirtualHost *:80>\n ServerName $1 \n DocumentRoot $dir \n</VirtualHost>" > /etc/apache2/sites-enabled/letsencrypt.conf
+  service apache2 reload
+  certbot certonly --webroot --text --non-interactive --email office@dnilabs.com --agree-tos -d $1 --webroot-path $dir
+  rm -rf /var/www/temp
+  rm /etc/apache2/sites-enabled/temp.conf
+  service apache2 reload
+}
 # create quick apache2 vhosts
 function vhostcreate() {
   [[ -z $1 ]] && echo "missing argument name" && return
