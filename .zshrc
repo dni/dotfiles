@@ -1,7 +1,7 @@
 export ZSH=~/.oh-my-zsh
 export TERM="xterm-256color"
 export EDITOR="vim"
-export PATH=$PATH:~/dotfiles/scripts
+export PATH=$PATH:~/dotfiles/scripts:~/.local/bin
 export TYPO3_CONTEXT=Development
 ZSH_THEME="candy"
 plugins=(aws vagrant composer)
