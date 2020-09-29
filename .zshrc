@@ -2,6 +2,8 @@ export ZSH=~/.oh-my-zsh
 export TERM="xterm-256color"
 export EDITOR="vim"
 export PATH=$PATH:~/dotfiles/scripts:~/.local/bin
+export PYTHONPATH=/usr/lib/python3.8/site-packages
+
 export TYPO3_CONTEXT=Development
 ZSH_THEME="candy"
 plugins=(aws vagrant composer)
@@ -345,5 +347,6 @@ alias encrypt='openssl aes-256-cbc -a -salt'
 alias sers='service apache2 restart'
 alias serl='service apache2 reload'
 alias sert='apachectl configtest'
+alias vpn='sudo openvpn --config /etc/openvpn/client/client.conf'
 
 alias q3='~/ioquake3/quake3e.x64 +set fs_game cpma +connect'
