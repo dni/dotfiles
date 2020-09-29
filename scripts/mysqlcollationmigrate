@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# export databases and manually and sieve through dbs
+# mysql -e "show databases;" > dbs.txt
+# mysqlcollationmigrate dbs.txt [<charset> <collation>]
+# changes MySQL/MariaDB charset and collation for one database - all tables and
+# all columns in all tables
+
+DBS="$1"
+CHARSET="$2"
+COLL="$3"
+
+[ -n "$DBS" ] || exit 1
+[ -n "$CHARSET" ] || CHARSET="utf8mb4"
+[ -n "$COLL" ] || COLL="utf8mb4_unicode_ci"
+
+for DB in $(cat $DBS); do
+  echo $DB
+  echo "ALTER DATABASE $DB CHARACTER SET $CHARSET COLLATE $COLL;" | mysql
+  echo "USE $DB; SHOW TABLES;" | mysql -s | (
+      while read TABLE; do
+          echo $DB.$TABLE
+          echo "ALTER TABLE $TABLE CONVERT TO CHARACTER SET $CHARSET COLLATE $COLL;" | mysql $DB
+      done
+  )
+done
