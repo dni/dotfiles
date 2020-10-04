@@ -220,7 +220,7 @@ typo3clone() {
   sudo service apache2 restart
   mysqlselect local
   mysqlcreatelocal $1
-  mysqlmigrate onlinenew local $1
+  mysqlmigrate online local $1
   git checkout v9
   yarn
   composer update
