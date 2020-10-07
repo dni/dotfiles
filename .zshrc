@@ -227,68 +227,6 @@ typo3clone() {
   chown -R typo3:www-data /var/www/$1
 }
 
-typo3migrate() {
-  [[ -z $1 ]] && echo missing argument name && return
-  [[ -z $2 ]] && echo missing argument domain && return
-  projectclone $1 typo3
-  cd /var/www/$1
-  vhostcreate $1 $2 typo3
-  sudo service apache2 restart
-  mysqlselect local
-  old_localconf=typo3conf/LocalConfiguration.php
-  user=$(grep -m 1 "user'" $old_localconf | cut -d "'" -f 4)
-  pw=$(grep -m 1 "password'" $old_localconf | cut -d "'" -f 4)
-  cloudfront=$(grep cloudfront package.json | cut -d '"' -f 4)
-  mysqlcreatelocal $1
-  mysqlselect onlinenew
-  mysqlcreate $1 $user $pw
-  mysqlselect online
-  mysqlfetch $1
-  mysql $1 -e "rename table tx_basetemplate_carousel_item to tx_bootstrappackage_carousel_item"
-  mysql $1 -e "rename table tx_basetemplate_accordion_item to tx_bootstrappackage_accordion_item"
-  mysql $1 -e "rename table tx_basetemplate_tab_item to tx_bootstrappackage_tab_item"
-  mysql $1 -e "update sys_template set include_static_file='EXT:fluid_styled_content/Configuration/TypoScript/,EXT:form/Configuration/TypoScript/,EXT:seo/Configuration/TypoScript/XmlSitemap,EXT:bootstrap_package/Configuration/TypoScript,EXT:hostinghelden_template/Configuration/TypoScript,EXT:${1}_template/Configuration/TypoScript' where uid=1;
-"
-  git checkout --orphan v9
-  git rm -rfq .
-  git remote add upstream git@git.hostinghelden.at:v9.git
-  git fetch upstream
-  git merge upstream/v9
-  localconf=public/typo3conf/LocalConfiguration.php
-  sed -i -e "s/typo3pass/$pw/g" -e "s/typo3user/$user/g" -e "s/v9.hostinghelden.at/$2/g" -e "s/v9/$1/g" $localconf
-  mv config/sites/dummy config/sites/$1
-  sed -i -e "s/v9.hostinghelden.at/$2/g" config/sites/$1/config.yaml
-  ext_key="$1-template"
-  ext_path="packages/$ext_key/"
-  cp -r packages/dummy-template $ext_path
-  typo3sedMigrate $1 $2 package.json
-  sed -i -e "s/E1938G9S64JN6P/$cloudfront/g" package.json
-  sed -i -e "s/dummy/$1/g" composer.json
-  typo3sedMigrate $1 $2 $ext_path/composer.json
-  typo3sedMigrate $1 $2 $ext_path/ext_tables.php
-  typo3sedMigrate $1 $2 $ext_path/ext_emconf.php
-  typo3sedMigrate $1 $2 $ext_path/ext_localconf.php
-  typo3sedMigrate $1 $2 $ext_path/Configuration/TypoScript/constants.typoscript
-  yarn
-  composer update
-  chown -R typo3:www-data /var/www/$1
-  ./vendor/bin/typo3cms database:updateschema
-  ./vendor/bin/typo3cms upgrade:all
-  ./vendor/bin/typo3cms cache:flush
-  chown -R typo3:www-data /var/www/$1
-  aws s3 sync s3://dummy-hostinghelden/dist/img/PhotoSwipe  s3://$1-hostinghelden/dist/img/PhotoSwipe
-  aws s3 sync s3://dummy-hostinghelden/dist/img/Flags s3://$1-hostinghelden/dist/img/Flags
-  aws s3 cp s3://dummy-hostinghelden/dist/css/bootstrappackageicon.eot s3://$1-hostinghelden/dist/css/
-  aws s3 cp s3://dummy-hostinghelden/dist/css/bootstrappackageicon.woff s3://$1-hostinghelden/dist/css/
-  aws s3 cp s3://dummy-hostinghelden/dist/css/bootstrappackageicon.ttf s3://$1-hostinghelden/dist/css/
-  aws s3 cp s3://dummy-hostinghelden/dist/css/critical_new/ s3://$1-hostinghelden/dist/css/
-  aws s3 cp s3://$1-hostinghelden/forms/newsletterAnmeldung.form.yaml tmp.txt
-  sed -i -e "s/base_template/hostinghelden_template/g" tmp.txt
-  aws s3 cp tmp.txt s3://$1-hostinghelden/forms/newsletterAnmeldung.form.yaml
-  rm tmp.txt
-}
-
-
 ## aliases
 alias smysqldump="mysqldump --single-transaction --quick --lock-tables=false"
 alias mysqlshow="ls -n ~/.my.cnf"
