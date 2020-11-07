@@ -1,4 +1,5 @@
 alias m2="bin/magento"
+alias m2index="bin/magento indexer:reindex"
 alias m2cache="bin/magento cache:clean"
 alias m2setup="bin/magento setup:upgrade"
 alias m2module="bin/magento module:status"
