@@ -1,5 +1,9 @@
+alias m2="bin/magento"
 alias m2cache="bin/magento cache:clean"
 alias m2setup="bin/magento setup:upgrade"
+alias m2module="bin/magento module:status"
+alias m2enmodule="bin/magento module:enable"
+alias m2dismodule="bin/magento module:disable"
 alias m2di="bin/magento setup:di:compile"
 alias m2disetup="bin/magento setup:upgrade;bin/magento setup:di:compile"
 
