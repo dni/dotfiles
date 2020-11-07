@@ -15,6 +15,15 @@ function magento2domainlocal() {
   bin/magento config:set "web/secure/base_url" "http://dev.$1:8081/"
 }
 
+function magento2fetch() {
+  [[ -z $1 ]] && echo missing argument dbname && return
+  [[ -z $2 ]] && echo missing argument domain && return
+  mysqlfetch $1
+  magento2dblocal
+  magento2domainlocal $2
+  bin/magento cache:flush
+}
+
 function magento2domainonline() {
   [[ -z $1 ]] && echo missing argument domain && return
   bin/magento config:set "web/secure/use_in_frontend" 1
