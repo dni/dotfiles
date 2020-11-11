@@ -8,6 +8,11 @@ alias m2dismodule="bin/magento module:disable"
 alias m2di="bin/magento setup:di:compile"
 alias m2disetup="bin/magento setup:upgrade;bin/magento setup:di:compile"
 
+function m2rm() {
+  setopt localoptions rmstarsilent
+  rm -rf var/cache/* var/view_preprocessed/* pub/static/frontend/* var/page_cache/*
+}
+
 function magento2domainlocal() {
   [[ -z $1 ]] && echo missing argument domain && return
   bin/magento config:set "web/secure/use_in_frontend" 0
@@ -42,10 +47,6 @@ function magento2perms () {
   sudo find var generated vendor pub/static pub/media app/etc -type d -exec chmod g+ws {} +
   sudo chown -R magento2:www-data .
   sudo chmod u+x bin/magento
-}
-
-function magento2rm () {
-  rm -rf var/cache/* var/view_preprocessed/* pub/static/frontend/* var/page_cache/*
 }
 function magento2createdb () {
   createdbfromconfig ./app/etc/env.php
