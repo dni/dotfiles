@@ -53,7 +53,7 @@ function magento2createdb () {
 }
 
 # magento2create initialize new magento2 store
-function magento2create(){
+function magento2createclean(){
   [[ -z $1 ]] && echo "missing argument projectname" && return
   [[ -z $2 ]] && echo "missing argument mysql password" && return
   [[ -z $3 ]] && echo "missing argument domain" && return

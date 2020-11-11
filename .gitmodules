@@ -67,3 +67,6 @@
 [submodule ".vim/bundle/vim-syntax-shakespeare"]
 	path = .vim/bundle/vim-syntax-shakespeare
 	url = https://github.com/pbrisbin/vim-syntax-shakespeare
+[submodule ".vim/bundle/vdebug"]
+	path = .vim/bundle/vdebug
+	url = https://github.com/vim-vdebug/vdebug
