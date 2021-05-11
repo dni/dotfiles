@@ -17,8 +17,8 @@ function magento2domainlocal() {
   [[ -z $1 ]] && echo missing argument domain && return
   bin/magento config:set "web/secure/use_in_frontend" 0
   bin/magento config:set "web/secure/use_in_adminhtml" 0
-  bin/magento config:set "web/unsecure/base_url" "http://dev.$1:8081/"
-  bin/magento config:set "web/secure/base_url" "http://dev.$1:8081/"
+  bin/magento config:set "web/unsecure/base_url" "http://dev.$1:8082/"
+  bin/magento config:set "web/secure/base_url" "http://dev.$1:8082/"
 }
 
 function magento2fetch() {
