@@ -57,9 +57,8 @@ add_client client2
 add_client client3
 add_client client4
 
-tar -czvf clients.tar.gz /etc/wireguard/client*
+tar -czf clients.tar.gz /etc/wireguard/client*
 echo "written ./clients.tar.gz"
 
-echo "run following commands to start wireguard and enable it on bootup"
-echo "systemctl start wg-quick@wg0"
-echo "systemctl enable wg-quick@wg0"
+systemctl start wg-quick@wg0
+systemctl enable wg-quick@wg0
