@@ -7,3 +7,6 @@ sudo mysql_secure_installation
 sudo mysql -u root -p < "CREATE DATABASE nextcloud;CREATE USER 'nextcloud'@'localhost' IDENTIFIED BY 'nextcloud'; GRANT ALL PRIVILEGES ON nextcloud.* TO 'nextcloud'@'localhost'; FLUSH PRIVILEGES;"
 wget https://download.nextcloud.com/server/releases/latest.zip
 unzip latest.zip
+
+echo "mount /dev/sdg /home/nextcloud"
+echo "genfstab > /etc/fstab"
