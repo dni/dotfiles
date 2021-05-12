@@ -6,8 +6,6 @@ apt-get upgrade
 apt install wireguard
 ufw allow 61951/udp
 echo "Uncomment the following line. net.ipv4.ip_forward=1"
-echo "ok? (y)"
-read -n 1
 vim /etc/sysctl.conf
 sysctl -p
 
@@ -33,10 +31,10 @@ EOF
 
 add_client() {
   name=$1
+  wg_add_key $name
   key=$(cat /etc/wireguard/$name\_private.key)
   pub=$(cat /etc/wireguard/$name\_public.key)
   i=$(echo $name | grep -o ".$")
-  wg_add_key $name
 cat <<EOF > /etc/wireguard/$name.conf
 [Interface]
 PrivateKey = $key
