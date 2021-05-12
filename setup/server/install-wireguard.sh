@@ -3,7 +3,7 @@ endpoint=wireguard.hostinghelden.at:61951
 
 apt-get update
 apt-get upgrade
-apt install wireguard
+apt install -y wireguard
 ufw allow 61951/udp
 echo "Uncomment the following line. net.ipv4.ip_forward=1"
 vim /etc/sysctl.conf

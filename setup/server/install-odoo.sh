@@ -1,7 +1,5 @@
 #!/bin/sh
-apt-get update
-apt-get upgrade
-apt install vim git python3-pip build-essential wget python3-dev python3-venv \
+apt install -y python3-pip build-essential wget python3-dev python3-venv \
     python3-wheel libfreetype6-dev libxml2-dev libzip-dev libldap2-dev libsasl2-dev \
     python3-setuptools node-less libjpeg-dev zlib1g-dev libpq-dev \
     libxslt1-dev libldap2-dev libtiff5-dev libjpeg8-dev libopenjp2-7-dev \
@@ -11,12 +9,12 @@ echo "creating odoo14 user"
 useradd -m -d /opt/odoo14 -U -r -s /bin/bash odoo14
 
 echo "installing postgresql and creating db user odoo14"
-apt install postgresql
+apt install -y postgresql
 su - postgres -c "createuser -s odoo14"
 
 echo "installing wkhtmltopdf"
 wget https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-1/wkhtmltox_0.12.6-1.bionic_amd64.deb
-apt install ./wkhtmltox_0.12.6-1.bionic_amd64.deb
+apt install -y ./wkhtmltox_0.12.6-1.bionic_amd64.deb
 
 echo "installing odoo"
 su - odoo14
@@ -68,7 +66,7 @@ systemctl enable --now odoo14
 systemctl status odoo14
 
 echo "install apache2 und configure proxy"
-apt install apache2
+apt install -y apache2
 a2enmod proxy proxy_http
 
 cat <<EOF > /etc/apache2/sites-enabled/odoo14.conf

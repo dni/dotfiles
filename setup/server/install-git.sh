@@ -1,7 +1,7 @@
 #!/bin/sh
 apt-get update
-apt-get upgrade
-apt install git
+apt-get upgrade -y
+apt install -y git
 adduser git
 which git-shell >> /etc/shells
 chsh git -s $(which git-shell)
