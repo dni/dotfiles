@@ -1,13 +1,15 @@
 #!/bin/sh
 apt install -y inspircd
+ufw allow 6667/tcp
+ufw allow 6697/tcp
 
-ip=%REPLACE IP%
-user=%REPLACE OPERATOR%
-email=%REPLACE EMAIL %
-domain=%REPLACE DOMAIN%
-password=%REPLACE OPERATOR PASS%
-diepassword=%REPLACE DIE%
-restartpassword=%REPLACE RESTART%
+ip=REPLACE
+user=REPLACE
+email=REPLACE
+domain=REPLACE
+password=REPLACE
+diepassword=REPLACE
+restartpassword=REPLACE
 
 cat <<EOF > /etc/inspircd/inspircd.motd
 Willkommen im wundervollen Hostinghelden IRC Server, join #hostinghelden , #dnilabs
@@ -38,7 +40,7 @@ cat << EOF > /etc/inspircd/inspircd.conf
 <files motd="/etc/inspircd/inspircd.motd" rules="/etc/inspircd/inspircd.rules">
 <channels users="20" opers="60">
 <dns server="8.8.8.8" timeout="5">
-<pid file="/var/run/inspircd.pid">
+<pid file="/run/inspircd/inspircd.pid">
 <options prefixquit="Quit: " noservices="no" qaprefixes="no" deprotectself="no" deprotectothers="no" flatlinks="no"
          hideulines="no" syntaxhints="no" cyclehosts="yes" ircumsgprefix="no" announcets="yes" disablehmac="no"
          hostintopic="yes" quietbursts="yes" pingwarning="15" allowhalfop="yes" exemptchanops="">
@@ -55,8 +57,4 @@ EOF
 vim /etc/inspircd/inspircd.conf
 
 service inspircd restart
-
-# chat bot (hubot)
-mkdir /opt/hubot
-git clone git@git.hostinghelden.at:hubot.git /opt/hubot
 
