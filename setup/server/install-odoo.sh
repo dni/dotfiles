@@ -83,4 +83,3 @@ cat <<EOF > /etc/apache2/sites-enabled/odoo14.conf
 EOF
 vim /etc/apache2/sites-enabled/odoo14.conf
 service apache2 reload
-
