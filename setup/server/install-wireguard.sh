@@ -1,35 +1,61 @@
 #!/bin/sh
+endpoint=wireguard.hostinghelden.at:61951
+
 sudo apt install wireguard
 sudo ufw allow 61951/udp
 echo "Uncomment the following line. net.ipv4.ip_forward=1"
 echo "ok? (y)"
-read -n
+read
 sudo vim /etc/sysctl.conf
 sudo sysctl -p
-echo "Server Private and public key pairs creation"
-wg genkey | sudo tee /etc/wireguard/server_private.key | wg pubkey | sudo tee /etc/wireguard/server_public.key
-sudo chmod 600 /etc/wireguard/server_private.key
-echo "Client Private and public key pairs creation"
-wg genkey | sudo tee /etc/wireguard/client_private.key | wg pubkey | sudo tee /etc/wireguard/client_public.key
-sudo chmod 600 /etc/wireguard/client_private.key
+
+wg_add_key() {
+  echo "$1: private and public key pairs creation"
+  wg genkey | sudo tee /etc/wireguard/$1_private.key | wg pubkey | sudo tee /etc/wireguard/$1_public.key
+  sudo chmod 600 /etc/wireguard/$1_private.key
+}
+
+wg_add_key server
 
 server_private=$(cat /etc/wireguard/server_private.key)
-client_public=$(cat /etc/wireguard/client_public.key)
+server_public=$(cat /etc/wireguard/server_public.key)
 
-tar -czvf client.tar.gz /etc/wireguard/client_*
-echo "written ./client.tar.gz"
-
-echo "Wireguard Config"
 cat <<EOF > /etc/wireguard/wg0.conf
-# Server configuration
 [Interface]
 PrivateKey = $server_private
 Address = 10.5.5.1/24
 ListenPort = 61951
 PostUp = iptables -A FORWARD -i wg0 -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 PostDown = iptables -D FORWARD -i wg0 -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
-# Configurations for the clients. You need to add a [Peer] section for each VPN client.
-[Peer]
-PublicKey = $client_public
-AllowedIPs = 10.5.5.2/32
 EOF
+
+add_client() {
+  name=$1
+  key=$(cat /etc/wireguard/$name\_private.key)
+  pub=$(cat /etc/wireguard/$name\_public.key)
+  i=$(echo $name | grep -o ".$")
+  wg_add_key $name
+cat <<EOF > /etc/wireguard/$name.conf
+[Interface]
+PrivateKey = $key
+Address = 10.5.5.$i/24
+DNS = 8.8.8.8
+[Peer]
+PublicKey = $server_public
+AllowedIPs = 0.0.0.0/0
+Endpoint = $endpoint
+PersistentKeepalive = 25
+EOF
+cat <<EOF >> /etc/wireguard/wg0.conf
+[Peer]
+PublicKey = $pub
+AllowedIPs = 10.5.5.$i/32
+EOF
+}
+
+add_client client2
+add_client client3
+add_client client4
+
+tar -czvf clients.tar.gz /etc/wireguard/client*
+echo "written ./clients.tar.gz"
