@@ -2,7 +2,7 @@
 # this is the arch linux install script, by dni <3
 
 echo "install programs"
-sudo pacman -S --noconfirm htop maim dmenu ttf-droid ttf-font-awesome ttf-inconsolata libnotify dunst firefox thunderbird dnsutils nautilus gimp libreoffice pulseaudio pulseaudio-alsa pamixer pavucontrol arandr pass openssh openvpn vlc inkscape
+sudo pacman -S --noconfirm htop maim dmenu ttf-droid ttf-font-awesome ttf-inconsolata libnotify dunst firefox thunderbird dnsutils nautilus gimp libreoffice pulseaudio pulseaudio-alsa pamixer pavucontrol arandr pass openssh openvpn vlc inkscape sxhkd
 
 echo "dotfiles"
 git clone --recurse-submodules -j8 https://github.com/dni/dotfiles.git ~/dotfiles
