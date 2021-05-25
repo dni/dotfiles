@@ -1,4 +1,5 @@
 #!/bin/sh
+wkhtmlto_bin=wkhtmltox_0.12.6-1.focal_amd64.deb
 wkhtmlto_url=https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-1/wkhtmltox_0.12.6-1.focal_amd64.deb
 
 install_odoo() {
