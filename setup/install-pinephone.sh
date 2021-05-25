@@ -8,6 +8,7 @@ echo "dotfiles"
 git clone https://github.com/robbyrussell/oh-my-zsh ~/.oh-my-zsh
 
 rm -f ~/.zshrc
+rm -f ~/.aliases
 ln -s ~/dotfiles/.zshrc ~/.zshrc
 ln -s ~/dotfiles/.aliases ~/.aliases
 chsh -s /bin/zsh

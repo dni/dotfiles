@@ -1,6 +1,6 @@
 #!/bin/sh
 wkhtmlto_version=0.12.6-1
-wkhtmlto_bin=wkhtmltox_$wkhtmlto_version.bionic_amd64.deb
+wkhtmlto_bin=wkhtmltox_$wkhtmlto_version.focal_amd64.deb
 
 install_odoo() {
   wget https://github.com/wkhtmltopdf/packaging/releases/download/$wkhtmlto/$wkhtmlto_bin
