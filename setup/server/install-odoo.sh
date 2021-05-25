@@ -1,9 +1,8 @@
 #!/bin/sh
-wkhtmlto_version=0.12.6-1
-wkhtmlto_bin=wkhtmltox_$wkhtmlto_version.focal_amd64.deb
+wkhtmlto_url=https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-1/wkhtmltox_0.12.6-1.focal_amd64.deb
 
 install_odoo() {
-  wget https://github.com/wkhtmltopdf/packaging/releases/download/$wkhtmlto/$wkhtmlto_bin
+  wget $wkhtmlto_url
   apt install -y postgresql apache2 python3-pip build-essential wget python3-dev python3-venv \
       python3-wheel libfreetype6-dev libxml2-dev libzip-dev libldap2-dev libsasl2-dev \
       python3-setuptools node-less libjpeg-dev zlib1g-dev libpq-dev \
