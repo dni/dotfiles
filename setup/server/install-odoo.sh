@@ -28,15 +28,16 @@ create_odoo_instance() {
 
   echo "installing $user"
   su - $user
-  git clone https://www.github.com/odoo/odoo --depth 1 --branch $version.0 /opt/$user/odoo
-  cd /opt/$user
-  python3 -m venv $user-venv
-  source $user-venv/bin/activate
-  pip3 install wheel
-  pip3 install -r odoo/requirements.txt
-  deactivate
-  mkdir /opt/$user/odoo-custom-addons
-  exit
+  su $user <<EOSU
+git clone https://www.github.com/odoo/odoo --depth 1 --branch $version.0 /opt/$user/odoo
+cd /opt/$user
+python3 -m venv $user-venv
+source $user-venv/bin/activate
+pip3 install wheel
+pip3 install -r odoo/requirements.txt
+deactivate
+mkdir /opt/$user/odoo-custom-addons
+EOSU
 
   echo "enter postgres password for $user: "
   read -r dbpass
