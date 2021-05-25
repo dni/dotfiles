@@ -27,7 +27,6 @@ create_odoo_instance() {
   su - postgres -c "createuser -s $user"
 
   echo "installing $user"
-  su - $user
   su $user <<EOSU
 git clone https://www.github.com/odoo/odoo --depth 1 --branch $version.0 /opt/$user/odoo
 cd /opt/$user
