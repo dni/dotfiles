@@ -4,7 +4,7 @@ wkhtmlto_url=https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-1
 
 install_odoo() {
   wget $wkhtmlto_url
-  apt install -y postgresql apache2 python3-pip build-essential wget python3-dev python3-venv \
+  apt install -y postgresql apache2 python2 python2-dev python3-pip build-essential wget python3-dev python3-venv \
       python3-wheel libfreetype6-dev libxml2-dev libzip-dev libldap2-dev libsasl2-dev \
       python3-setuptools node-less libjpeg-dev zlib1g-dev libpq-dev \
       libxslt1-dev libldap2-dev libtiff5-dev libjpeg8-dev libopenjp2-7-dev \
@@ -13,6 +13,9 @@ install_odoo() {
 
   a2enmod proxy proxy_http
   create_odoo_instance 14 8069
+  create_odoo_instance 8 8068
+  echo "IMPORTANT: odoo8 probably fails installing python modules"
+  echo "needs more configuration with python2 and also wget https://bootstrap.pypa.io/pip/2.7/get-pip.py"
   service apache2 reload
 }
 
@@ -67,7 +70,7 @@ SyslogIdentifier=$user
 PermissionsStartOnly=true
 User=$user
 Group=$user
-ExecStart=/opt/$user/$user-venv/bin/python3 /opt/$user/odoo/odoo-bin -c /etc/$user.conf
+ExecStart=/opt/$user/$user-venv/bin/python3 /opt/$user/odoo/odoo-bin -c /etc/$user.conf --xmlrpc-port=$port
 StandardOutput=journal+console
 
 [Install]
@@ -81,7 +84,7 @@ EOF
 
   echo "domain for user $user: "
   read -r domain
-  cat <<EOF > /etc/apache2/sites-enabled/odoo14.conf
+  cat <<EOF > /etc/apache2/sites-enabled/$user.conf
 <VirtualHost *:80>
   ServerName $domain
   ProxyPreserveHost On
