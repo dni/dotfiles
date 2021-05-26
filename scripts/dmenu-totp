@@ -1,7 +1,0 @@
-#!/bin/sh
-password=$(pass show totp)
-acc=$(echo $password | totp-cli list | dmenu -l 5)
-name=$(echo $password | totp-cli list $acc | dmenu -l 5 | sed "s/\./ /")
-otp=$(echo $password | totp-cli generate $name | tail -n 1)
-echo $otp | xclip
-dunstify "($name) OTP is: $otp"
