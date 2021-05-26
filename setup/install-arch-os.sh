@@ -1,17 +1,27 @@
 #!/bin/sh
 # this is the arch linux install script, by dni <3
 
-echo "install programs"
-sudo pacman -S --noconfirm htop maim dmenu ttf-roboto ttf-droid ttf-font-awesome ttf-inconsolata libnotify dunst firefox thunderbird dnsutils nautilus gimp libreoffice pulseaudio pulseaudio-alsa pamixer pavucontrol arandr pass openssh openvpn vlc inkscape sxhkd
+echo "install cli programs"
+sudo pacman -S --noconfirm vim zsh git htop maim dmenu dunst dnsutils pass pass-otp zbar openssh wireguard-tools sxhkd pulseaudio yay
+
+echo "install fonts"
+sudo pacman -S --noconfirm ttf-roboto ttf-droid ttf-font-awesome ttf-inconsolata
+
+echo "install gnome programs"
+sudo pacman -S --noconfirm gnome-control-center gnome-contacts gnome-calculator gnome-tweaks
+
+echo "install gui programs"
+sudo pacman -S --noconfirm firefox thunderbird nautilus libreoffice pavucontrol arandr vlc gimp inkscape fractal discord signal-desktop qtpass
+
 
 echo "dotfiles"
 git clone --recurse-submodules -j8 https://github.com/dni/dotfiles.git ~/dotfiles
 git clone https://github.com/robbyrussell/oh-my-zsh ~/.oh-my-zsh
-
 ln -s ~/dotfiles/.xinitrc ~/.xinitrc
 ln -s ~/dotfiles/.config/sxhkd ~/.config/sxhkd
 ln -s ~/dotfiles/.config/screenlayout ~/.config/screenlayout
 ln -s ~/dotfiles/.config/fontconfig ~/.config/fontconfig
+gsettings set org.gnome.desktop.interface gtk-theme Adwaita-dark
 
 rm -f ~/.zshrc
 ln -s ~/dotfiles/.zshrc ~/.zshrc
@@ -30,12 +40,6 @@ sh ~/dotfiles/setup/dwm/setup.sh
 
 echo "build st"
 sh ~/dotfiles/setup/st/setup.sh
-
-echo "install trizen (AUR)"
-cd
-git clone https://aur.archlinux.org/trizen.git && cd trizen && makepkg -si
-cd
-rm -rf trizen
 
 echo "rebooting..."
 reboot

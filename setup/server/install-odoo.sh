@@ -1,83 +1,99 @@
 #!/bin/sh
-apt install -y python3-pip build-essential wget python3-dev python3-venv \
-    python3-wheel libfreetype6-dev libxml2-dev libzip-dev libldap2-dev libsasl2-dev \
-    python3-setuptools node-less libjpeg-dev zlib1g-dev libpq-dev \
-    libxslt1-dev libldap2-dev libtiff5-dev libjpeg8-dev libopenjp2-7-dev \
-    liblcms2-dev libwebp-dev libharfbuzz-dev libfribidi-dev libxcb1-dev
+wkhtmlto_bin=wkhtmltox_0.12.6-1.focal_amd64.deb
+wkhtmlto_url=https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-1/wkhtmltox_0.12.6-1.focal_amd64.deb
 
-echo "creating odoo14 user"
-useradd -m -d /opt/odoo14 -U -r -s /bin/bash odoo14
+install_odoo() {
+  wget $wkhtmlto_url
+  apt install -y postgresql apache2 python2 python2-dev python3-pip build-essential wget python3-dev python3-venv \
+      python3-wheel libfreetype6-dev libxml2-dev libzip-dev libldap2-dev libsasl2-dev \
+      python3-setuptools node-less libjpeg-dev zlib1g-dev libpq-dev \
+      libxslt1-dev libldap2-dev libtiff5-dev libjpeg8-dev libopenjp2-7-dev \
+      liblcms2-dev libwebp-dev libharfbuzz-dev libfribidi-dev libxcb1-dev \
+      ./$wkhtmlto_bin
 
-echo "installing postgresql and creating db user odoo14"
-apt install -y postgresql
-su - postgres -c "createuser -s odoo14"
+  a2enmod proxy proxy_http
+  create_odoo_instance 14 8069
+  create_odoo_instance 8 8068
+  echo "IMPORTANT: odoo8 probably fails installing python modules"
+  echo "needs more configuration with python2 and also wget https://bootstrap.pypa.io/pip/2.7/get-pip.py"
+  service apache2 reload
+}
 
-echo "installing wkhtmltopdf"
-wget https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-1/wkhtmltox_0.12.6-1.bionic_amd64.deb
-apt install -y ./wkhtmltox_0.12.6-1.bionic_amd64.deb
+create_odoo_instance() {
+  version=$1
+  port=$2
+  user=odoo$version
+  echo "creating odoo$version user"
+  useradd -m -d /opt/$user -U -r -s /bin/bash $user
 
-echo "installing odoo"
-su - odoo14
-git clone https://www.github.com/odoo/odoo --depth 1 --branch 14.0 /opt/odoo14/odoo
-cd /opt/odoo14
-python3 -m venv odoo-venv
-source odoo-venv/bin/activate
+  echo "installing postgresql and creating db user $user"
+  su - postgres -c "createuser -s $user"
+
+  echo "installing $user"
+  su $user <<EOSU
+git clone https://www.github.com/odoo/odoo --depth 1 --branch $version.0 /opt/$user/odoo
+cd /opt/$user
+python3 -m venv $user-venv
+source $user-venv/bin/activate
 pip3 install wheel
 pip3 install -r odoo/requirements.txt
 deactivate
-mkdir /opt/odoo14/odoo-custom-addons
-exit
+mkdir /opt/$user/odoo-custom-addons
+EOSU
 
-cat <<EOF > /etc/odoo14.conf
+  echo "enter postgres password for $user: "
+  read -r dbpass
+
+  cat <<EOF > /etc/$user.conf
 [options]
 ; This is the password that allows database operations:
-admin_passwd = %INSERT PASSWORD%
+admin_passwd = $dbpass
 db_host = False
 db_port = False
-db_user = odoo14
+db_user = $user
 db_password = False
-addons_path = /opt/odoo14/odoo/addons,/opt/odoo14/odoo-custom-addons
+addons_path = /opt/$user/odoo/addons,/opt/$user/odoo-custom-addons
 proxy_mode = True
 EOF
-vim /etc/odoo14.conf
 
-echo "creating systemd service"
-cat <<EOF > /etc/systemd/system/odoo14.service
+  echo "creating systemd service"
+
+  cat <<EOF > /etc/systemd/system/$user.service
 [Unit]
-Description=Odoo14
+Description=$user
 Requires=postgresql.service
 After=network.target postgresql.service
 
 [Service]
 Type=simple
-SyslogIdentifier=odoo14
+SyslogIdentifier=$user
 PermissionsStartOnly=true
-User=odoo14
-Group=odoo14
-ExecStart=/opt/odoo14/odoo-venv/bin/python3 /opt/odoo14/odoo/odoo-bin -c /etc/odoo14.conf
+User=$user
+Group=$user
+ExecStart=/opt/$user/$user-venv/bin/python3 /opt/$user/odoo/odoo-bin -c /etc/$user.conf --xmlrpc-port=$port
 StandardOutput=journal+console
 
 [Install]
 WantedBy=multi-user.target
 EOF
 
-systemctl daemon-reload
-systemctl enable --now odoo14
-systemctl status odoo14
+  systemctl daemon-reload
+  systemctl enable --now $user
+  systemctl status $user
 
-echo "install apache2 und configure proxy"
-apt install -y apache2
-a2enmod proxy proxy_http
 
-cat <<EOF > /etc/apache2/sites-enabled/odoo14.conf
+  echo "domain for user $user: "
+  read -r domain
+  cat <<EOF > /etc/apache2/sites-enabled/$user.conf
 <VirtualHost *:80>
-  ServerName %INSERT DOMAIN%
+  ServerName $domain
   ProxyPreserveHost On
   ProxyRequests Off
   ProxyVia Off
-  ProxyPass / http://localhost:8069/
-  ProxyPassReverse / http://localhost:8069/
+  ProxyPass / http://localhost:$port/
+  ProxyPassReverse / http://localhost:$port/
 </VirtualHost>
 EOF
-vim /etc/apache2/sites-enabled/odoo14.conf
-service apache2 reload
+}
+
+install_odoo

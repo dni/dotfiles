@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# thanks to https://gist.github.com/Alveel/d26c3b524d785af6fb0037394dd1f25e
+shopt -s nullglob globstar
+otp_dir_name=otp
+prefix=${PASSWORD_STORE_DIR-~/.password-store}
+otp_dirs=$(find $prefix -wholename "*/$otp_dir_name" | sed "s|$prefix/|$otp_dirs|g")
+otp_dir=$(printf '%s\n' "${otp_dirs[@]}" | dmenu "$@")
+[[ -n $otp_dir ]] || exit
+password_files=( "$prefix"/"$otp_dir"/*.gpg )
+password_files=( "${password_files[@]#"$prefix"/"$otp_dir"/}" )
+password_files=( "${password_files[@]%.gpg}" )
+password=$(printf '%s\n' "${password_files[@]}" | dmenu "$@")
+[[ -n $password ]] || exit
+pass otp show -c "$otp_dir"/"$password" 2>/dev/null

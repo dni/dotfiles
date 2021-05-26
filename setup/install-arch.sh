@@ -25,7 +25,7 @@ grub-install --target=i386-pc --recheck /dev/sda
 grub-mkconfig -o /boot/grub/grub.cfg
 
 echo "install early deps / dotfiles"
-pacman -S --noconfirm git openssl vim zsh sudo vim dialog wpa_supplicant archey3
+pacman -S --noconfirm git openssl vim zsh sudo dialog wpa_supplicant archey3
 
 echo "create user account"
 useradd -m -g users -s /bin/bash dni

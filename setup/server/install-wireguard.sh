@@ -1,5 +1,6 @@
 #!/bin/sh
-endpoint=wireguard.hostinghelden.at:61951
+echo "endpoint with port (61951):"
+read -r endpoint
 
 apt-get update
 apt-get upgrade
