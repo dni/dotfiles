@@ -1,5 +1,5 @@
 #!/bin/sh
-# this is the arch linux install script, by dni <3
+# this is my pinephone init script for arch arm, by dni <3
 
 echo "install programs"
 sudo pacman -S --noconfirm git vim zsh tmux htop pass openssh wireguard-dkms wireguard-tools resolvconf
