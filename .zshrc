@@ -210,6 +210,7 @@ alias notify='dunstify'
 
 # misc
 alias pwgen='openssl rand -base64 32'
+alias pig='ping -c 3 8.8.8.8'
 alias myip='wget http://checkip.dyndns.org/ -O - -o /dev/null | cut -d: -f 2 | cut -d\< -f 1'
 alias decrypt='openssl aes-256-cbc -d -a'
 alias encrypt='openssl aes-256-cbc -a -salt'
