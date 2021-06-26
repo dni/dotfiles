@@ -1,72 +1,69 @@
-[submodule "vim-pathogen"]
-	path = .vim/vim-pathogen
-	url = https://github.com/tpope/vim-pathogen.git
-[submodule ".vim/bundle/nerdtree"]
-	path = .vim/bundle/nerdtree
+[submodule ".vim/pack/dni/start/nerdtree"]
+	path = .vim/pack/dni/start/nerdtree
 	url = https://github.com/scrooloose/nerdtree.git
-[submodule ".vim/bundle/vim-coffee-script"]
-	path = .vim/bundle/vim-coffee-script
+[submodule ".vim/pack/dni/start/vim-coffee-script"]
+	path = .vim/pack/dni/start/vim-coffee-script
 	url = https://github.com/kchmck/vim-coffee-script.git
-[submodule ".vim/bundle/vim-colors-solarized"]
-	path = .vim/bundle/vim-colors-solarized
+[submodule ".vim/pack/dni/start/vim-colors-solarized"]
+	path = .vim/pack/dni/start/vim-colors-solarized
 	url = https://github.com/altercation/vim-colors-solarized.git
-[submodule ".vim/bundle/vim-less"]
-	path = .vim/bundle/vim-less
+[submodule ".vim/pack/dni/start/vim-less"]
+	path = .vim/pack/dni/start/vim-less
 	url = https://github.com/groenewege/vim-less
-[submodule ".vim/bundle/vim-commentary"]
-	path = .vim/bundle/vim-commentary
+[submodule ".vim/pack/dni/start/vim-commentary"]
+	path = .vim/pack/dni/start/vim-commentary
 	url = git://github.com/tpope/vim-commentary.git
-[submodule ".vim/bundle/vim-fugitive"]
-	path = .vim/bundle/vim-fugitive
+[submodule ".vim/pack/dni/start/vim-fugitive"]
+	path = .vim/pack/dni/start/vim-fugitive
 	url = https://github.com/tpope/vim-fugitive.git
-[submodule ".vim/bundle/syntastic"]
-	path = .vim/bundle/syntastic
+[submodule ".vim/pack/dni/start/syntastic"]
+	path = .vim/pack/dni/start/syntastic
 	url = https://github.com/scrooloose/syntastic.git
-[submodule ".vim/bundle/vim-nerdtree_plugin_open"]
-	path = .vim/bundle/vim-nerdtree_plugin_open
+[submodule ".vim/pack/dni/start/vim-nerdtree_plugin_open"]
+	path = .vim/pack/dni/start/vim-nerdtree_plugin_open
 	url = https://github.com/aufgang001/vim-nerdtree_plugin_open.git
-[submodule ".vim/bundle/vim-surround"]
-	path = .vim/bundle/vim-surround
+[submodule ".vim/pack/dni/start/vim-surround"]
+	path = .vim/pack/dni/start/vim-surround
 	url = git://github.com/tpope/vim-surround.git
-[submodule ".vim/bundle/vim-autoclose"]
-	path = .vim/bundle/vim-autoclose
+[submodule ".vim/pack/dni/start/vim-autoclose"]
+	path = .vim/pack/dni/start/vim-autoclose
 	url = https://github.com/Townk/vim-autoclose.git
-[submodule ".vim/bundle/vim-json"]
-	path = .vim/bundle/vim-json
+[submodule ".vim/pack/dni/start/vim-json"]
+	path = .vim/pack/dni/start/vim-json
 	url = https://github.com/elzr/vim-json.git
-[submodule ".vim/bundle/vim-airline"]
-	path = .vim/bundle/vim-airline
+[submodule ".vim/pack/dni/start/vim-airline"]
+	path = .vim/pack/dni/start/vim-airline
 	url = https://github.com/bling/vim-airline
-[submodule ".vim/bundle/emmet-vim"]
-	path = .vim/bundle/emmet-vim
+[submodule ".vim/pack/dni/start/emmet-vim"]
+	path = .vim/pack/dni/start/emmet-vim
 	url = https://github.com/mattn/emmet-vim.git
-[submodule ".vim/bundle/vim-css3-syntax"]
-	path = .vim/bundle/vim-css3-syntax
+[submodule ".vim/pack/dni/start/vim-css3-syntax"]
+	path = .vim/pack/dni/start/vim-css3-syntax
 	url = https://github.com/hail2u/vim-css3-syntax.git
-[submodule ".vim/bundle/vim-indent-guides"]
-	path = .vim/bundle/vim-indent-guides
+[submodule ".vim/pack/dni/start/vim-indent-guides"]
+	path = .vim/pack/dni/start/vim-indent-guides
 	url = git://github.com/nathanaelkane/vim-indent-guides.git
-[submodule ".vim/bundle/vim-javascript"]
-	path = .vim/bundle/vim-javascript
+[submodule ".vim/pack/dni/start/vim-javascript"]
+	path = .vim/pack/dni/start/vim-javascript
 	url = https://github.com/pangloss/vim-javascript.git
-[submodule ".vim/bundle/vim-markdown"]
-	path = .vim/bundle/vim-markdown
+[submodule ".vim/pack/dni/start/vim-markdown"]
+	path = .vim/pack/dni/start/vim-markdown
 	url = https://github.com/plasticboy/vim-markdown
-[submodule ".vim/bundle/molokai"]
-	path = .vim/bundle/molokai
+[submodule ".vim/pack/dni/start/molokai"]
+	path = .vim/pack/dni/start/molokai
 	url = https://github.com/tomasr/molokai
-[submodule ".vim/bundle/badwolf"]
-	path = .vim/bundle/badwolf
+[submodule ".vim/pack/dni/start/badwolf"]
+	path = .vim/pack/dni/start/badwolf
 	url = https://github.com/sjl/badwolf
-[submodule ".vim/bundle/html5.vim"]
-	path = .vim/bundle/html5.vim
+[submodule ".vim/pack/dni/start/html5.vim"]
+	path = .vim/pack/dni/start/html5.vim
 	url = https://github.com/othree/html5.vim
-[submodule ".vim/bundle/ctrlp.vim"]
-	path = .vim/bundle/ctrlp.vim
+[submodule ".vim/pack/dni/start/ctrlp.vim"]
+	path = .vim/pack/dni/start/ctrlp.vim
 	url = https://github.com/kien/ctrlp.vim
-[submodule ".vim/bundle/vim-syntax-shakespeare"]
-	path = .vim/bundle/vim-syntax-shakespeare
+[submodule ".vim/pack/dni/start/vim-syntax-shakespeare"]
+	path = .vim/pack/dni/start/vim-syntax-shakespeare
 	url = https://github.com/pbrisbin/vim-syntax-shakespeare
-[submodule ".vim/bundle/vdebug"]
-	path = .vim/bundle/vdebug
+[submodule ".vim/pack/dni/start/vdebug"]
+	path = .vim/pack/dni/start/vdebug
 	url = https://github.com/vim-vdebug/vdebug
