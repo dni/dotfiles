@@ -1,3 +1,0 @@
-#!/bin/sh
-dir=~/dotfiles/scripts
-zsh $dir/$(ls $dir | dmenu -l 5)

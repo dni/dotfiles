@@ -1,0 +1,6 @@
+#!/usr/bin/env sh
+. $DOTFILES/scripts/audio.sh
+. $DOTFILES/scripts/devtools.sh
+. $DOTFILES/scripts/dmenu.sh
+. $DOTFILES/scripts/status.sh
+. $DOTFILES/scripts/utils.sh

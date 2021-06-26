@@ -1,4 +1,0 @@
-#!/bin/sh
-sudo pacman -Sy
-sudo pacman -Qu | wc -l > ~/.updates
-dunstify "$(cat ~/.updates) updates available"

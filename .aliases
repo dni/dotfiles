@@ -1,0 +1,56 @@
+#!/usr/bin/env sh
+
+## aliases
+alias smysqldump="mysqldump --single-transaction --quick --lock-tables=false"
+alias mysqlshow="ls -n ~/.my.cnf"
+# git
+alias gac="git add -A && git commit -am"
+alias gps="git push"
+alias gpl="git pull"
+alias gst="git status"
+alias pgp="pass git push"
+
+# shortcuts
+alias t='tail -f'
+alias h="history"
+alias p="sudo pacman"
+alias c="clear"
+
+# cli apps
+alias m="mutt"
+alias f="ranger"
+alias i="weechat"
+alias v="vim ."
+
+# configs
+alias ho="sudo vim /etc/hosts"
+
+# dir shortcuts
+alias www="cd /var/www/"
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+alias .....="cd ../../../.."
+
+# tmux
+alias ta='tmux attach -t'
+alias tnew='tmux new -s'
+alias tls='tmux ls'
+alias tkill='tmux kill-session -t'
+
+# notifications
+alias notify='dunstify'
+
+# misc
+alias pwgen='openssl rand -base64 32'
+alias pig='ping -c 3 8.8.8.8'
+alias myip='wget http://checkip.dyndns.org/ -O - -o /dev/null | cut -d: -f 2 | cut -d\< -f 1'
+alias decrypt='openssl aes-256-cbc -d -a'
+alias encrypt='openssl aes-256-cbc -a -salt'
+
+# server
+alias sers='service apache2 restart'
+alias serl='service apache2 reload'
+alias sert='apachectl configtest'
+
+alias q3='~/ioquake3/quake3e.x64 +set fs_game cpma +connect'
