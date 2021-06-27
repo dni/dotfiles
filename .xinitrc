@@ -1,15 +1,9 @@
 #!/usr/bin/env sh
-sh /etc/X11/xinit/xinitrc.d/50-systemd-user.sh # gnome keyring
-sh "$DOTFILES"/.config/screenlayout/workstation.sh
-
-jackd -R -d net -a 192.168.1.192
-pactl load-module module-jack-sink
-
-mousekeyboard # mouse keyboard settings
+xinit_hook # defined in script/utils.sh
 sxhkd & # keybinds daemon .config/sxhkd/
 dunst & # notification daemon
 while true; do
   status_update # statusbar
-	sleep 20s
+	sleep "$STATUS_INTERVAL"
 done &
 exec dwm

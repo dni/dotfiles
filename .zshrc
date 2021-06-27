@@ -1,5 +1,4 @@
 #!/bin/zsh
-#
 ZSH_THEME="candy"
 plugins=(aws vagrant composer)
 export ZSH=~/.oh-my-zsh
