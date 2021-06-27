@@ -1,7 +1,15 @@
 #!/usr/bin/env sh
-# run interactive shell, so .profile is sourced
-#sh -ic "${0##*/}"
 
-# or source functions and eval ?
-. "$DOTFILES"/.functions
+# this file is useful for running functions in a non-interactive shell (dmenu, xinit, sxhkd).
+# so we need to source our functions here and run them, else we end in an infinite loop.
+# functions are not sourced in a non-interactive shell so we create symlinks to this script
+# in the $PATH and source the profile.
+
+# TODO: not sure if this also works yet need to investigate more
+# run interactive shell, so .profile is sourced already
+# sh -ic "${0##*/}"
+
+# source .profile with functions and eval
+# symlinked binaries in the $PATH=$DOTFILES/bin are overwritten by the function calls
+. "$DOTFILES"/.profile
 eval "${0##*/}"
