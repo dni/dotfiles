@@ -48,9 +48,4 @@ alias myip='wget http://checkip.dyndns.org/ -O - -o /dev/null | cut -d: -f 2 | c
 alias decrypt='openssl aes-256-cbc -d -a'
 alias encrypt='openssl aes-256-cbc -a -salt'
 
-# server
-alias sers='service apache2 restart'
-alias serl='service apache2 reload'
-alias sert='apachectl configtest'
-
 alias q3='~/ioquake3/quake3e.x64 +set fs_game cpma +connect'

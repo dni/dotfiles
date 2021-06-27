@@ -1,6 +1,9 @@
 #!/usr/bin/env sh
 . $DOTFILES/scripts/audio.sh
-. $DOTFILES/scripts/devtools.sh
+. $DOTFILES/scripts/devtools/typo3.sh
+. $DOTFILES/scripts/devtools/magento2.sh
+. $DOTFILES/scripts/devtools/webserver.sh
+. $DOTFILES/scripts/devtools/mysql.sh
 . $DOTFILES/scripts/dmenu.sh
 . $DOTFILES/scripts/status.sh
 . $DOTFILES/scripts/utils.sh

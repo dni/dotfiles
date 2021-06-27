@@ -1,4 +1,7 @@
 #!/usr/bin/env sh
-#. "$DOTFILES"/.functions
-sh -ic "${0##*/}"
-#eval "${0##*/}"
+# run interactive shell, so .profile is sourced
+#sh -ic "${0##*/}"
+
+# or source functions and eval ?
+. "$DOTFILES"/.functions
+eval "${0##*/}"
