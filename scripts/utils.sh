@@ -2,6 +2,7 @@
 
 # populate ./bin/ with symlink to the magic run_function script
 create_binaries() {
+  rm "$DOTFILES"/bin/*
   sh -ic "declare -F" | sed "s/declare -f//g" | while read -r x; do
     ln -sf "$DOTFILES"/scripts/run_function "$DOTFILES"/bin/"$x"
   done

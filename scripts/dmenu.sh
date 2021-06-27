@@ -1,12 +1,13 @@
 #!/usr/bin/env sh
 layout_dir="$DOTFILES"/.config/screenlayout
 
-dmenu_layout() {
-  sh $layout_dir/$(ls $layout_dir | dmenu -l 5)
+dmenu_layouts() {
+  cd "$layout_dir" || exit
+  find . -name "*.sh" | dmenu -l 5 || exit | sh
 }
 
-dmenu_script() {
-  get_functions | dmenu -l 5 && eval || exit
+dmenu_scripts() {
+  get_functions | dmenu -l 5 || exit | eval
 }
 
 dmenu_cpma() {

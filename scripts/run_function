@@ -1,3 +1,4 @@
 #!/usr/bin/env sh
-. "$DOTFILES"/.functions
-eval "${0##*/}"
+#. "$DOTFILES"/.functions
+sh -ic "${0##*/}"
+#eval "${0##*/}"
