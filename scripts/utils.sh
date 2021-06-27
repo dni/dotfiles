@@ -1,5 +1,17 @@
 #!/usr/bin/env sh
 
+# this function is for testing and debugging, also mentioned in my blog post
+hello() {
+  echo "hello world! you are running a"
+  case $- in
+    *i*) echo "interactive";;
+    *) echo "non-interactive";;
+  esac
+  # sh has no 100% reliable way to tell if its a login shell,
+  # but checking if you are in tty is pretty close
+  tty | grep -q "tty" && echo "tty / (?)login shell" || echo "non-login shell"
+}
+
 # xinit hook
 xinit_hook() {
   sh /etc/X11/xinit/xinitrc.d/50-systemd-user.sh # gnome keyring
