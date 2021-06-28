@@ -71,6 +71,8 @@ nesting_test(){
   inside
   echo "executing nest2()"
   nest2
+  echo "executing inside()"
+  inside
   echo "executing inside2()"
   inside2
   echo "not executing nest3()"
