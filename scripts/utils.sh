@@ -34,6 +34,51 @@ create_binaries() {
   done
 }
 
+# before running nesting_test all function inside are undefined
+nesting_test(){
+  echo "define nest1"
+  nest1() {
+    echo "define inside, inside nest1"
+    inside() {
+      echo "inside nest1"
+    }
+    echo "execute inside, inside nest1"
+    inside
+  }
+  echo "define nest2"
+  nest2() {
+    echo "define inside2"
+    inside2() {
+      echo "inside2 nest2"
+    }
+    echo "define inside"
+    inside() {
+      echo "inside nest2"
+    }
+    echo "execute inside, inside nest2"
+    inside
+  }
+  echo "define nest3"
+  nest3() {
+    echo "define inside3"
+    inside3() {
+      echo "inside nest3"
+    }
+  }
+  echo "executing nest1()"
+  nest1
+  echo "executing inside()"
+  inside
+  echo "executing nest2()"
+  nest2
+  echo "executing inside2()"
+  inside2
+  echo "not executing nest3()"
+  echo "executing inside3() will fail"
+  inside3
+  echo "all functions still are defined"
+}
+
 check_update() {
   sudo pacman -Sy
   sudo pacman -Qu | wc -l > ~/.cache/updates
@@ -60,3 +105,6 @@ upload() {
   aws s3 cp "$1" s3://dnilabs-hostinghelden/upload/
   echo "https://d261tqllhzwogc.cloudfront.net/upload/$1"
 }
+
+
+
