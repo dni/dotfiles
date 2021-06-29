@@ -3,7 +3,7 @@
 # .functions should hold all functions
 # .alias should hold all aliases
 # also we source potential user configuration, so overwriting is possible
-export DOTFILES=/home/dni/dotfiles
+export DOTFILES=/home/alarm/dotfiles
 while read -r x; do
   . "$DOTFILES"/"$x"
   [ -e "$HOME"/"$x" ] && . "$HOME"/"$x"
