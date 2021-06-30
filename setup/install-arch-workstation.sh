@@ -1,7 +1,7 @@
 #!/bin/sh
 # this is the arch linux install script, by dni <3
 echo "install programs"
-sudo pacman -S --noconfirm python-pyqt5 libffado numlockx
+sudo pacman -S --noconfirm numlockx
 
 # change to razor mouse
 xinput --set-prop 11 'libinput Left Handed Enabled' 1
