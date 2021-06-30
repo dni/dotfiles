@@ -16,7 +16,7 @@ hello() {
 xinit_hook() {
   sh /etc/X11/xinit/xinitrc.d/50-systemd-user.sh # gnome keyring
   sh "$DOTFILES"/.config/screenlayout/workstation.sh
-  sh "$HOME"/.fehbg # background
+  [ -e "$HOME"/.fehbg ] && sh "$HOME"/.fehbg & # background
   jackd -R -d net -a 192.168.1.192
   pactl load-module module-jack-sink
   mousekeyboard # mouse keyboard settings
