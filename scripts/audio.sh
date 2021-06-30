@@ -5,6 +5,7 @@ get_sinks(){
 }
 
 volume_command(){
+  [ -n "$1" ] || return
   for x in $(get_sinks); do
     pamixer --sink "$x" "$@"
   done
@@ -19,7 +20,7 @@ volume_up() {
 }
 
 volume_set() {
-  [ -n "$1" ] || exit
+  [ -n "$1" ] || return
   volume_command --set-volume "$1"
 }
 
