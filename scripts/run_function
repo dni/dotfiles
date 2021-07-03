@@ -8,5 +8,6 @@
 
 # source .profile with functions and eval
 # symlinked binaries in the $PATH are overwritten by the function calls
+DOTFILES=/home/dni/dotfiles
 . "$DOTFILES"/.profile
 eval "${0##*/}"
