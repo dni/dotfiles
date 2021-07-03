@@ -1,5 +1,9 @@
 #!/usr/bin/env sh
 
+alias cdd="cd ~/dotfiles"
+alias blogbuild="bundle exec jekyll build"
+alias blogserve="bundle exec jekyll build"
+
 ## aliases
 alias smysqldump="mysqldump --single-transaction --quick --lock-tables=false"
 alias mysqlshow="ls -n ~/.my.cnf"
