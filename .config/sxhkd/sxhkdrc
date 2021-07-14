@@ -2,7 +2,7 @@ super + {d,p,t,Return,F10,F11,F12}
   {dmenu_run,passmenu,dmenu_otp,st,dmenu_scripts,dmenu_layouts,mousekeyboard}
 
 super + o ; {f,t,n,p,g,i,s,d,q,r,m,h,v}
-  {firefox,thunderbird,nautilus,pavucontrol,gimp,inkscape,signal-desktop,discord,dmenu_cpma,st -e ranger,st -e neomutt, st -e htop, virtualbox}
+  {firefox,thunderbird,nautilus,pavucontrol,gimp,st -e irssst -e irssi,signal-desktop,discord,dmenu_cpma,st -e ranger,st -e neomutt, st -e htop, virtualbox}
 
 super + s ; {w,b,s,i}
 	{weather,btcprice,status_update,externalip}

@@ -5,19 +5,12 @@ servers = (
     port = "6697";
     use_tls = "yes";
     tls_verify = "yes";
-    autoconnect = "yes";
   },
-  {
-    address = "irc.pine64.org";
-    chatnet = "PINE64";
-    port = "6667";
-    autoconnect = "yes";
-  },
-  {
+  { address = "irc.pine64.org"; chatnet = "PINE64"; port = "6667"; },
+  { 
     address = "irc.quakenet.org";
     chatnet = "QuakeNet";
     port = "6667";
-    autoconnect = "yes";
   },
   {
     address = "irc.hostinghelden.at";
@@ -37,8 +30,18 @@ chatnets = {
     max_msgs = "1";
     max_whois = "1";
   };
-  hostinghelden = { type = "IRC"; };
-  pine64 = { type = "IRC"; };
+  hostinghelden = {
+    type = "IRC";
+    max_kicks = "1";
+    max_msgs = "1";
+    max_whois = "1";
+  };
+  pine64 = { 
+    type = "IRC";
+    max_kicks = "1";
+    max_msgs = "1";
+    max_whois = "1";
+  };
 };
 
 channels = (
@@ -160,6 +163,7 @@ statusbar = {
         more = { priority = "-1"; alignment = "right"; };
         barend = { priority = "100"; alignment = "right"; };
       };
+      disabled = "yes";
     };
 
     window_inact = {
@@ -176,7 +180,6 @@ statusbar = {
         more = { priority = "-1"; alignment = "right"; };
         barend = { priority = "100"; alignment = "right"; };
       };
-      disabled = "yes";
     };
 
     prompt = {
@@ -207,33 +210,11 @@ statusbar = {
         topicbarend = { priority = "100"; alignment = "right"; };
       };
     };
-    dr_who = {
-      items = { dr_who = { alignment = "right"; }; };
-      position = "0";
-      placement = "top";
-    };
-    awl_0 = {
-      items = {
-        barstart = { priority = "100"; };
-        awl_0 = { };
-        barend = { priority = "100"; alignment = "right"; };
-      };
-    };
-    awl_1 = {
-      items = {
-        barstart = { priority = "100"; };
-        awl_1 = { };
-        barend = { priority = "100"; alignment = "right"; };
-      };
-    };
+    dr_who = { items = { dr_who = { }; }; };
   };
 };
 settings = {
   core = { real_name = "dnilabs"; user_name = "dni"; nick = "dni"; };
   "fe-text" = { actlist_sort = "refnum"; };
-  "fe-common/core" = { theme = "revolutionaryv2"; };
-  "perl/core/scripts" = { awl_shared_sbar = "OFF"; awl_viewer = "no"; };
+  "fe-common/core" = { theme = "lenten"; };
 };
-keyboard = ( 
-  { key = "meta-[M"; id = "command"; data = "mouse_xterm "; }
-);

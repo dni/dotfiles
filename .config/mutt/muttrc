@@ -1,0 +1,20 @@
+set folder      = ~/Mail/dnilabs
+set mbox_type   = Maildir
+set sendmail    = /usr/bin/msmtp
+
+set from = "office@dnilabs.com"
+set realname = "Daniel Krahofer"
+
+# set mbox  = "+INBOX"
+set spoolfile = "+INBOX"
+set postponed = "+Drafts"
+set record = "+Sent"
+set trash ="+Trash"
+
+mailboxes +INBOX +Sent +Trash +Drafts
+
+macro index D \
+    "<save-message>+Trash<enter>" \
+    "move message to the trash"
+
+source ~/.config/mutt/colors.mutt
