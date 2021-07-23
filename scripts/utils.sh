@@ -42,6 +42,18 @@ upload() {
   aws s3 cp "$1" s3://dnilabs-hostinghelden/upload/
   echo "https://d261tqllhzwogc.cloudfront.net/upload/$1"
 }
+uploadtrack() {
+  [ -n "$1" ] || echo "$1" doesnt exist.
+  [ -n "$1" ] || return
+  aws s3 cp "$1" s3://dnilabs-hostinghelden/tracks/
+  echo "https://d261tqllhzwogc.cloudfront.net/tracks/$1"
+}
+uploadartwork() {
+  [ -n "$1" ] || echo "$1" doesnt exist.
+  [ -n "$1" ] || return
+  aws s3 cp "$1" s3://dnilabs-hostinghelden/artworks/
+  echo "https://d261tqllhzwogc.cloudfront.net/artworks/$1"
+}
 
 # just for testing nesting :)
 # before running nesting_test all function inside are undefined
