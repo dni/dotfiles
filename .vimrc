@@ -36,6 +36,8 @@ nmap <space> /
 nnoremap <leader>gd :Gvdiff<CR>
 nnoremap gdh :diffget //2<CR>
 nnoremap gdl :diffget //3<CR>
+nnoremap gdu :diffupdate<CR>
+nnoremap gdw :Gwrite!<CR>
 
 
 set noswapfile
