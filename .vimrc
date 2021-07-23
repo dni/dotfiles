@@ -33,7 +33,7 @@ nmap <c-j> :bprevious<cr>
 nmap <space> /
 
 " Fugitive Conflict Resolution
-nnoremap <leader>gd :Gvdiff<CR>
+nnoremap <leader>gd :Gvdiffsplit!<CR>
 nnoremap gdh :diffget //2<CR>
 nnoremap gdl :diffget //3<CR>
 nnoremap gdu :diffupdate<CR>
