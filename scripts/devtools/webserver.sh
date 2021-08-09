@@ -4,6 +4,11 @@ alias sers='service apache2 restart'
 alias serl='service apache2 reload'
 alias sert='apachectl configtest'
 
+# counts_ips /var/log/apache2/access.log count the apache2 log ips
+count_ips() {
+  cat $1 | awk '{print $1}' | sort -n | uniq -c | sort -nr | head -20
+}
+
 # clone projects and configure it
  projectclone() {
   [[ -z $1 ]] && echo "missing argument projectname" && return
