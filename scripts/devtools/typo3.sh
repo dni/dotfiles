@@ -1,8 +1,14 @@
 #!/usr/bin/env sh
 
 typo3clone() {
-  [ -n "$1" ] || echo missing argument name; return
-  [ -n "$2" ] || echo missing argument domain; return
+  if [ -z "$1" ]; then
+    echo missing argument name
+    exit
+  fi
+  if [ -z "$2" ]; then
+    echo missing argument domain
+    exit
+  fi
   projectclone "$1" typo3
   cd /var/www/"$1" || exit
   vhostcreate "$1" "$2" typo3
