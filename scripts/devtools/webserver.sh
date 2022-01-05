@@ -37,12 +37,29 @@ count_ips() {
  vhostcreate() {
   [[ -z $1 ]] && echo "missing argument name" && return
   [[ -z $2 ]] && echo "missing argument domain" && return
-  local template=~/dotfiles/scripts/templates/vhost.conf
-  local target=/etc/apache2/sites-enabled/$1.conf
-  [[ -z $3 ]] || local template=~/dotfiles/scripts/templates/vhost-typo3.conf
+  target=/etc/apache2/sites-enabled/$1.conf
   [[ -f $target ]] && echo vhost does exist. && return
-  sudo cp $template $target
-  sudo sed -i -e "s/%name%/$1/g" -e "s/%domain%/$2/g" $target
+  sudo tee $target <<EOF
+<VirtualHost *:80>
+  DirectoryIndex index.html index.php
+  ServerName dev.$2
+  DocumentRoot /var/www/$1/public
+  SetEnv TYPO3_CONTEXT Development
+  LogLevel info
+  ErrorLog /var/log/apache2/$1.log
+  CustomLog /var/log/apache2/$1-access.log combined
+  <Directory ~ "\.git">
+    Order allow,deny
+    Deny from all
+  </Directory>
+  <Directory "/var/www/$1/public/">
+    Options FollowSymLinks
+    AllowOverride All
+    Order allow,deny
+    Allow from all
+  </Directory>
+</VirtualHost>
+EOF
 }
 
 request_ssl() {
