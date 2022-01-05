@@ -43,3 +43,12 @@
 [submodule ".vim/pack/dni/start/vdebug"]
 	path = .vim/pack/dni/start/vdebug
 	url = https://github.com/vim-vdebug/vdebug
+[submodule ".vim/pack/dni/start/rust.vim"]
+	path = .vim/pack/dni/start/rust.vim
+	url = https://github.com/rust-lang/rust.vim
+[submodule ".vim/pack/plugins/tagbar"]
+	path = .vim/pack/plugins/tagbar
+	url = https://github.com/preservim/tagbar
+[submodule ".vim/pack/dni/start/python-syntax"]
+	path = .vim/pack/dni/start/python-syntax
+	url = https://github.com/vim-python/python-syntax

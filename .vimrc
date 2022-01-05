@@ -20,6 +20,8 @@ nmap <C-x> :q<CR>
 nmap <C-x><C-x> :q!<CR>
 nmap <C-y> :w<CR>
 nnoremap <C-z> <NOP>
+map <C-n> :NERDTreeToggle<CR>
+map <leader>t :TagbarToggle<CR>
 nmap <leader>h :nohl<CR>
 nmap <leader>c gcc
 nmap <C-h> :set hlsearch!<CR>
@@ -73,10 +75,11 @@ let g:vim_markdown_folding_disabled=1
 
 " nerdtree
 let g:nerdtree_plugin_open_cmd = 'open'
-map <C-n> :NERDTreeToggle<CR>
 " let NERDTreeShowHidden=1
 "
+let g:python_highlight_all = 1
 
+hi Normal guibg=NONE ctermbg=NONE
 
 " SNIPPETS
 " ab print_r echo "<pre>";<CR>print_r();<CR>die();<ESC>kf)

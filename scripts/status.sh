@@ -11,8 +11,10 @@ status_update() {
 
   TEMP="$(($(cat /sys/class/thermal/thermal_zone0/temp) / 1000))C"
   AVAIL=$(df -h --output=avail | head -n4 | tail -n1)
+  MSG=" ($UPDATES) | ♪ $VOL |  $TEMP |  $BTC | $AVAIL |  $DATE |  $TIME "
 
-  xsetroot -name " ($UPDATES) | $EXTIP | ♪ $VOL |  $TEMP |  $BTC | $AVAIL |  $DATE |  $TIME "
+  xsetroot -name "$MSG"
+  # xsetroot -name " ($UPDATES) | $EXTIP | ♪ $VOL |  $TEMP |  $BTC | $AVAIL |  $DATE |  $TIME "
 
   #if acpi -a | grep off-line > /dev/null
   #then
@@ -55,6 +57,19 @@ btcprice() {
   dunstify "$msg"
   echo "$msg"
   echo "$price" > ~/.cache/btcprice
+}
+
+lnmticker() {
+  #get data and remove colors from output
+  data=$(lnm ticker)
+  index=$(echo "$data" | grep index | cut -d " " -f 4 | cut -d "," -f 1)
+  bid=$(echo "$data" | grep bid | cut -d " " -f 4 | cut -d "," -f 1)
+  offer=$(echo "$data" | grep offer | cut -d " " -f 4)
+  msg="Lnmarkets Ticker 
+  index: $index
+  bid: $bid
+  offer: $offer"
+  dunstify "$msg"
 }
 
 weather() {

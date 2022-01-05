@@ -12,6 +12,35 @@ hello() {
   tty | grep -q "tty" && echo "tty / (?)login shell" || echo "non-login shell"
 }
 
+build_st() {
+  cd ~/.config
+  git clone https://git.suckless.org/st
+  cd st
+  git pull
+  rm -f config.h
+  wget https://st.suckless.org/patches/scrollback/st-scrollback-20210507-4536f46.diff
+  patch -Np1 -i st-scrollback-20210507-4536f46.diff
+  wget https://st.suckless.org/patches/anysize/st-anysize-0.8.4.diff
+  patch -Np1 -i st-anysize-0.8.4.diff
+  wget https://st.suckless.org/patches/alpha/st-alpha-0.8.2.diff
+  patch -Np1 -i st-alpha-0.8.2.diff
+  sed -i -e "s/Liberation Mono:pixelsize=12/FuraCode Nerd Font:pixelsize=16/" config.def.h
+  sudo make clean install
+}
+
+build_dwm() {
+  cd ~/.config
+  git clone https://git.suckless.org/dwm
+  git reset --hard
+  git pull
+  cd dwm
+  rm -f config.h
+  wget https://dwm.suckless.org/patches/alpha/dwm-alpha-20201019-61bb8b2.diff
+  patch -Np1 -i dwm-alpha-20201019-61bb8b2.diff
+  #ln -s ~/dotfiles/setup/dwm/config.h config.h
+  sudo make clean install
+}
+
 get_functions() {
   retval=$(sh -ic "declare -F" | sed "s/declare -f//g")
   echo "$retval"
